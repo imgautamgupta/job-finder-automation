@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+{% block title %}Personal Job Agent{% endblock %}
+{% block page_title %}Personal Job Agent{% endblock %}
+{% block page_subtitle %}Today's prioritized job-search actions & unified daily command center{% endblock %}
+
+{% block content %}
+<div class="jobs-view-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+  <!-- Safety & Human Control Banner -->
+  <div class="card" style="padding: 1rem 1.25rem; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border-left: 5px solid #6366f1; color: #f8fafc;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 1.75rem;">🤖</span>
+        <div>
+          <h3 style="margin: 0; font-size: 1.1rem; color: #f8fafc; font-weight: 700;">Human-in-the-Loop Job Assistant</h3>
+          <p style="margin: 2px 0 0; font-size: 0.85rem; color: #cbd5e1;">
+            All job applications remain strictly <strong>MANUAL</strong>. The Job Agent prioritizes and guides your daily actions without automated form submissions, external LLMs, or background status alterations.
+          </p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="status-badge" style="background: rgba(99, 102, 241, 0.2); color: #c7d2fe; border: 1px solid #6366f1;">
+          🛡️ 100% Deterministic & Safe
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today's Summary Metrics Grid -->
+  <section>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem;">
+      <div class="stat-card" style="padding: 1rem; text-align: center;">
+        <span class="stat-label" style="font-size: 0.75rem;">Found Today</span>
+        <span class="stat-value" style="font-size: 1.5rem; color: #3b82f6;">{{ summary.jobs_found_today }}</span>
+      </div>
+      <div class="stat-card" style="padding: 1rem; text-align: center;">
+        <span class="stat-label" style="font-size: 0.75rem;">Relevant (≥60)</span>
+        <span class="stat-value" style="font-size: 1.5rem; color: #10b981;">{{ summary.relevant_jobs }}</span>
+      </div>
+      <div class="stat-card" style="padding: 1rem; text-align: center;">
+        <span class="stat-label" style="font-size: 0.75rem;">Recommended</span>
+        <span class="stat-value" style="font-size: 1.5rem; color: #8b5cf6;">{{ summary.recommended_jobs }}</span>
+      </div>
+      <div class="stat-card" style="padding: 1rem; text-align: center;">
+        <span class="stat-label" style="font-size: 0.75rem;">Applied Today</span>
+        <span class="stat-value" style="font-size: 1.5rem; color: #06b6d4;">{{ summary.applications_today }}</span>
+      </div>
+      <div class="stat-card" style="padding: 1rem; text-align: center;">
+        <span class="stat-label" style="font-size: 0.75rem;">Target Remaining</span>
+        <span class="stat-value" style="font-size: 1.5rem; color: {% if summary.target_remaining > 0 %}#f59e0b{% else %}#10b981{% endif %};">
+          {{ summary.target_remaining }}
+        </span>
+      </div>
+      <div class="stat-card" style="padding: 1rem; text-align: center;">
+        <span class="stat-label" style="font-size: 0.75rem;">Interviews Upcoming</span>
+        <span class="stat-value" style="font-size: 1.5rem; color: #a855f7;">{{ summary.interviews_upcoming }}</span>
+      </div>
+      <div class="stat-card" style="padding: 1rem; text-align: center;">
+        <span class="stat-label" style="font-size: 0.75rem;">Follow-ups Due</span>
+        <span class="stat-value" style="font-size: 1.5rem; color: #f97316;">{{ summary.follow_ups_due }}</span>
+      </div>
+      <div class="stat-card" style="padding: 1rem; text-align: center; border: 1px solid {% if summary.overdue_actions > 0 %}#ef4444{% else %}#334155{% endif %};">
+        <span class="stat-label" style="font-size: 0.75rem;">Overdue Actions</span>
+        <span class="stat-value" style="font-size: 1.5rem; color: {% if summary.overdue_actions > 0 %}#ef4444{% else %}#94a3b8{% endif %};">
+          {{ summary.overdue_actions }}
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Daily Target & Streak Progress Bar -->
+  <section class="card" style="padding: 1.25rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+      <div>
+        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #f8fafc;">
+          🎯 Daily Application Target (Phase 12)
+        </h4>
+        <span style="font-size: 0.8rem; color: #94a3b8;">
+          Target: {{ plan.target_daily }} &bull; Applied Today: {{ plan.target_applied_today }} &bull; Remaining: {{ plan.target_remaining }}
+        </span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span class="status-badge" style="background: #fef3c7; color: #92400e; font-weight: 700;">
+          🔥 {{ plan.streak_days }}-Day Streak
+        </span>
+        <span style="font-weight: 700; font-size: 0.9rem; color: #38bdf8;">{{ plan.target_progress_pct }}%</span>
+      </div>
+    </div>
+    <div style="width: 100%; height: 10px; background: #334155; border-radius: 5px; overflow: hidden;">
+      <div style="width: {{ plan.target_progress_pct }}%; height: 100%; background: linear-gradient(90deg, #38bdf8, #10b981); transition: width 0.3s ease;"></div>
+    </div>
+  </section>
+
+  <!-- TODAY'S PRIORITIZED ACTION PLAN -->
+  <section>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h3 style="margin: 0; font-size: 1.2rem; color: #f8fafc;">
+        📋 Today's Action Plan ({{ plan.actions|length }} Actions)
+      </h3>
+      <span style="font-size: 0.85rem; color: #94a3b8;">
+        As of: <strong>{{ plan.date }}</strong>
+      </span>
+    </div>
+
+    <!-- URGENT ACTIONS -->
+    {% if plan.urgent_actions %}
+      <div style="margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span style="background: #ef4444; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;">
+            🚨 URGENT
+          </span>
+          <span style="font-size: 0.85rem; color: #f87171; font-weight: 600;">Immediate attention required today</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for act in plan.urgent_actions %}
+            <div class="card" style="padding: 1rem 1.25rem; border-left: 5px solid #ef4444; background: #1e1b24;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                <div style="flex: 1; min-width: 250px;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="status-badge" style="background: #450a0a; color: #fca5a5; font-size: 0.75rem; border: 1px solid #b91c1c;">
+                      {{ act.action_type }}
+                    </span>
+                    <strong style="color: #f8fafc; font-size: 1rem;">{{ act.title }}</strong>
+                    {% if act.due_date %}
+                      <span class="status-badge" style="background: #fef2f2; color: #991b1b; font-size: 0.7rem; font-weight: 700;">
+                        📅 Due: {{ act.due_date }}
+                      </span>
+                    {% endif %}
+                  </div>
+                  <p style="margin: 0.35rem 0 0.25rem; font-size: 0.85rem; color: #e2e8f0;">{{ act.description }}</p>
+                  <p style="margin: 0; font-size: 0.8rem; color: #94a3b8;"><em>Why: {{ act.reason }}</em></p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  {% if act.job_id %}
+                    <a href="/jobs/{{ act.job_id }}" class="btn btn-sm btn-primary">
+                      Review Job →
+                    </a>
+                  {% endif %}
+                  <form method="POST" action="/job-agent/action" style="display: inline;">
+                    <input type="hidden" name="action_id" value="{{ act.id }}">
+                    <input type="hidden" name="action_status" value="COMPLETED">
+                    <button type="submit" class="btn btn-sm btn-outline" style="border-color: #10b981; color: #34d399;" title="Mark action as completed for today">
+                      ✓ Done
+                    </button>
+                  </form>
+                </div>
+              </div>
+              {% if act.checklist %}
+                <div style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
+                  <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Preparation Steps:</span>
+                  <ul style="margin: 0.25rem 0 0 1.25rem; padding: 0; font-size: 0.8rem; color: #cbd5e1;">
+                    {% for step in act.checklist %}
+                      <li>{{ step }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- HIGH PRIORITY ACTIONS -->
+    {% if plan.high_actions %}
+      <div style="margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span style="background: #f59e0b; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;">
+            ⭐ HIGH PRIORITY
+          </span>
+          <span style="font-size: 0.85rem; color: #fbbf24; font-weight: 600;">Strongest opportunities & key preparation tasks</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for act in plan.high_actions %}
+            <div class="card" style="padding: 1rem 1.25rem; border-left: 5px solid #f59e0b;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                <div style="flex: 1; min-width: 250px;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="status-badge" style="background: #451a03; color: #fcd34d; font-size: 0.75rem; border: 1px solid #d97706;">
+                      {{ act.action_type }}
+                    </span>
+                    <strong style="color: #f8fafc; font-size: 0.95rem;">{{ act.title }}</strong>
+                    {% if act.match_score is not none %}
+                      <span class="score-badge {{ act.match_score|score_badge_class }}" style="font-size: 0.75rem;">
+                        Match: {{ act.match_score }}
+                      </span>
+                    {% endif %}
+                    {% if act.readiness_score is not none %}
+                      <span class="score-badge {{ act.readiness_score|readiness_badge_class }}" style="font-size: 0.75rem;">
+                        Readiness: {{ act.readiness_score }}
+                      </span>
+                    {% endif %}
+                  </div>
+                  <p style="margin: 0.35rem 0 0.25rem; font-size: 0.85rem; color: #e2e8f0;">{{ act.description }}</p>
+                  <p style="margin: 0; font-size: 0.8rem; color: #94a3b8;"><em>Why: {{ act.reason }}</em></p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  {% if act.job_id %}
+                    <a href="/jobs/{{ act.job_id }}" class="btn btn-sm btn-primary">
+                      Take Action →
+                    </a>
+                  {% endif %}
+                  <form method="POST" action="/job-agent/action" style="display: inline;">
+                    <input type="hidden" name="action_id" value="{{ act.id }}">
+                    <input type="hidden" name="action_status" value="COMPLETED">
+                    <button type="submit" class="btn btn-sm btn-outline" style="border-color: #10b981; color: #34d399;">
+                      ✓
+                    </button>
+                  </form>
+                </div>
+              </div>
+              {% if act.checklist %}
+                <div style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
+                  <ul style="margin: 0 0 0 1.25rem; padding: 0; font-size: 0.8rem; color: #cbd5e1;">
+                    {% for step in act.checklist %}
+                      <li>{{ step }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- MEDIUM & LOW ACTIONS -->
+    {% if plan.medium_actions or plan.low_actions %}
+      <div style="margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span style="background: #3b82f6; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;">
+            📌 MEDIUM / LOW
+          </span>
+          <span style="font-size: 0.85rem; color: #93c5fd; font-weight: 600;">Routine recommendations, follow-up prep & analytics</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for act in plan.medium_actions + plan.low_actions %}
+            <div class="card" style="padding: 0.85rem 1.25rem; border-left: 5px solid #3b82f6;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div style="flex: 1; min-width: 250px;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="status-badge" style="background: #172554; color: #93c5fd; font-size: 0.7rem; border: 1px solid #2563eb;">
+                      {{ act.action_type }}
+                    </span>
+                    <strong style="color: #f8fafc; font-size: 0.9rem;">{{ act.title }}</strong>
+                    {% if act.match_score is not none %}
+                      <span class="score-badge {{ act.match_score|score_badge_class }}" style="font-size: 0.7rem;">
+                        {{ act.match_score }} pts
+                      </span>
+                    {% endif %}
+                  </div>
+                  <p style="margin: 0.25rem 0 0; font-size: 0.8rem; color: #94a3b8;">{{ act.reason }}</p>
+                </div>
+                <div>
+                  {% if act.job_id %}
+                    <a href="/jobs/{{ act.job_id }}" class="btn btn-sm btn-outline" style="border-color: #3b82f6; color: #93c5fd;">
+                      View →
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- TODAY'S APPLICATIONS (READY TO APPLY CARDS) -->
+  <section class="card" style="padding: 1.25rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+      <div>
+        <h3 style="margin: 0; font-size: 1.15rem; color: #f8fafc;">🚀 Ready for Manual Application</h3>
+        <p style="margin: 2px 0 0; font-size: 0.8rem; color: #94a3b8;">
+          Jobs where preparation is complete or readiness is high. Apply manually directly on the company portal.
+        </p>
+      </div>
+      <a href="/apply-today" class="btn btn-sm btn-outline" style="border-color: #38bdf8; color: #7dd3fc;">
+        Open Apply Queue →
+      </a>
+    </div>
+
+    {% if today_applications %}
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem;">
+        {% for card in today_applications %}
+          <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <div>
+                  <h4 style="margin: 0; font-size: 1rem; color: #f8fafc;">{{ card.title }}</h4>
+                  <span style="font-size: 0.85rem; color: #38bdf8; font-weight: 600;">{{ card.company }}</span>
+                  <span style="font-size: 0.8rem; color: #64748b;"> &bull; {{ card.location }}</span>
+                </div>
+                <span class="priority-pill priority-{{ card.priority|lower }}" style="font-size: 0.7rem; padding: 2px 6px;">
+                  {{ card.priority }}
+                </span>
+              </div>
+
+              <!-- Score Badges -->
+              <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                <span class="score-badge {{ card.match_score|score_badge_class }}" style="font-size: 0.75rem;">
+                  Match: {{ card.match_score }}/100
+                </span>
+                <span class="score-badge {{ card.readiness_score|readiness_badge_class }}" style="font-size: 0.75rem;">
+                  Readiness: {{ card.readiness_score }}/100
+                </span>
+                <span class="score-badge {{ card.resume_alignment_score|resume_badge_class }}" style="font-size: 0.75rem;">
+                  Resume: {{ card.resume_alignment_score }}/100
+                </span>
+              </div>
+
+              <!-- Skills & Project -->
+              {% if card.skills_to_emphasize %}
+                <div style="margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Skills to Emphasize:</span>
+                  <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px;">
+                    {% for sk in card.skills_to_emphasize %}
+                      <span style="background: #1e293b; color: #7dd3fc; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; border: 1px solid #0284c7;">
+                        {{ sk }}
+                      </span>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if card.recommended_project %}
+                <div style="margin-bottom: 0.75rem;">
+                  <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Featured Project:</span>
+                  <span style="font-size: 0.8rem; color: #a7f3d0; font-weight: 600;"> {{ card.recommended_project }}</span>
+                </div>
+              {% endif %}
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #1e293b;">
+              <span style="font-size: 0.75rem; color: #10b981; font-weight: 600;">
+                ✓ {{ card.preparation_summary }}
+              </span>
+              {% if card.url %}
+                <a href="{{ card.url }}" target="_blank" rel="noopener" class="btn btn-sm btn-primary" style="font-weight: 600;">
+                  Apply on Portal ↗
+                </a>
+              {% else %}
+                <a href="/jobs/{{ card.job_id }}" class="btn btn-sm btn-primary">
+                  Review Job →
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+        No applications marked READY yet. Review resume preparation tasks above to prepare your top matches.
+      </p>
+    {% endif %}
+  </section>
+
+  <!-- SEARCH FOCUS INTELLIGENCE (PHASE 13 INTEGRATION) -->
+  <section class="card" style="padding: 1.25rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+      <h3 style="margin: 0; font-size: 1.15rem; color: #f8fafc;">💡 Search Intelligence Focus</h3>
+      <a href="/search-intelligence" class="btn btn-sm btn-outline" style="border-color: #6366f1; color: #a5b4fc;">
+        Full Search Strategy →
+      </a>
+    </div>
+
+    {% if search_focus %}
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem;">
+        {% for sf in search_focus %}
+          <div style="background: #0f172a; border-left: 4px solid #6366f1; border-radius: 6px; padding: 0.75rem 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <span style="font-size: 0.7rem; color: #a5b4fc; font-weight: 700; text-transform: uppercase;">
+                {{ sf.category }}
+              </span>
+              <span class="status-badge" style="background: #312e81; color: #c7d2fe; font-size: 0.65rem;">
+                {{ sf.priority }}
+              </span>
+            </div>
+            <strong style="font-size: 0.9rem; color: #f8fafc;">{{ sf.title }}</strong>
+            <p style="margin: 0.25rem 0 0; font-size: 0.8rem; color: #cbd5e1;">{{ sf.recommendation }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+        Search intelligence data is being continuously computed from your collected postings.
+      </p>
+    {% endif %}
+  </section>
+
+  <!-- SAFETY & AUDIT POLICY -->
+  <section class="card" style="padding: 1rem 1.25rem; background: #0f172a; border: 1px solid #1e293b;">
+    <h4 style="margin: 0 0 0.5rem; font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">
+      Safety, Verification & Guardrails
+    </h4>
+    <ul style="margin: 0 0 0 1.25rem; padding: 0; font-size: 0.8rem; color: #64748b; line-height: 1.5;">
+      {% for notice in safety_notices %}
+        <li>{{ notice }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+</div>
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}{{ view_title }}{% endblock %}
+{% block page_title %}{{ view_title }}{% endblock %}
+{% block page_subtitle %}Found {{ total_count }} matching listings. Filter, sort, and manage application tracking.{% endblock %}
+
+{% block content %}
+<div class="jobs-view-container">
+  <!-- Filter & Search Toolbar -->
+  <form method="get" action="/jobs" class="filter-card">
+    <div class="filter-grid">
+      <!-- Search -->
+      <div class="filter-field filter-search">
+        <label for="search">Search Keywords</label>
+        <input type="text" id="search" name="search" value="{{ search }}" placeholder="Title, company, skill, tech...">
+      </div>
+
+      <!-- Match Score Filter -->
+      <div class="filter-field">
+        <label for="score">Min Match Score</label>
+        <select id="score" name="score">
+          <option value="all" {% if score == 'all' or not score %}selected{% endif %}>All Scores</option>
+          <option value="90" {% if score == '90' %}selected{% endif %}>90+ (Excellent)</option>
+          <option value="80" {% if score == '80' %}selected{% endif %}>80+ (Strong)</option>
+          <option value="70" {% if score == '70' %}selected{% endif %}>70+ (Good)</option>
+          <option value="60" {% if score == '60' %}selected{% endif %}>60+ (Possible)</option>
+        </select>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="filter-field">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          <option value="all" {% if status == 'all' or not status %}selected{% endif %}>All Statuses</option>
+          {% for st in all_statuses %}
+            <option value="{{ st }}" {% if status == st %}selected{% endif %}>{{ st }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Source Filter -->
+      <div class="filter-field">
+        <label for="source">Source</label>
+        <select id="source" name="source">
+          <option value="all" {% if source == 'all' or not source %}selected{% endif %}>All Sources</option>
+          {% for src in distinct_sources %}
+            <option value="{{ src }}" {% if source == src %}selected{% endif %}>{{ src|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Location Filter -->
+      <div class="filter-field">
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" value="{{ location }}" placeholder="Filter location...">
+      </div>
+
+      <!-- Company Filter -->
+      <div class="filter-field">
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" value="{{ company }}" placeholder="Filter company...">
+      </div>
+
+      <!-- Sort By -->
+      <div class="filter-field">
+        <label for="sort_by">Sort By</label>
+        <select id="sort_by" name="sort_by">
+          <option value="match_score" {% if sort_by == 'match_score' %}selected{% endif %}>Match Score (High to Low)</option>
+          <option value="date_posted" {% if sort_by == 'date_posted' %}selected{% endif %}>Date Posted (Newest)</option>
+          <option value="first_seen_at" {% if sort_by == 'first_seen_at' %}selected{% endif %}>First Seen (Newest)</option>
+          <option value="last_seen_at" {% if sort_by == 'last_seen_at' %}selected{% endif %}>Last Seen (Newest)</option>
+        </select>
+      </div>
+
+      <!-- Per Page -->
+      <div class="filter-field">
+        <label for="per_page">Per Page</label>
+        <select id="per_page" name="per_page">
+          <option value="25" {% if per_page == 25 %}selected{% endif %}>25 jobs</option>
+          <option value="50" {% if per_page == 50 %}selected{% endif %}>50 jobs</option>
+          <option value="100" {% if per_page == 100 %}selected{% endif %}>100 jobs</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Hidden days parameter preservation -->
+    {% if first_seen_days %}
+      <input type="hidden" name="first_seen_days" value="{{ first_seen_days }}">
+    {% endif %}
+
+    <div class="filter-actions">
+      <button type="submit" class="btn btn-primary">Apply Filters</button>
+      <a href="/jobs" class="btn btn-outline">Reset</a>
+    </div>
+  </form>
+
+  <!-- Job Table Card -->
+  <div class="table-card">
+    {% if jobs %}
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Score</th>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Source</th>
+            <th>Date Posted</th>
+            <th>Status</th>
+            <th>First Seen</th>
+            <th>Last Seen</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in jobs %}
+            <tr>
+              <td>
+                <span class="priority-pill {{ job.match_score|score_badge_class }}">
+                  {{ job.match_category or "Match" }}
+                </span>
+              </td>
+              <td>
+                <span class="score-badge {{ job.match_score|score_badge_class }}">
+                  {{ job.match_score if job.match_score is not none else "N/A" }}
+                </span>
+              </td>
+              <td class="cell-title">
+                <a href="/jobs/{{ job.id }}" class="job-link">{{ job.title }}</a>
+                {% if job.url %}
+                  <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer" class="ext-link-icon" title="Open source job posting">↗</a>
+                {% endif %}
+              </td>
+              <td class="cell-company">{{ job.company }}</td>
+              <td class="cell-location">{{ job.location or "Not Specified" }}</td>
+              <td><span class="source-tag source-{{ job.source|lower }}">{{ job.source|capitalize }}</span></td>
+              <td class="cell-date">{{ job.date_posted or "Unknown" }}</td>
+              <td>
+                <span class="status-badge {{ job.status|status_badge_class }}">
+                  {{ job.status.value if job.status.value is defined else job.status }}
+                </span>
+              </td>
+              <td class="cell-date">{{ job.first_seen_at|format_datetime }}</td>
+              <td class="cell-date">{{ job.last_seen_at|format_datetime }}</td>
+              <td class="cell-actions">
+                <a href="/jobs/{{ job.id }}" class="btn btn-sm btn-outline">Details</a>
+                <!-- Quick Status Change Form -->
+                <form method="post" action="/jobs/{{ job.id }}/status" class="quick-status-form">
+                  <input type="hidden" name="redirect_to" value="{{ request.url }}">
+                  <select name="status" onchange="this.form.submit()" class="quick-status-select" title="Change status">
+                    {% for st in all_statuses %}
+                      <option value="{{ st }}" {% if (job.status.value if job.status.value is defined else job.status) == st %}selected{% endif %}>
+                        {{ st }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- Pagination Footer -->
+      <div class="pagination-bar">
+        <div class="pagination-info">
+          Showing <strong>{{ ((page - 1) * per_page) + 1 }}</strong> to <strong>{{ [page * per_page, total_count]|min }}</strong> of <strong>{{ total_count }}</strong> jobs
+        </div>
+
+        <div class="pagination-controls">
+          {% if page > 1 %}
+            <a href="?page={{ page - 1 }}&per_page={{ per_page }}&score={{ score }}&status={{ status }}&source={{ source }}&company={{ company }}&location={{ location }}&search={{ search }}&first_seen_days={{ first_seen_days }}&sort_by={{ sort_by }}&order={{ order }}" class="btn btn-sm btn-outline">← Previous</a>
+          {% else %}
+            <button class="btn btn-sm btn-outline" disabled>← Previous</button>
+          {% endif %}
+
+          <span class="page-current">Page {{ page }} of {{ total_pages }}</span>
+
+          {% if page < total_pages %}
+            <a href="?page={{ page + 1 }}&per_page={{ per_page }}&score={{ score }}&status={{ status }}&source={{ source }}&company={{ company }}&location={{ location }}&search={{ search }}&first_seen_days={{ first_seen_days }}&sort_by={{ sort_by }}&order={{ order }}" class="btn btn-sm btn-outline">Next →</a>
+          {% else %}
+            <button class="btn btn-sm btn-outline" disabled>Next →</button>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">📂</div>
+        <h3>No jobs matched your criteria</h3>
+        <p>Try broadening your filters, resetting search terms, or checking different sources.</p>
+        <a href="/jobs" class="btn btn-primary">Reset Filters</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

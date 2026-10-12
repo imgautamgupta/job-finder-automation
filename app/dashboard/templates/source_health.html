@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Source Health & Status{% endblock %}
+{% block page_title %}Job Sources Health{% endblock %}
+{% block page_subtitle %}Live connectivity, authentication requirements, and rate limit tracking across job boards.{% endblock %}
+
+{% block content %}
+<div class="source-health-container">
+  <div class="health-grid">
+    {% for s in source_health %}
+      <div class="card source-card">
+        <div class="source-card-header">
+          <div class="source-info">
+            <h3>{{ s.source }}</h3>
+            <span class="source-endpoint">{{ s.endpoint }}</span>
+          </div>
+          <div>
+            {% if s.status == "COMPLETED" %}
+              <span class="badge-health-ok">✓ Active</span>
+            {% elif s.status == "BLOCKED" %}
+              <span class="badge-health-blocked">⚠️ Blocked</span>
+            {% elif s.status == "DISABLED" %}
+              <span class="badge-health-disabled">⚪ Disabled</span>
+            {% else %}
+              <span class="badge-health-idle">⏳ {{ s.status }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="source-card-body">
+          <div class="meta-row">
+            <span class="meta-label">Enabled:</span>
+            <span class="meta-value">{{ "Yes" if s.enabled else "No" }}</span>
+          </div>
+
+          <div class="meta-row">
+            <span class="meta-label">Last Collected:</span>
+            <span class="meta-value"><strong>{{ s.collected }}</strong> jobs</span>
+          </div>
+
+          <div class="meta-row">
+            <span class="meta-label">Last Run ID:</span>
+            <span class="meta-value"><code>{{ s.last_run_id }}</code></span>
+          </div>
+
+          <div class="meta-row">
+            <span class="meta-label">Last Run Time:</span>
+            <span class="meta-value">{{ s.last_run_time|format_datetime }}</span>
+          </div>
+
+          <div class="meta-row">
+            <span class="meta-label">Errors / Diagnostics:</span>
+            <span class="meta-value">
+              {% if s.error and s.error != "None" %}
+                <span class="text-danger">{{ s.error }}</span>
+              {% else %}
+                <span class="text-success">No errors reported</span>
+              {% endif %}
+            </span>
+          </div>
+        </div>
+
+        <div class="source-card-footer">
+          {% if s.source|lower == 'naukri' %}
+            <p class="source-tip">Naukri enforces bot mitigation returning HTTP 403. Safely handled without breaking other sources.</p>
+          {% elif s.source|lower == 'lever' %}
+            <p class="source-tip">Official public Lever Postings API. Publicly accessible without authentication.</p>
+          {% elif s.source|lower == 'greenhouse' %}
+            <p class="source-tip">Official public Greenhouse Job Board API. Publicly accessible without authentication.</p>
+          {% elif s.source|lower == 'linkedin' %}
+            <p class="source-tip">LinkedIn connector placeholder. Configured for future integration.</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

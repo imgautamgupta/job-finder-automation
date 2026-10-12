@@ -1,0 +1,45 @@
+"""Test more potential Lever and Greenhouse tokens."""
+
+import json
+import time
+from candidate_auditor import probe_lever, probe_greenhouse
+
+CANDIDATES = [
+    "atlan", "appsmith", "headout", "leenaai", "leena-ai", "invideo", "murf",
+    "dhiwise", "cogoport", "porter", "dukaan", "plumhq", "plum", "glance",
+    "kuku-fm", "kukufm", "urbanic", "mamaearth", "sarvam", "sarvamai",
+    "krutrim", "ola", "olacabs", "notion", "figma", "airtable", "miro",
+    "clickup", "monday", "asana", "hubspot", "intercom", "loom", "grammarly",
+    "webflow", "retool", "checkr", "carta", "benchling", "brex", "ramp",
+    "plaid", "affirm", "klarna", "revolut", "wise", "monzo", "cureskin",
+    "verloop", "yellow-ai", "okcredit", "browserstack-careers", "postman-inc",
+    "springverify", "signeasy", "chargebee-careers", "hasura-technologies"
+]
+
+def main():
+    print("Testing additional candidates...")
+    found_lever = []
+    found_gh = []
+    for c in CANDIDATES:
+        try:
+            r = probe_lever(c)
+            if r["http_status"] == 200 and r["available"] > 0:
+                print(f"[LV 200] {c:20} Avail: {r['available']:4} | India: {r['india_jobs']:3} | Remote: {r['remote_jobs']:3} | Eng: {r['engineering_jobs']:3} | Rel: {r['potentially_relevant']:2}")
+                found_lever.append(r)
+        except Exception:
+            pass
+
+        try:
+            r = probe_greenhouse(c)
+            if r["http_status"] == 200 and r["available"] > 0:
+                print(f"[GH 200] {c:20} Avail: {r['available']:4} | India: {r['india_jobs']:3} | Remote: {r['remote_jobs']:3} | Eng: {r['engineering_jobs']:3} | Rel: {r['potentially_relevant']:2}")
+                found_gh.append(r)
+        except Exception:
+            pass
+        time.sleep(0.15)
+
+    with open("scratch/additional_discovered.json", "w", encoding="utf-8") as f:
+        json.dump({"lever": found_lever, "greenhouse": found_gh}, f, indent=2)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Overview{% endblock %}
+{% block page_title %}Job Review Dashboard{% endblock %}
+{% block page_subtitle %}Executive summary of discovery results, matches, and application stages.{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <!-- Metrics Cards Grid -->
+  <section class="metrics-grid">
+    <div class="metric-card card-total">
+      <div class="metric-header">
+        <span class="metric-title">Total Jobs</span>
+        <span class="metric-icon">📁</span>
+      </div>
+      <div class="metric-value">{{ counts.total }}</div>
+      <div class="metric-footer">Persisted in SQLite database</div>
+    </div>
+
+    <div class="metric-card card-new">
+      <div class="metric-header">
+        <span class="metric-title">New Jobs</span>
+        <span class="metric-icon">✨</span>
+      </div>
+      <div class="metric-value">{{ counts.new_jobs }}</div>
+      <div class="metric-footer">Awaiting review</div>
+    </div>
+
+    <div class="metric-card card-high">
+      <div class="metric-header">
+        <span class="metric-title">High Priority</span>
+        <span class="metric-icon">🔥</span>
+      </div>
+      <div class="metric-value">{{ counts.high_priority }}</div>
+      <div class="metric-footer">Score ≥ 90 (Excellent)</div>
+    </div>
+
+    <div class="metric-card card-strong">
+      <div class="metric-header">
+        <span class="metric-title">Strong Matches</span>
+        <span class="metric-icon">⭐</span>
+      </div>
+      <div class="metric-value">{{ counts.strong_matches }}</div>
+      <div class="metric-footer">Score ≥ 80 (Strong+)</div>
+    </div>
+
+    <div class="metric-card card-shortlisted">
+      <div class="metric-header">
+        <span class="metric-title">Shortlisted</span>
+        <span class="metric-icon">📌</span>
+      </div>
+      <div class="metric-value">{{ counts.shortlisted }}</div>
+      <div class="metric-footer"><a href="/shortlisted">View shortlisted →</a></div>
+    </div>
+
+    <div class="metric-card card-applied">
+      <div class="metric-header">
+        <span class="metric-title">Applied</span>
+        <span class="metric-icon">📨</span>
+      </div>
+      <div class="metric-value">{{ counts.applied }}</div>
+      <div class="metric-footer"><a href="/applied">View applied jobs →</a></div>
+    </div>
+
+    <div class="metric-card card-interview">
+      <div class="metric-header">
+        <span class="metric-title">Interviews</span>
+        <span class="metric-icon">🎯</span>
+      </div>
+      <div class="metric-value">{{ counts.interview }}</div>
+      <div class="metric-footer"><a href="/interviews">Active interviews →</a></div>
+    </div>
+
+    <div class="metric-card card-offers">
+      <div class="metric-header">
+        <span class="metric-title">Offers</span>
+        <span class="metric-icon">🎉</span>
+      </div>
+      <div class="metric-value">{{ counts.offers }}</div>
+      <div class="metric-footer"><a href="/offers">View offers →</a></div>
+    </div>
+
+    <div class="metric-card card-rejected">
+      <div class="metric-header">
+        <span class="metric-title">Rejected / Passed</span>
+        <span class="metric-icon">🚫</span>
+      </div>
+      <div class="metric-value">{{ counts.rejected + counts.not_interested }}</div>
+      <div class="metric-footer">{{ counts.rejected }} rejected, {{ counts.not_interested }} not interested</div>
+    </div>
+  </section>
+
+  <!-- Phase 9: Application Decision & Daily Progress Grid -->
+  <section class="metrics-grid" style="margin-top: 1.5rem;">
+    <div class="metric-card card-high" style="border-left: 4px solid #ef4444;">
+      <div class="metric-header">
+        <span class="metric-title">Apply Today Queue</span>
+        <span class="metric-icon">🚀</span>
+      </div>
+      <div class="metric-value">{{ counts.apply_today }}</div>
+      <div class="metric-footer"><a href="/apply-today">View Apply Today queue →</a></div>
+    </div>
+
+    <div class="metric-card card-high">
+      <div class="metric-header">
+        <span class="metric-title">Urgent Applications</span>
+        <span class="metric-icon">🔥</span>
+      </div>
+      <div class="metric-value">{{ counts.urgent_applications }}</div>
+      <div class="metric-footer">Readiness ≥ 85 & Score ≥ 80</div>
+    </div>
+
+    <div class="metric-card card-strong">
+      <div class="metric-header">
+        <span class="metric-title">High Priority</span>
+        <span class="metric-icon">⭐</span>
+      </div>
+      <div class="metric-value">{{ counts.high_applications }}</div>
+      <div class="metric-footer">Readiness ≥ 75 or Score ≥ 80</div>
+    </div>
+
+    <div class="metric-card card-applied" style="border-left: 4px solid #10b981;">
+      <div class="metric-header">
+        <span class="metric-title">Today's Progress</span>
+        <span class="metric-icon">🎯</span>
+      </div>
+      <div class="metric-value">{{ counts.applied_today }} / {{ daily_target }}</div>
+      <div class="metric-footer">
+        {% if remaining_today > 0 %}
+          {{ remaining_today }} more needed today
+        {% else %}
+          ✓ Daily target achieved!
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="metric-card card-shortlisted" style="border-left: 4px solid #f59e0b;">
+      <div class="metric-header">
+        <span class="metric-title">Follow-ups Due</span>
+        <span class="metric-icon">📅</span>
+      </div>
+      <div class="metric-value">{{ counts.follow_ups_due }}</div>
+      <div class="metric-footer">Due today or overdue</div>
+    </div>
+
+    <div class="metric-card card-total" style="border-left: 4px solid #6366f1;">
+      <div class="metric-header">
+        <span class="metric-title">Average Readiness</span>
+        <span class="metric-icon">📈</span>
+      </div>
+      <div class="metric-value">{{ counts.avg_readiness }}%</div>
+      <div class="metric-footer">Across actionable candidate jobs</div>
+    </div>
+  </section>
+
+  <!-- Upcoming Follow-ups Section (Phase 9) -->
+  {% if upcoming_follow_ups %}
+    <section class="content-section" style="margin-top: 1.5rem;">
+      <div class="section-header">
+        <div>
+          <h2>📅 Upcoming & Due Follow-ups</h2>
+          <p class="section-subtitle">Tracked follow-up dates and notes for manual application check-ins.</p>
+        </div>
+      </div>
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Due Date</th>
+              <th>Company</th>
+              <th>Job Title</th>
+              <th>Status</th>
+              <th>Notes / Action Item</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for j in upcoming_follow_ups %}
+              <tr>
+                <td><strong>{{ j.follow_up_date }}</strong></td>
+                <td>{{ j.company }}</td>
+                <td class="cell-title"><a href="/jobs/{{ j.id }}" class="job-link">{{ j.title }}</a></td>
+                <td><span class="status-badge {{ j.status|status_badge_class }}">{{ j.status.value if j.status.value is defined else j.status }}</span></td>
+                <td>{{ j.follow_up_notes or "No notes added" }}</td>
+                <td><a href="/jobs/{{ j.id }}" class="btn btn-sm btn-outline">Update</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- Top Matches Section -->
+  <section class="content-section">
+    <div class="section-header">
+      <div>
+        <h2>Top Matching Opportunities</h2>
+        <p class="section-subtitle">Candidates with Match Score ≥ 80 sorted by score.</p>
+      </div>
+      <a href="/jobs?score=80" class="btn btn-outline">View All (≥80)</a>
+    </div>
+
+    {% if top_jobs %}
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Priority</th>
+              <th>Score</th>
+              <th>Job Title</th>
+              <th>Company</th>
+              <th>Location</th>
+              <th>Source</th>
+              <th>Status</th>
+              <th>First Seen</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for job in top_jobs %}
+              <tr>
+                <td>
+                  <span class="priority-pill {{ job.match_score|score_badge_class }}">
+                    {{ job.match_category or "Match" }}
+                  </span>
+                </td>
+                <td>
+                  <span class="score-badge {{ job.match_score|score_badge_class }}">
+                    {{ job.match_score if job.match_score is not none else "N/A" }}
+                  </span>
+                </td>
+                <td class="cell-title">
+                  <a href="/jobs/{{ job.id }}" class="job-link">{{ job.title }}</a>
+                  {% if job.url %}
+                    <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer" class="ext-link-icon" title="Open source posting">↗</a>
+                  {% endif %}
+                </td>
+                <td class="cell-company">{{ job.company }}</td>
+                <td class="cell-location">{{ job.location or "Not Specified" }}</td>
+                <td><span class="source-tag source-{{ job.source|lower }}">{{ job.source|capitalize }}</span></td>
+                <td><span class="status-badge {{ job.status|status_badge_class }}">{{ job.status.value if job.status.value is defined else job.status }}</span></td>
+                <td class="cell-date">{{ job.first_seen_at|format_datetime }}</td>
+                <td class="cell-actions">
+                  <a href="/jobs/{{ job.id }}" class="btn btn-sm btn-outline">View</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No high-match listings yet (≥ 80)</h3>
+        <p>Run the daily pipeline or browse all collected listings.</p>
+        <a href="/jobs" class="btn btn-primary">Browse All Jobs</a>
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- Two Column Layout: Recent Pipeline Runs & Source Health -->
+  <div class="grid-two-col">
+    <!-- Recent Pipeline Executions -->
+    <section class="content-section">
+      <div class="section-header">
+        <div>
+          <h2>Recent Pipeline Runs</h2>
+          <p class="section-subtitle">Execution history from daily scheduler.</p>
+        </div>
+        <a href="/pipeline-runs" class="btn btn-sm btn-outline">Full History</a>
+      </div>
+
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Run ID</th>
+              <th>Status</th>
+              <th>Raw</th>
+              <th>Matches</th>
+              <th>New</th>
+              <th>Started</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for run in recent_runs %}
+              <tr>
+                <td><code class="code-pill">{{ run.run_id[:17] }}</code></td>
+                <td>
+                  {% if run.status == "COMPLETED" %}
+                    <span class="badge-status-completed">Completed</span>
+                  {% elif run.status == "COMPLETED_WITH_SOURCE_WARNINGS" %}
+                    <span class="badge-status-warning" title="Completed with source warnings (e.g. 403)">Warnings</span>
+                  {% elif run.status == "RUNNING" %}
+                    <span class="badge-status-running">Running</span>
+                  {% else %}
+                    <span class="badge-status-failed">{{ run.status }}</span>
+                  {% endif %}
+                </td>
+                <td>{{ run.raw_collected }}</td>
+                <td><strong>{{ run.relevant }}</strong> ({{ run.strong }} strong)</td>
+                <td>{{ run.new_jobs }}</td>
+                <td class="cell-date">{{ run.started_at|format_datetime }}</td>
+              </tr>
+            {% else %}
+              <tr><td colspan="6" class="text-center">No runs recorded yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Source Health Status -->
+    <section class="content-section">
+      <div class="section-header">
+        <div>
+          <h2>Source Health</h2>
+          <p class="section-subtitle">Live status across configured job sources.</p>
+        </div>
+        <a href="/source-health" class="btn btn-sm btn-outline">Details</a>
+      </div>
+
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Status</th>
+              <th>Last Count</th>
+              <th>Notes / Errors</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in source_health %}
+              <tr>
+                <td><strong>{{ s.source }}</strong></td>
+                <td>
+                  {% if s.status == "COMPLETED" %}
+                    <span class="badge-health-ok">Active</span>
+                  {% elif s.status == "BLOCKED" %}
+                    <span class="badge-health-blocked">Blocked</span>
+                  {% elif s.status == "DISABLED" %}
+                    <span class="badge-health-disabled">Disabled</span>
+                  {% else %}
+                    <span class="badge-health-idle">{{ s.status }}</span>
+                  {% endif %}
+                </td>
+                <td>{{ s.collected }}</td>
+                <td class="cell-subtle">
+                  {% if s.error and s.error != "None" %}
+                    <span class="text-danger">{{ s.error }}</span>
+                  {% else %}
+                    Healthy
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

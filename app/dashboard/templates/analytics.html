@@ -1,0 +1,739 @@
+{% extends "base.html" %}
+
+{% block title %}Application Analytics & Optimization{% endblock %}
+{% block page_title %}Application Analytics & Strategy Optimization{% endblock %}
+{% block page_subtitle %}Evaluate real funnel conversions, source quality, role performance, and deterministic job-search optimizations.{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+
+  <!-- Period & Filter Controls Bar -->
+  <div class="filter-card mb-24">
+    <form method="GET" action="/analytics" class="filter-form">
+      <div class="filter-row">
+        <!-- Period Quick Select -->
+        <div class="filter-group">
+          <label class="filter-label">Time Window</label>
+          <div class="pill-group">
+            <a href="/analytics?period=today{% if source %}&source={{ source }}{% endif %}{% if role %}&role={{ role }}{% endif %}" class="pill-btn {% if period == 'today' %}active{% endif %}">Today</a>
+            <a href="/analytics?period=7d{% if source %}&source={{ source }}{% endif %}{% if role %}&role={{ role }}{% endif %}" class="pill-btn {% if period == '7d' %}active{% endif %}">Last 7 Days</a>
+            <a href="/analytics?period=30d{% if source %}&source={{ source }}{% endif %}{% if role %}&role={{ role }}{% endif %}" class="pill-btn {% if period == '30d' %}active{% endif %}">Last 30 Days</a>
+            <a href="/analytics?period=90d{% if source %}&source={{ source }}{% endif %}{% if role %}&role={{ role }}{% endif %}" class="pill-btn {% if period == '90d' %}active{% endif %}">Last 90 Days</a>
+            <a href="/analytics?period=all{% if source %}&source={{ source }}{% endif %}{% if role %}&role={{ role }}{% endif %}" class="pill-btn {% if period == 'all' %}active{% endif %}">All Time</a>
+          </div>
+          <input type="hidden" name="period" value="{{ period }}">
+        </div>
+
+        <!-- Custom Date Range -->
+        <div class="filter-group">
+          <label class="filter-label" for="start_date">Start Date</label>
+          <input type="date" id="start_date" name="start_date" class="form-control" value="{{ start_date }}">
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="end_date">End Date</label>
+          <input type="date" id="end_date" name="end_date" class="form-control" value="{{ end_date }}">
+        </div>
+
+        <!-- Source Filter -->
+        <div class="filter-group">
+          <label class="filter-label" for="source">Source</label>
+          <input type="text" id="source" name="source" class="form-control" placeholder="e.g. greenhouse" value="{{ source }}">
+        </div>
+
+        <!-- Role Filter -->
+        <div class="filter-group">
+          <label class="filter-label" for="role">Role Keyword</label>
+          <input type="text" id="role" name="role" class="form-control" placeholder="e.g. Python" value="{{ role }}">
+        </div>
+
+        <div class="filter-actions">
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+          <a href="/analytics" class="btn btn-outline">Reset</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Small Dataset Protection Banner -->
+  {% if report.is_small_sample %}
+  <div class="alert-banner alert-warning mb-24">
+    <div class="alert-icon">ℹ️</div>
+    <div class="alert-content">
+      <strong>Limited Application Sample Size ({{ report.funnel.applied }} total applications)</strong>
+      <p>Conversion metrics (interview rate, offer rate) require at least 3–5 tracked applications for statistical stability. Rates displayed are preliminary observations from your local database and do not prove causation.</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Top KPI Cards -->
+  <div class="kpi-grid mb-24">
+    <div class="kpi-card">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-info">
+        <div class="kpi-value">{{ report.funnel.jobs_found }}</div>
+        <div class="kpi-label">Jobs Found</div>
+        <div class="kpi-subtext">Total collection volume</div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-info">
+        <div class="kpi-value">{{ report.funnel.relevant }}</div>
+        <div class="kpi-label">Relevant Jobs</div>
+        <div class="kpi-subtext">Score ≥ 60 ({% if report.funnel.jobs_found > 0 %}{{ (report.funnel.relevant / report.funnel.jobs_found * 100) | round(1) }}% yield{% else %}0%{% endif %})</div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">⭐</div>
+      <div class="kpi-info">
+        <div class="kpi-value">{{ report.funnel.recommended }}</div>
+        <div class="kpi-label">Recommended</div>
+        <div class="kpi-subtext">Priority: Urgent / High / Normal</div>
+      </div>
+    </div>
+
+    <div class="kpi-card highlight-card">
+      <div class="kpi-icon">📨</div>
+      <div class="kpi-info">
+        <div class="kpi-value">{{ report.funnel.applied }}</div>
+        <div class="kpi-label">Applied</div>
+        <div class="kpi-subtext">
+          {% if report.conversion_rates.application_rate is not none %}
+            {{ report.conversion_rates.application_rate }}% of relevant
+          {% else %}
+            N/A
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">🗣️</div>
+      <div class="kpi-info">
+        <div class="kpi-value">{{ report.funnel.interview }}</div>
+        <div class="kpi-label">Interviews</div>
+        <div class="kpi-subtext">
+          {% if report.conversion_rates.interview_rate is not none %}
+            {{ report.conversion_rates.interview_rate }}% conversion
+          {% else %}
+            N/A
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">🎉</div>
+      <div class="kpi-info">
+        <div class="kpi-value">{{ report.funnel.offer }}</div>
+        <div class="kpi-label">Offers</div>
+        <div class="kpi-subtext">
+          {% if report.conversion_rates.offer_rate is not none %}
+            {{ report.conversion_rates.offer_rate }}% of applied
+          {% else %}
+            N/A
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 1: Application Funnel & Lifecycle Visualizer -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <h3>Application Funnel & Conversion Rates</h3>
+      <span class="badge badge-info">Deterministic Local Calculations</span>
+    </div>
+    <div class="card-body">
+      <!-- Visual Funnel Flow -->
+      <div class="funnel-flow mb-24">
+        <div class="funnel-step">
+          <div class="funnel-box">
+            <span class="step-num">{{ report.funnel.jobs_found }}</span>
+            <span class="step-name">Jobs Found</span>
+          </div>
+          <div class="funnel-arrow">
+            <span>{% if report.funnel.jobs_found > 0 %}{{ (report.funnel.relevant / report.funnel.jobs_found * 100) | round(1) }}%{% else %}—{% endif %}</span>
+            ➜
+          </div>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-box">
+            <span class="step-num">{{ report.funnel.relevant }}</span>
+            <span class="step-name">Relevant</span>
+          </div>
+          <div class="funnel-arrow">
+            <span>{% if report.funnel.relevant > 0 %}{{ (report.funnel.recommended / report.funnel.relevant * 100) | round(1) }}%{% else %}—{% endif %}</span>
+            ➜
+          </div>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-box">
+            <span class="step-num">{{ report.funnel.recommended }}</span>
+            <span class="step-name">Recommended</span>
+          </div>
+          <div class="funnel-arrow">
+            <span>{% if report.conversion_rates.recommendation_to_app_rate is not none %}{{ report.conversion_rates.recommendation_to_app_rate }}%{% else %}—{% endif %}</span>
+            ➜
+          </div>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-box highlight">
+            <span class="step-num">{{ report.funnel.applied }}</span>
+            <span class="step-name">Applied</span>
+          </div>
+          <div class="funnel-arrow">
+            <span>{% if report.conversion_rates.interview_rate is not none %}{{ report.conversion_rates.interview_rate }}%{% else %}—{% endif %}</span>
+            ➜
+          </div>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-box">
+            <span class="step-num">{{ report.funnel.interview }}</span>
+            <span class="step-name">Interview</span>
+          </div>
+          <div class="funnel-arrow">
+            <span>{% if report.conversion_rates.interview_to_offer_rate is not none %}{{ report.conversion_rates.interview_to_offer_rate }}%{% else %}—{% endif %}</span>
+            ➜
+          </div>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-box success">
+            <span class="step-num">{{ report.funnel.offer }}</span>
+            <span class="step-name">Offer</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Funnel Details Table -->
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Funnel Stage</th>
+              <th>Current Count</th>
+              <th>Conversion Rate</th>
+              <th>Counting Definition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Jobs Found</strong></td>
+              <td><strong>{{ report.funnel.jobs_found }}</strong></td>
+              <td>100.0%</td>
+              <td>Total job opportunities stored in SQLite database</td>
+            </tr>
+            <tr>
+              <td><strong>2. Relevant Jobs</strong></td>
+              <td><strong>{{ report.funnel.relevant }}</strong></td>
+              <td>
+                {% if report.funnel.jobs_found > 0 %}
+                  {{ (report.funnel.relevant / report.funnel.jobs_found * 100) | round(1) }}% of found
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>Match score ≥ 60 across target roles, skills, and locations</td>
+            </tr>
+            <tr>
+              <td><strong>3. Recommended Jobs</strong></td>
+              <td><strong>{{ report.funnel.recommended }}</strong></td>
+              <td>
+                {% if report.funnel.relevant > 0 %}
+                  {{ (report.funnel.recommended / report.funnel.relevant * 100) | round(1) }}% of relevant
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>Application priority classified as URGENT, HIGH, or NORMAL</td>
+            </tr>
+            <tr>
+              <td><strong>4. Manual Applications</strong></td>
+              <td><strong>{{ report.funnel.applied }}</strong></td>
+              <td>
+                {% if report.conversion_rates.application_rate is not none %}
+                  {{ report.conversion_rates.application_rate }}% of relevant
+                  ({{ report.conversion_rates.recommendation_to_app_rate }}% of recommended)
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>Status is APPLIED, INTERVIEW, or OFFER (1 record = 1 application)</td>
+            </tr>
+            <tr>
+              <td><strong>5. Interviews</strong></td>
+              <td><strong>{{ report.funnel.interview }}</strong></td>
+              <td>
+                {% if report.conversion_rates.interview_rate is not none %}
+                  {{ report.conversion_rates.interview_rate }}% of applied
+                {% else %}
+                  N/A (insufficient applications)
+                {% endif %}
+              </td>
+              <td>Status is INTERVIEW or scheduled/completed interview recorded</td>
+            </tr>
+            <tr>
+              <td><strong>6. Offers</strong></td>
+              <td><strong>{{ report.funnel.offer }}</strong></td>
+              <td>
+                {% if report.conversion_rates.offer_rate is not none %}
+                  {{ report.conversion_rates.offer_rate }}% of applied
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>Status is OFFER</td>
+            </tr>
+            <tr class="muted-row">
+              <td><strong>Rejected / Passed Over</strong></td>
+              <td>{{ report.funnel.rejected }}</td>
+              <td>—</td>
+              <td>Status is REJECTED</td>
+            </tr>
+            <tr class="muted-row">
+              <td><strong>Not Interested</strong></td>
+              <td>{{ report.funnel.not_interested }}</td>
+              <td>—</td>
+              <td>Status is NOT_INTERESTED</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="footnote text-muted mt-8">
+        * Funnel stages represent real database stage progression. Applications remain strictly manual.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 2: Consistency & Daily Target Tracker -->
+  <div class="grid-2-col mb-24">
+    <!-- Daily Application Target Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Daily Target Analysis</h3>
+        <span class="badge badge-primary">Target: {{ report.daily_target.target }} / Day</span>
+      </div>
+      <div class="card-body">
+        <div class="target-stat-row mb-16">
+          <div class="target-stat">
+            <span class="stat-number">{{ report.daily_target.applied_today }}</span>
+            <span class="stat-label">Applied Today</span>
+          </div>
+          <div class="target-stat">
+            <span class="stat-number">{{ report.daily_target.remaining }}</span>
+            <span class="stat-label">Remaining Today</span>
+          </div>
+          <div class="target-stat">
+            <span class="stat-number">{{ report.daily_target.achievement_percentage }}%</span>
+            <span class="stat-label">Target Progress</span>
+          </div>
+          <div class="target-stat">
+            <span class="stat-number">{{ report.daily_target.seven_day_avg }}</span>
+            <span class="stat-label">7-Day Daily Avg</span>
+          </div>
+        </div>
+
+        <div class="progress-bar-container mb-16">
+          <div class="progress-bar-fill" style="width: {{ [report.daily_target.achievement_percentage, 100.0] | min }}%;"></div>
+        </div>
+
+        <p class="text-secondary font-sm">
+          Applications are logged only when you manually submit an application and transition the status to APPLIED.
+        </p>
+      </div>
+    </div>
+
+    <!-- Application Streak Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Application Consistency Streak</h3>
+        <span class="badge badge-warning">Manual Effort</span>
+      </div>
+      <div class="card-body">
+        <div class="streak-display mb-16">
+          <div class="streak-box">
+            <div class="streak-icon">🔥</div>
+            <div class="streak-val">{{ report.streak.current_streak }}</div>
+            <div class="streak-lbl">Current Streak (Days)</div>
+          </div>
+          <div class="streak-box">
+            <div class="streak-icon">🏆</div>
+            <div class="streak-val">{{ report.streak.longest_streak }}</div>
+            <div class="streak-lbl">Longest Streak (Days)</div>
+          </div>
+        </div>
+        <p class="text-secondary font-sm">
+          A day counts toward your streak only if at least one manual application is recorded via applied_at. Automatic job discovery does not increment the streak.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Optimization Suggestions & Strategy Insights -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <h3>Application Strategy Insights & Optimization Suggestions</h3>
+      <span class="badge badge-success">Deterministic Rules</span>
+    </div>
+    <div class="card-body">
+      {% if report.insights %}
+        <div class="insights-grid">
+          {% for item in report.insights %}
+          <div class="insight-card insight-{{ item.category.lower() }}">
+            <div class="insight-header">
+              <span class="insight-badge badge-{{ item.category.lower() }}">{{ item.category }}</span>
+              <h4 class="insight-title">{{ item.title }}</h4>
+            </div>
+            <p class="insight-message">{{ item.message }}</p>
+            {% if item.actionable %}
+            <div class="insight-action">
+              <span class="pill pill-actionable">⚡ Action Suggested</span>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted">No specific strategy alerts at this time. Continue monitoring incoming opportunities.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Section 4: Daily Application Activity -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <h3>Daily Activity Timeline</h3>
+      <span class="badge badge-info">{{ period.upper() }} Window</span>
+    </div>
+    <div class="card-body">
+      {% if report.daily_activity %}
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Jobs Found</th>
+              <th>Relevant (Score ≥ 60)</th>
+              <th>Manual Applications</th>
+              <th>Interviews</th>
+              <th>Offers</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in report.daily_activity %}
+            <tr>
+              <td><strong>{{ row.date_str }}</strong></td>
+              <td>{{ row.jobs_found }}</td>
+              <td>{{ row.relevant }}</td>
+              <td>
+                {% if row.applied > 0 %}
+                  <span class="badge badge-primary">{{ row.applied }}</span>
+                {% else %}
+                  0
+                {% endif %}
+              </td>
+              <td>
+                {% if row.interviews > 0 %}
+                  <span class="badge badge-warning">{{ row.interviews }}</span>
+                {% else %}
+                  0
+                {% endif %}
+              </td>
+              <td>
+                {% if row.offers > 0 %}
+                  <span class="badge badge-success">{{ row.offers }}</span>
+                {% else %}
+                  0
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted">No activity records logged in the selected window.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Section 5: Source Performance & Source Quality Score -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <h3>Job Source Performance & Quality Score</h3>
+      <span class="badge badge-primary">ATS & Portal Breakdown</span>
+    </div>
+    <div class="card-body">
+      {% if report.sources %}
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Source Connector</th>
+              <th>Jobs Found</th>
+              <th>Relevant</th>
+              <th>Recommended</th>
+              <th>Applied</th>
+              <th>Interviews</th>
+              <th>Relevance Rate</th>
+              <th>Application Rate</th>
+              <th>Source Quality Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in report.sources %}
+            <tr>
+              <td><strong>{{ s.source | title }}</strong></td>
+              <td>{{ s.jobs_found }}</td>
+              <td>{{ s.relevant }}</td>
+              <td>{{ s.recommended }}</td>
+              <td>{{ s.applied }}</td>
+              <td>{{ s.interview }}</td>
+              <td>
+                {% if s.relevance_rate is not none %}
+                  {{ s.relevance_rate }}%
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>
+                {% if s.application_rate is not none %}
+                  {{ s.application_rate }}%
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>
+                {% if s.quality_score is not none %}
+                  <span class="score-pill score-high">{{ s.quality_score }} / 100</span>
+                  <span class="font-sm text-secondary">({{ s.quality_label }})</span>
+                {% else %}
+                  <span class="font-sm text-muted">{{ s.quality_label }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="footnote text-muted mt-8">
+        * Source Quality Score combines relevance rate (40%), recommended rate (25%), application conversion (20%), and interview conversion (15%). Requires ≥ 5 jobs per source.
+      </p>
+      {% else %}
+      <p class="text-muted">No source records found.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Section 6: Target Role & Location Performance -->
+  <div class="grid-2-col mb-24">
+    <!-- Role Performance -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Role Family Performance</h3>
+        <span class="badge badge-info">Profile Target Roles</span>
+      </div>
+      <div class="card-body">
+        {% if report.roles %}
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Role Family</th>
+                <th>Found</th>
+                <th>Relevant</th>
+                <th>Applied</th>
+                <th>Interview</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in report.roles %}
+              <tr>
+                <td><strong>{{ r.role_name }}</strong></td>
+                <td>{{ r.jobs_found }}</td>
+                <td>{{ r.relevant }}</td>
+                <td>{{ r.applied }}</td>
+                <td>{{ r.interview }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No role performance data available.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Location Performance -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Location Performance</h3>
+        <span class="badge badge-info">Preferred Geographies</span>
+      </div>
+      <div class="card-body">
+        {% if report.locations %}
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>Found</th>
+                <th>Relevant</th>
+                <th>Applied</th>
+                <th>App Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for loc in report.locations %}
+              <tr>
+                <td><strong>{{ loc.location_name }}</strong></td>
+                <td>{{ loc.jobs_found }}</td>
+                <td>{{ loc.relevant }}</td>
+                <td>{{ loc.applied }}</td>
+                <td>
+                  {% if loc.application_rate is not none %}
+                    {{ loc.application_rate }}%
+                  {% else %}
+                    —
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No location records available.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 7: Score Performance (Match, Readiness, Resume Alignment) -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <h3>Score Performance Analysis</h3>
+      <span class="badge badge-primary">Correlation by Score Tiers</span>
+    </div>
+    <div class="card-body">
+      <div class="grid-3-col">
+        <!-- Match Score Tiers -->
+        <div class="bucket-block">
+          <h4 class="bucket-title">Match Score (0–100)</h4>
+          <table class="mini-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Jobs</th>
+                <th>Applied</th>
+                <th>Interview</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for b in report.match_buckets %}
+              <tr>
+                <td>{{ b.bucket_label }}</td>
+                <td>{{ b.jobs_count }}</td>
+                <td>{{ b.applied }}</td>
+                <td>{{ b.interview }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Readiness Score Tiers -->
+        <div class="bucket-block">
+          <h4 class="bucket-title">Readiness Score (Phase 9)</h4>
+          <table class="mini-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Jobs</th>
+                <th>Applied</th>
+                <th>Interview</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for b in report.readiness_buckets %}
+              <tr>
+                <td>{{ b.bucket_label }}</td>
+                <td>{{ b.jobs_count }}</td>
+                <td>{{ b.applied }}</td>
+                <td>{{ b.interview }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Resume Alignment Score Tiers -->
+        <div class="bucket-block">
+          <h4 class="bucket-title">Resume Alignment (Phase 10)</h4>
+          <table class="mini-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Jobs</th>
+                <th>Applied</th>
+                <th>Interview</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for b in report.resume_buckets %}
+              <tr>
+                <td>{{ b.bucket_label }}</td>
+                <td>{{ b.jobs_count }}</td>
+                <td>{{ b.applied }}</td>
+                <td>{{ b.interview }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 8: Technical Skills Observed in Applications -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <h3>Technical Skills Observed in Application Pipeline</h3>
+      <span class="badge badge-info">Candidate Application Data</span>
+    </div>
+    <div class="card-body">
+      {% if report.skills %}
+      <div class="skills-grid">
+        {% for sk in report.skills %}
+        <div class="skill-stat-card">
+          <div class="skill-name">{{ sk.skill }}</div>
+          <div class="skill-counts">
+            <span class="skill-pill pill-applied">Applied: {{ sk.applied_count }}</span>
+            <span class="skill-pill pill-interview">Interviews: {{ sk.interview_count }}</span>
+            {% if sk.offer_count > 0 %}
+            <span class="skill-pill pill-offer">Offers: {{ sk.offer_count }}</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <p class="footnote text-muted mt-8">
+        * Labeled strictly as: "Observed in your application data". Does not prove causation.
+      </p>
+      {% else %}
+      <p class="text-muted">No applied jobs with recorded technical skills in the selected window.</p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

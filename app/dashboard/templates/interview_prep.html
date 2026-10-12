@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+
+{% block title %}Interview Preparation Workspace{% endblock %}
+{% block page_title %}Interview Preparation Workspace{% endblock %}
+{% block page_subtitle %}Deterministic, job-specific technical preparation guides, project talking points, likely questions, and tracking.{% endblock %}
+
+{% block content %}
+<div class="jobs-view-container">
+  <!-- Job Selector Toolbar -->
+  <div class="filter-card" style="margin-bottom: 1.5rem;">
+    <form method="get" action="/interview-prep" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 280px;">
+        <label for="job_id" style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+          Select Target Job / Interview
+        </label>
+        <select id="job_id" name="job_id" onchange="this.form.submit()" style="width: 100%; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.9rem;">
+          {% for candidate_job in eligible_jobs %}
+            <option value="{{ candidate_job.id }}" {% if selected_job and selected_job.id == candidate_job.id %}selected{% endif %}>
+              {% if candidate_job.interview_date %}📅 [{{ candidate_job.interview_date }}] {% endif %}
+              {{ candidate_job.company }} — {{ candidate_job.title }} (Status: {{ candidate_job.status.value if candidate_job.status.value is defined else candidate_job.status }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary">Load Preparation Guide</button>
+      </div>
+      {% if selected_job %}
+        <div style="margin-left: auto;">
+          <a href="/jobs/{{ selected_job.id }}" class="btn btn-outline">View Full Job Posting →</a>
+        </div>
+      {% endif %}
+    </form>
+  </div>
+
+  {% if package %}
+    <!-- Job Summary Header Banner -->
+    <div class="card" style="padding: 1.5rem; margin-bottom: 1.5rem; background: var(--bg-surface);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+            <span class="status-badge {{ package.status|status_badge_class }}">
+              {{ package.status }}
+            </span>
+            <span class="score-badge {{ package.match_score|score_badge_class }}">
+              Match: {{ package.match_score if package.match_score is not none else 'N/A' }}/100
+            </span>
+            <span class="score-badge {{ package.readiness_score|readiness_badge_class }}">
+              Readiness: {{ package.readiness_score if package.readiness_score is not none else 'N/A' }}/100
+            </span>
+            {% if package.resume_alignment_score is not none %}
+              <span class="score-badge" style="background: #e0e7ff; color: #4338ca;">
+                Resume Alignment: {{ package.resume_alignment_score }}/100
+              </span>
+            {% endif %}
+          </div>
+          <h2 style="margin: 0; font-size: 1.5rem; color: var(--text-primary);">
+            {{ package.title }}
+          </h2>
+          <p style="margin: 4px 0 0; color: var(--text-secondary); font-size: 0.95rem;">
+            🏢 <strong>{{ package.company }}</strong> &bull; 📍 {{ package.location or 'Remote' }} &bull; Source: {{ package.source.capitalize() }}
+          </p>
+        </div>
+
+        <div>
+          <a href="{{ package.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+            Open Employer Application ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Why this job matches -->
+      {% if package.match_reasons %}
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            WHY THIS JOB MATCHES:
+          </div>
+          <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-primary); line-height: 1.5;">
+            {% for reason in package.match_reasons %}
+              <li>{{ reason }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Two-Column Workspace Layout -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+      <!-- Left Column: Technical & Interview Content -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+        <!-- 1. Real Project Discussion -->
+        {% if package.project_questions %}
+          <div class="card" style="padding: 1.25rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+              <h3 style="margin: 0; font-size: 1.15rem; color: var(--text-primary);">
+                📁 Featured Project to Emphasize
+              </h3>
+              <span class="priority-pill priority-high" style="font-size: 0.75rem;">
+                Verified Portfolio
+              </span>
+            </div>
+            <div style="font-weight: 700; font-size: 1.05rem; color: var(--primary); margin-bottom: 0.25rem;">
+              {{ package.project_questions.project_name }}
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              {{ package.project_questions.why_recommended }}
+            </div>
+            <div style="margin-bottom: 0.75rem;">
+              {% for tech in package.project_questions.technologies %}
+                <span class="skill-pill" style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">
+                  {{ tech }}
+                </span>
+              {% endfor %}
+            </div>
+            <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+              Likely Project Walkthrough Questions:
+            </div>
+            <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-primary); line-height: 1.5;">
+              {% for pt in package.project_questions.discussion_points %}
+                <li style="margin-bottom: 6px;">{{ pt }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <!-- 2. Technical Preparation Topics -->
+        {% if package.technical_topics %}
+          <div class="card" style="padding: 1.25rem;">
+            <h3 style="margin: 0 0 1rem 0; font-size: 1.15rem; color: var(--text-primary);">
+              💻 Technical Concept Focus Areas
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              {% for topic in package.technical_topics %}
+                <div style="background: var(--bg-surface-alt, #f8fafc); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.85rem 1rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <span style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">
+                      {{ topic.skill }}
+                    </span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">
+                      {{ topic.category }}
+                    </span>
+                  </div>
+                  <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                    {% for fp in topic.focus_points %}
+                      <li>{{ fp }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- 3. Likely Technical Questions -->
+        {% if package.likely_technical_questions %}
+          <div class="card" style="padding: 1.25rem;">
+            <div style="margin-bottom: 0.75rem;">
+              <h3 style="margin: 0; font-size: 1.15rem; color: var(--text-primary);">
+                ❓ Likely Technical Questions
+              </h3>
+              <p style="margin: 2px 0 0; font-size: 0.8rem; color: var(--text-muted);">
+                Derived deterministically from job description requirements & technologies (not company-specific).
+              </p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              {% for q in package.likely_technical_questions %}
+                <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-alt, #f8fafc); border-left: 3px solid var(--primary); border-radius: 4px; font-size: 0.88rem; color: var(--text-primary);">
+                  <strong>Q:</strong> {{ q }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- 4. General HR & Behavioral Preparation -->
+        <div class="card" style="padding: 1.25rem;">
+          <div style="margin-bottom: 0.75rem;">
+            <h3 style="margin: 0; font-size: 1.15rem; color: var(--text-primary);">
+              👥 Behavioral & HR Questions
+            </h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: var(--text-muted);">
+              General interview questions to prepare using the STAR method (Situation, Task, Action, Result).
+            </p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            {% for q in package.hr_behavioral_questions %}
+              <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-alt, #f8fafc); border-radius: 4px; font-size: 0.88rem; color: var(--text-primary); border: 1px solid var(--border-color);">
+                <strong>Q:</strong> {{ q }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 5. Questions to Ask the Employer -->
+        <div class="card" style="padding: 1.25rem;">
+          <h3 style="margin: 0 0 0.5rem 0; font-size: 1.15rem; color: var(--text-primary);">
+            💬 Thoughtful Questions to Ask Interviewer
+          </h3>
+          <p style="margin: 0 0 0.75rem 0; font-size: 0.8rem; color: var(--text-muted);">
+            High-impact questions demonstrating engineering enthusiasm and professional curiosity.
+          </p>
+          <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-primary); line-height: 1.5;">
+            {% for q in package.questions_to_ask_employer %}
+              <li style="margin-bottom: 6px;">"{{ q }}"</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Column: Tracking Form & Skill Gaps -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+        <!-- Interview Tracking Form -->
+        <div class="card" style="padding: 1.25rem; border-top: 4px solid #8b5cf6;">
+          <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; color: var(--text-primary);">
+            🗓️ Interview Tracking
+          </h3>
+          <form method="post" action="/jobs/{{ package.job_id }}/interview">
+            <input type="hidden" name="redirect_to" value="/interview-prep?job_id={{ package.job_id }}">
+            
+            <div style="margin-bottom: 0.75rem;">
+              <label for="interview_date" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Interview Date</label>
+              <input type="date" id="interview_date" name="interview_date" value="{{ package.interview_date or '' }}" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border-color); border-radius: 4px;">
+            </div>
+
+            <div style="margin-bottom: 0.75rem;">
+              <label for="interview_stage" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Interview Stage</label>
+              <select id="interview_stage" name="interview_stage" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                <option value="" {% if not package.interview_stage %}selected{% endif %}>Not Specified</option>
+                <option value="HR" {% if package.interview_stage == 'HR' %}selected{% endif %}>HR / Recruiter Call</option>
+                <option value="Technical Screening" {% if package.interview_stage == 'Technical Screening' %}selected{% endif %}>Technical Screening</option>
+                <option value="Coding Round" {% if package.interview_stage == 'Coding Round' %}selected{% endif %}>Coding Round</option>
+                <option value="Technical Interview" {% if package.interview_stage == 'Technical Interview' %}selected{% endif %}>Technical Deep Dive</option>
+                <option value="Managerial" {% if package.interview_stage == 'Managerial' %}selected{% endif %}>Managerial / Fit</option>
+                <option value="System Design" {% if package.interview_stage == 'System Design' %}selected{% endif %}>System Design</option>
+                <option value="Behavioral" {% if package.interview_stage == 'Behavioral' %}selected{% endif %}>Behavioral Round</option>
+                <option value="Final" {% if package.interview_stage == 'Final' %}selected{% endif %}>Final Round</option>
+                <option value="Other" {% if package.interview_stage == 'Other' %}selected{% endif %}>Other</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 0.75rem;">
+              <label for="interview_status" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Interview Status</label>
+              <select id="interview_status" name="interview_status" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                <option value="NOT_SCHEDULED" {% if package.interview_status == 'NOT_SCHEDULED' %}selected{% endif %}>Not Scheduled</option>
+                <option value="SCHEDULED" {% if package.interview_status == 'SCHEDULED' %}selected{% endif %}>Scheduled</option>
+                <option value="COMPLETED" {% if package.interview_status == 'COMPLETED' %}selected{% endif %}>Completed</option>
+                <option value="PASSED" {% if package.interview_status == 'PASSED' %}selected{% endif %}>Passed 🎉</option>
+                <option value="FAILED" {% if package.interview_status == 'FAILED' %}selected{% endif %}>Failed ❌</option>
+                <option value="RESCHEDULED" {% if package.interview_status == 'RESCHEDULED' %}selected{% endif %}>Rescheduled</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 0.75rem;">
+              <label for="interview_preparation_status" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Preparation Status</label>
+              <select id="interview_preparation_status" name="interview_preparation_status" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                <option value="NOT_STARTED" {% if package.interview_preparation_status == 'NOT_STARTED' %}selected{% endif %}>Not Started</option>
+                <option value="IN_PROGRESS" {% if package.interview_preparation_status == 'IN_PROGRESS' %}selected{% endif %}>In Progress</option>
+                <option value="READY" {% if package.interview_preparation_status == 'READY' %}selected{% endif %}>Ready for Interview</option>
+                <option value="COMPLETED" {% if package.interview_preparation_status == 'COMPLETED' %}selected{% endif %}>Completed</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <label for="interview_notes" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Interview Notes & Feedback</label>
+              <textarea id="interview_notes" name="interview_notes" rows="3" placeholder="Notes on interview questions, feedback, or follow-up steps..." style="width: 100%; padding: 0.4rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.85rem;">{{ package.interview_notes or '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              Save Interview Details
+            </button>
+          </form>
+        </div>
+
+        <!-- Skill Gap Analysis -->
+        <div class="card" style="padding: 1.25rem;">
+          <h3 style="margin: 0 0 0.75rem 0; font-size: 1.1rem; color: var(--text-primary);">
+            🎯 Skill Alignment & Gaps
+          </h3>
+
+          <div style="margin-bottom: 0.75rem;">
+            <div style="font-weight: 600; font-size: 0.8rem; color: #166534; margin-bottom: 0.25rem;">
+              ✓ Matched Candidate Skills:
+            </div>
+            {% if package.matched_skills %}
+              <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                {% for s in package.matched_skills %}
+                  <span class="skill-pill" style="background: #dcfce7; color: #15803d; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px;">
+                    {{ s }}
+                  </span>
+                {% endfor %}
+              </div>
+            {% else %}
+              <span style="font-size: 0.8rem; color: var(--text-muted);">None detected</span>
+            {% endif %}
+          </div>
+
+          <div style="margin-bottom: 0.75rem;">
+            <div style="font-weight: 600; font-size: 0.8rem; color: #854d0e; margin-bottom: 0.25rem;">
+              ⚠️ Skills to Revise (in profile):
+            </div>
+            {% if package.skills_to_revise %}
+              <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                {% for s in package.skills_to_revise %}
+                  <span class="skill-pill" style="background: #fef9c3; color: #a16207; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px;">
+                    {{ s }}
+                  </span>
+                {% endfor %}
+              </div>
+            {% else %}
+              <span style="font-size: 0.8rem; color: var(--text-muted);">All known skills matched</span>
+            {% endif %}
+          </div>
+
+          <div>
+            <div style="font-weight: 600; font-size: 0.8rem; color: #991b1b; margin-bottom: 0.25rem;">
+              ❌ Missing Skills in Job (not in profile):
+            </div>
+            {% if package.missing_skills %}
+              <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0.5rem;">
+                {% for s in package.missing_skills %}
+                  <span class="skill-pill" style="background: #fee2e2; color: #b91c1c; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px;">
+                    {{ s }}
+                  </span>
+                {% endfor %}
+              </div>
+              <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+                <em>Truthful advice: If asked, acknowledge unfamiliarity transparently, highlight related skills, and convey eager readiness to learn.</em>
+              </p>
+            {% else %}
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Zero missing critical skills</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 10-Step Preparation Checklist -->
+        <div class="card" style="padding: 1.25rem;">
+          <h3 style="margin: 0 0 0.75rem 0; font-size: 1.1rem; color: var(--text-primary);">
+            📋 Interview Checklist
+          </h3>
+          <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            {% for item in package.checklist %}
+              <li style="font-size: 0.82rem; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 6px;">
+                <span style="color: var(--primary);">✓</span>
+                <span>{{ item }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="card" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+      <p style="font-size: 1.25rem; margin: 0 0 0.5rem 0;">No active interview or candidate job selected.</p>
+      <p style="margin: 0;">Please select a job above to load its deterministic preparation package.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

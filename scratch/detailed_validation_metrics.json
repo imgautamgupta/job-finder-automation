@@ -1,0 +1,769 @@
+[
+  {
+    "company": "paytm",
+    "platform": "Lever",
+    "board_identifier": "paytm",
+    "available_postings": 177,
+    "india_jobs": 139,
+    "bengaluru_jobs": 17,
+    "delhi_jobs": 4,
+    "noida_jobs": 87,
+    "remote_jobs": 2,
+    "ahmedabad_jobs": 3,
+    "software_eng_jobs": 30,
+    "python_jobs": 0,
+    "backend_jobs": 3,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 4,
+    "intern_entry_jobs": 15,
+    "potentially_relevant": 8,
+    "sample_relevant_titles": [
+      "Backend - TL/STL [Bangalore, Karnataka onsite]",
+      "Campaign Management - Campaign Ads I Exp- 7 -11 Years [Bangalore, Karnataka onsite]",
+      "Campaign Management- Traffic Management- Growth [Noida, Uttar Pradesh onsite]",
+      "Campaign Management- User Growth [Noida, Uttar Pradesh onsite]"
+    ],
+    "sample_rejected_titles": [
+      "Area Collection Manager - Manager - Lending Collections (Frontend) (Excluded/Non-target)",
+      "Backend - Senior Software Engineer (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "meesho",
+    "platform": "Lever",
+    "board_identifier": "meesho",
+    "available_postings": 61,
+    "india_jobs": 58,
+    "bengaluru_jobs": 54,
+    "delhi_jobs": 1,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 16,
+    "python_jobs": 0,
+    "backend_jobs": 1,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 3,
+    "intern_entry_jobs": 6,
+    "potentially_relevant": 2,
+    "sample_relevant_titles": [
+      "Cluster Head- Last mile - Chennai [Chennai, Tamil Nadu onsite]",
+      "Trainee - Recruitment Coordinator [Bangalore, Karnataka onsite]"
+    ],
+    "sample_rejected_titles": [
+      "Data Scientist III (Excluded/Non-target)",
+      "Director \u2013 Sales, Meesho AI Services (MAS) | North India (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "jumpcloud",
+    "platform": "Lever",
+    "board_identifier": "jumpcloud",
+    "available_postings": 31,
+    "india_jobs": 15,
+    "bengaluru_jobs": 14,
+    "delhi_jobs": 1,
+    "noida_jobs": 0,
+    "remote_jobs": 31,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 20,
+    "python_jobs": 1,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 3,
+    "intern_entry_jobs": 0,
+    "potentially_relevant": 4,
+    "sample_relevant_titles": [
+      "Devices Software Engineer - T\u00fcrkiye [Ankara, T\u00fcrkiye - Remote remote]",
+      "GTM AI Operations - India [Bangalore, India - Remote remote]",
+      "GTM AI Operations - Mexico [Mexico City, Mexico - Remote remote]",
+      "LDAP Software Engineer - India [Bangalore, India - Remote remote]"
+    ],
+    "sample_rejected_titles": [
+      "Customer Support Engineer, Tier 1 (MacOS and MDM) - Mexico (Excluded/Non-target)",
+      "Customer Support Engineer, Tier 2 - Mexico (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "fampay",
+    "platform": "Lever",
+    "board_identifier": "fampay",
+    "available_postings": 16,
+    "india_jobs": 16,
+    "bengaluru_jobs": 16,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 5,
+    "python_jobs": 1,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 0,
+    "intern_entry_jobs": 3,
+    "potentially_relevant": 3,
+    "sample_relevant_titles": [
+      "Data Engineer (SDE 2) [Bengaluru onsite]",
+      "SDE 2 Infra [Bengaluru onsite]",
+      "Security Engineer Intern [Bengaluru onsite]"
+    ],
+    "sample_rejected_titles": [
+      "Security Engineer 2 (Excluded/Non-target)",
+      "Tech Lead Manager - Product Engineering (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "zeta",
+    "platform": "Lever",
+    "board_identifier": "zeta",
+    "available_postings": 25,
+    "india_jobs": 23,
+    "bengaluru_jobs": 12,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 2,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 9,
+    "python_jobs": 0,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 1,
+    "intern_entry_jobs": 3,
+    "potentially_relevant": 0,
+    "sample_relevant_titles": [],
+    "sample_rejected_titles": [
+      "Cloud Network Engineer II (Excluded/Non-target)",
+      "Director - Solution Engineering (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "cred",
+    "platform": "Lever",
+    "board_identifier": "cred",
+    "available_postings": 8,
+    "india_jobs": 8,
+    "bengaluru_jobs": 7,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 0,
+    "python_jobs": 0,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 0,
+    "intern_entry_jobs": 0,
+    "potentially_relevant": 0,
+    "sample_relevant_titles": [],
+    "sample_rejected_titles": []
+  },
+  {
+    "company": "epifi",
+    "platform": "Lever",
+    "board_identifier": "epifi",
+    "available_postings": 2,
+    "india_jobs": 2,
+    "bengaluru_jobs": 2,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 1,
+    "python_jobs": 1,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 1,
+    "intern_entry_jobs": 1,
+    "potentially_relevant": 1,
+    "sample_relevant_titles": [
+      "DS/ML Intern [Bangalore onsite]"
+    ],
+    "sample_rejected_titles": []
+  },
+  {
+    "company": "pocketfm",
+    "platform": "Lever",
+    "board_identifier": "pocketfm",
+    "available_postings": 9,
+    "india_jobs": 2,
+    "bengaluru_jobs": 2,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 7,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 1,
+    "python_jobs": 0,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 0,
+    "intern_entry_jobs": 2,
+    "potentially_relevant": 0,
+    "sample_relevant_titles": [],
+    "sample_rejected_titles": [
+      "Audio Engineer (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "curai",
+    "platform": "Lever",
+    "board_identifier": "curai",
+    "available_postings": 5,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 5,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 3,
+    "python_jobs": 0,
+    "backend_jobs": 0,
+    "fullstack_jobs": 1,
+    "aiml_jobs": 0,
+    "intern_entry_jobs": 0,
+    "potentially_relevant": 0,
+    "sample_relevant_titles": [],
+    "sample_rejected_titles": [
+      "Senior Software Engineer, Agentic AI (Excluded/Non-target)",
+      "Senior Software Engineer, Full-Stack (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "palantir",
+    "platform": "Lever",
+    "board_identifier": "palantir",
+    "available_postings": 314,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 203,
+    "python_jobs": 2,
+    "backend_jobs": 13,
+    "fullstack_jobs": 2,
+    "aiml_jobs": 3,
+    "intern_entry_jobs": 47,
+    "potentially_relevant": 0,
+    "sample_relevant_titles": [],
+    "sample_rejected_titles": []
+  },
+  {
+    "company": "gitlab",
+    "platform": "Greenhouse",
+    "board_identifier": "gitlab",
+    "available_postings": 210,
+    "india_jobs": 28,
+    "bengaluru_jobs": 26,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 185,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 105,
+    "python_jobs": 25,
+    "backend_jobs": 28,
+    "fullstack_jobs": 4,
+    "aiml_jobs": 13,
+    "intern_entry_jobs": 5,
+    "potentially_relevant": 15,
+    "sample_relevant_titles": [
+      "AI Transformation Owner, CRO [Remote, United States]",
+      "AI Transformation Owner, Product & Design [Remote, Canada; Remote, United Kingdom; Remote, United States]",
+      "Backend Engineer, AI Engineering: Duo Chat [Remote, Canada; Remote, United States]",
+      "Backend Engineer, Create: Repository Management [Remote, United Kingdom]"
+    ],
+    "sample_rejected_titles": [
+      "Customer Success Engineer, LATAM (Spanish, Portugese) (Excluded/Non-target)",
+      "Director, Engineering, Platform Operations & Productivity (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "stripe",
+    "platform": "Greenhouse",
+    "board_identifier": "stripe",
+    "available_postings": 732,
+    "india_jobs": 45,
+    "bengaluru_jobs": 45,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 119,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 223,
+    "python_jobs": 56,
+    "backend_jobs": 16,
+    "fullstack_jobs": 14,
+    "aiml_jobs": 27,
+    "intern_entry_jobs": 49,
+    "potentially_relevant": 9,
+    "sample_relevant_titles": [
+      "Backend Engineer, Core Technology [US-Remote, Chicago, Seattle, San Francisco]",
+      "Backend Engineer, Payments [Toronto, Canada Remote]",
+      "Forward Deployed AI Accelerator, Marketing [Remote in the US, Remote in Canada]",
+      "Software Engineer, Intern [Bengaluru]"
+    ],
+    "sample_rejected_titles": [
+      "Abuse Research Engineer (Excluded/Non-target)",
+      "ARG Engineering Manager (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "mongodb",
+    "platform": "Greenhouse",
+    "board_identifier": "mongodb",
+    "available_postings": 394,
+    "india_jobs": 82,
+    "bengaluru_jobs": 13,
+    "delhi_jobs": 69,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 143,
+    "python_jobs": 63,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 14,
+    "intern_entry_jobs": 19,
+    "potentially_relevant": 8,
+    "sample_relevant_titles": [
+      "Software Engineer 3 [Gurugram]",
+      "Software Engineer 3 [Gurugram]",
+      "Software Engineer 3 [Gurugram]",
+      "Software Engineer 3 [Gurugram]"
+    ],
+    "sample_rejected_titles": [
+      "Application Engineer (Excluded/Non-target)",
+      "Cloud Operations Engineer (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "instawork",
+    "platform": "Greenhouse",
+    "board_identifier": "instawork",
+    "available_postings": 58,
+    "india_jobs": 37,
+    "bengaluru_jobs": 37,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 16,
+    "python_jobs": 5,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 1,
+    "intern_entry_jobs": 12,
+    "potentially_relevant": 3,
+    "sample_relevant_titles": [
+      "Contractual || Trainer - India [Bengaluru, Karnataka, India]",
+      "Hardware Intern \u2014 Robotics & AI [Bengaluru, Karnataka, India]",
+      "Trainer Intern [Bengaluru, Karnataka, India]"
+    ],
+    "sample_rejected_titles": [
+      "Data Collector & Annotator \u2014 Morning / Evening Shift (Excluded/Non-target)",
+      "Data Collector & Annotator - Night Shift (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "twilio",
+    "platform": "Greenhouse",
+    "board_identifier": "twilio",
+    "available_postings": 131,
+    "india_jobs": 13,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 131,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 61,
+    "python_jobs": 21,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 3,
+    "intern_entry_jobs": 1,
+    "potentially_relevant": 7,
+    "sample_relevant_titles": [
+      "Machine Learning Engineer [Remote - Ireland]",
+      "Machine Learning Engineer [Remote - Spain]",
+      "Software Engineer L2 - Cloud Infrastructure [Remote - US]",
+      "Software Engineer L3 [Remote - India]"
+    ],
+    "sample_rejected_titles": [
+      "Applications Engineer 2 (Excluded/Non-target)",
+      "DevOps Engineer (Observability) (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "samsara",
+    "platform": "Greenhouse",
+    "board_identifier": "samsara",
+    "available_postings": 240,
+    "india_jobs": 6,
+    "bengaluru_jobs": 6,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 208,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 121,
+    "python_jobs": 71,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 17,
+    "intern_entry_jobs": 10,
+    "potentially_relevant": 17,
+    "sample_relevant_titles": [
+      "AI Engineer, Customer Success [Remote - US]",
+      "ML/AI - Supply Chain [Remote - US]",
+      "People Analytics AI Engineer [Remote - Seattle]",
+      "Software Engineer - Data Platform [Remote - Canada]"
+    ],
+    "sample_rejected_titles": [
+      "AI Architect - GTM Systems (Excluded/Non-target)",
+      "AI Architect - GTM Systems (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "rubrik",
+    "platform": "Greenhouse",
+    "board_identifier": "rubrik",
+    "available_postings": 133,
+    "india_jobs": 35,
+    "bengaluru_jobs": 29,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 15,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 44,
+    "python_jobs": 17,
+    "backend_jobs": 2,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 3,
+    "intern_entry_jobs": 6,
+    "potentially_relevant": 6,
+    "sample_relevant_titles": [
+      "ENG Project/ Program - Intern [Bangalore]",
+      "Software Engineer - Cloud: Azure [Bangalore ]",
+      "Software Engineer (CPD) - Winter Intern [Bangalore]",
+      "Software Engineer - IAM [Pune]"
+    ],
+    "sample_rejected_titles": [
+      "Corporate IT Architect (Excluded/Non-target)",
+      "Cyber Resilience Architect, APJ (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "glance",
+    "platform": "Greenhouse",
+    "board_identifier": "glance",
+    "available_postings": 38,
+    "india_jobs": 22,
+    "bengaluru_jobs": 22,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 29,
+    "python_jobs": 6,
+    "backend_jobs": 1,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 2,
+    "intern_entry_jobs": 2,
+    "potentially_relevant": 6,
+    "sample_relevant_titles": [
+      "Consultant - AI Governance Specialist [bangalore]",
+      "SDE III - Data Engineering [Bangalore]",
+      "SDE III - Data Engineering [Bangalore]",
+      "SDE III - Machine Learning [Bangalore]"
+    ],
+    "sample_rejected_titles": [
+      "Applied Scientist II - Recommendation Systems (Excluded/Non-target)",
+      "Senior Analyst \u2013 Programmatic Monetization (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "hackerrank",
+    "platform": "Greenhouse",
+    "board_identifier": "hackerrank",
+    "available_postings": 28,
+    "india_jobs": 18,
+    "bengaluru_jobs": 18,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 4,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 17,
+    "python_jobs": 9,
+    "backend_jobs": 2,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 2,
+    "intern_entry_jobs": 1,
+    "potentially_relevant": 1,
+    "sample_relevant_titles": [
+      "Software Development Engineer Intern [Onsite in Bangalore]"
+    ],
+    "sample_rejected_titles": [
+      "Customer Experience Engineer, L2 (Excluded/Non-target)",
+      "Data Engineer II (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "inmobi",
+    "platform": "Greenhouse",
+    "board_identifier": "inmobi",
+    "available_postings": 71,
+    "india_jobs": 37,
+    "bengaluru_jobs": 32,
+    "delhi_jobs": 2,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 27,
+    "python_jobs": 11,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 3,
+    "intern_entry_jobs": 7,
+    "potentially_relevant": 2,
+    "sample_relevant_titles": [
+      "Intern - Creative & Communications, People Team [Bangalore]",
+      "SDE III - Devops [Bangalore]"
+    ],
+    "sample_rejected_titles": [
+      "Applied Scientist III (Excluded/Non-target)",
+      "Associate Product Manager - MSD Financial Systems and Transformation (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "launchdarkly",
+    "platform": "Greenhouse",
+    "board_identifier": "launchdarkly",
+    "available_postings": 56,
+    "india_jobs": 6,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 39,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 26,
+    "python_jobs": 14,
+    "backend_jobs": 6,
+    "fullstack_jobs": 3,
+    "aiml_jobs": 0,
+    "intern_entry_jobs": 2,
+    "potentially_relevant": 3,
+    "sample_relevant_titles": [
+      "Backend Engineer (Multiple Positions) [Remote - US]",
+      "Full Stack Engineer, Experimentation [Remote - US]",
+      "Full Stack Engineer (Multiple Positions) [Remote - US]"
+    ],
+    "sample_rejected_titles": [
+      "Engineering Manager, Cloud Engineering (Excluded/Non-target)",
+      "Engineering Manager, Data Platform (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "databricks",
+    "platform": "Greenhouse",
+    "board_identifier": "databricks",
+    "available_postings": 889,
+    "india_jobs": 92,
+    "bengaluru_jobs": 78,
+    "delhi_jobs": 2,
+    "noida_jobs": 0,
+    "remote_jobs": 66,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 622,
+    "python_jobs": 305,
+    "backend_jobs": 37,
+    "fullstack_jobs": 15,
+    "aiml_jobs": 55,
+    "intern_entry_jobs": 30,
+    "potentially_relevant": 5,
+    "sample_relevant_titles": [
+      "Sr. Forward Deployed Engineer (FDE) - Retail [Remote - California]",
+      "Sr Full Stack Developer (AI Agents) [Bengaluru, India]",
+      "Sr Software Engineer - Backend [Bengaluru, India]",
+      "Sr. Software Engineer - Observability [Bengaluru, India]"
+    ],
+    "sample_rejected_titles": [
+      "Director of Engineering (Excluded/Non-target)",
+      "Director of Engineering (Data Infrastructure) (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "airbnb",
+    "platform": "Greenhouse",
+    "board_identifier": "airbnb",
+    "available_postings": 160,
+    "india_jobs": 8,
+    "bengaluru_jobs": 4,
+    "delhi_jobs": 4,
+    "noida_jobs": 0,
+    "remote_jobs": 24,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 64,
+    "python_jobs": 19,
+    "backend_jobs": 2,
+    "fullstack_jobs": 2,
+    "aiml_jobs": 15,
+    "intern_entry_jobs": 7,
+    "potentially_relevant": 2,
+    "sample_relevant_titles": [
+      "Software Engineer, Passport & Commerce, Android [Remote, USA]",
+      "Software Engineer, Passport & Commerce, iOS [Remote, USA]"
+    ],
+    "sample_rejected_titles": [
+      "Data Scientist - Algorithms, Community Support (Excluded/Non-target)",
+      "Engineering Manager, Payments (AirCover Insurance Platform) (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "elastic",
+    "platform": "Greenhouse",
+    "board_identifier": "elastic",
+    "available_postings": 417,
+    "india_jobs": 17,
+    "bengaluru_jobs": 12,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 209,
+    "python_jobs": 27,
+    "backend_jobs": 0,
+    "fullstack_jobs": 3,
+    "aiml_jobs": 19,
+    "intern_entry_jobs": 8,
+    "potentially_relevant": 1,
+    "sample_relevant_titles": [
+      "Agentic AI Engineer [Bangalore, India]"
+    ],
+    "sample_rejected_titles": [
+      "Lead Salesforce Full Stack AI Engineer (Excluded/Non-target)",
+      "Senior Solution Architect, Mumbai (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "cloudflare",
+    "platform": "Greenhouse",
+    "board_identifier": "cloudflare",
+    "available_postings": 419,
+    "india_jobs": 1,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 60,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 243,
+    "python_jobs": 99,
+    "backend_jobs": 0,
+    "fullstack_jobs": 1,
+    "aiml_jobs": 14,
+    "intern_entry_jobs": 8,
+    "potentially_relevant": 1,
+    "sample_relevant_titles": [
+      "Partner Engineer, Spain [Distributed]"
+    ],
+    "sample_rejected_titles": [
+      "Director, Growth Sales (AI & Digital Natives) (Excluded/Non-target)",
+      "Director, Growth Sales (AI & Digital Natives) (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "affirm",
+    "platform": "Greenhouse",
+    "board_identifier": "affirm",
+    "available_postings": 187,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 182,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 119,
+    "python_jobs": 98,
+    "backend_jobs": 64,
+    "fullstack_jobs": 16,
+    "aiml_jobs": 8,
+    "intern_entry_jobs": 12,
+    "potentially_relevant": 25,
+    "sample_relevant_titles": [
+      "Analyst II, Full Stack [Remote Spain]",
+      "Analytics Engineer II, Full Stack (Revenue Analytics) [Remote Spain]",
+      "Analytics Engineer II, Full Stack (Revenue Analytics) [Remote Poland]",
+      "Machine Learning Engineer II (Underwriting ML) [Remote Canada]"
+    ],
+    "sample_rejected_titles": [
+      "Analytics Engineer II (Excluded/Non-target)",
+      "Analytics Lead, Full Stack (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "gusto",
+    "platform": "Greenhouse",
+    "board_identifier": "gusto",
+    "available_postings": 95,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 11,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 38,
+    "python_jobs": 8,
+    "backend_jobs": 0,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 6,
+    "intern_entry_jobs": 1,
+    "potentially_relevant": 0,
+    "sample_relevant_titles": [],
+    "sample_rejected_titles": [
+      "Senior Staff Engineer - Tax Platform Engineering (Excluded/Non-target)",
+      "Staff Software Engineer, Financial Platform (Excluded/Non-target)"
+    ]
+  },
+  {
+    "company": "canonical",
+    "platform": "Greenhouse",
+    "board_identifier": "canonical",
+    "available_postings": 311,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 183,
+    "python_jobs": 124,
+    "backend_jobs": 3,
+    "fullstack_jobs": 0,
+    "aiml_jobs": 2,
+    "intern_entry_jobs": 25,
+    "potentially_relevant": 0,
+    "sample_relevant_titles": [],
+    "sample_rejected_titles": []
+  },
+  {
+    "company": "deliveroo",
+    "platform": "Greenhouse",
+    "board_identifier": "deliveroo",
+    "available_postings": 195,
+    "india_jobs": 4,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 1,
+    "ahmedabad_jobs": 0,
+    "software_eng_jobs": 57,
+    "python_jobs": 29,
+    "backend_jobs": 5,
+    "fullstack_jobs": 8,
+    "aiml_jobs": 4,
+    "intern_entry_jobs": 8,
+    "potentially_relevant": 0,
+    "sample_relevant_titles": [],
+    "sample_rejected_titles": [
+      "Engineering Manager (Excluded/Non-target)",
+      "Senior Analytics Engineer (Excluded/Non-target)"
+    ]
+  }
+]

@@ -1,0 +1,103 @@
+{
+  "target_roles": [
+    "Python Developer",
+    "Backend Developer",
+    "Backend Engineer",
+    "Software Engineer",
+    "Software Development Engineer",
+    "Full Stack Developer",
+    "Web Developer",
+    "ML Engineer",
+    "Machine Learning Engineer",
+    "AI Engineer",
+    "SDE",
+    "SDE Intern",
+    "Software Development Engineer Intern",
+    "DS/ML Intern",
+    "Python Developer Intern",
+    "Machine Learning Intern",
+    "Web Developer Intern"
+  ],
+  "preferred_locations": [
+    "Delhi",
+    "Noida",
+    "Bangalore",
+    "Bengaluru",
+    "Ahmedabad",
+    "India",
+    "Remote"
+  ],
+  "experience_levels": [
+    "Fresher",
+    "Entry Level",
+    "Internship",
+    "0-1 years"
+  ],
+  "skills": [
+    "Python",
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "FastAPI",
+    "REST API",
+    "MongoDB",
+    "SQL",
+    "PostgreSQL",
+    "Machine Learning",
+    "Scikit-learn",
+    "OpenCV",
+    "NLP",
+    "Pandas",
+    "NumPy",
+    "Git",
+    "GitHub"
+  ],
+  "positive_keywords": [
+    "AI",
+    "Artificial Intelligence",
+    "Backend",
+    "Full Stack",
+    "Software Development",
+    "Web Development"
+  ],
+  "negative_keywords": [
+    "Senior",
+    "Lead",
+    "Principal",
+    "Staff",
+    "Manager",
+    "Director",
+    "Architect",
+    "5+ years",
+    "7+ years",
+    "10+ years"
+  ],
+  "preferences": {
+    "remote_allowed": true,
+    "internship_allowed": true,
+    "fresher_allowed": true,
+    "entry_level_allowed": true
+  },
+  "projects": [
+    {
+      "name": "Loan Application Fraud Detection via Document Verification",
+      "skills": ["Python", "OpenCV", "Scikit-learn", "FastAPI", "OCR", "Machine Learning"],
+      "description": "AI/ML pipeline for loan application fraud detection using document OCR and computer vision verification."
+    },
+    {
+      "name": "NeuroNest Notes & Bookmarks Manager",
+      "skills": ["JavaScript", "React", "Next.js", "REST API", "MongoDB", "SQL", "PostgreSQL"],
+      "description": "Full-stack personal knowledge and bookmarks manager with RESTful backend and database integration."
+    }
+  ],
+  "experience": [
+    {
+      "title": "AI/ML Intern",
+      "company": "AI/ML Internship",
+      "experience_type": "internship",
+      "skills": ["Python", "OpenCV", "Scikit-learn", "FastAPI", "Machine Learning"],
+      "description": "Built computer vision and machine learning models for document analysis and automated validation."
+    }
+  ]
+}

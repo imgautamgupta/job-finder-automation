@@ -1,0 +1,757 @@
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }} @ {{ job.company }}{% endblock %}
+{% block page_title %}{{ job.title }}{% endblock %}
+{% block page_subtitle %}{{ job.company }} • {{ job.location or "Location Not Specified" }}{% endblock %}
+
+{% block content %}
+<div class="job-detail-container">
+  <!-- Back Navigation & Quick Actions Bar -->
+  <div class="detail-top-nav">
+    <a href="{{ referrer or '/jobs' }}" class="back-link">← Back</a>
+    <div class="header-badges">
+      <span class="source-tag source-{{ job.source|lower }}">{{ job.source|capitalize }}</span>
+      <span class="priority-pill-lg {{ job.application_priority|priority_badge_class }}">
+        {{ job.application_priority.value if job.application_priority.value is defined else (job.application_priority or "NORMAL") }}
+      </span>
+      <span class="score-badge-lg {{ job.application_readiness_score|readiness_badge_class }}">
+        Application Readiness: {{ job.application_readiness_score if job.application_readiness_score is not none else "N/A" }}/100
+      </span>
+      <span class="score-badge-lg {{ job.match_score|score_badge_class }}">
+        Match Score: {{ job.match_score if job.match_score is not none else "N/A" }}/100
+      </span>
+      <span class="priority-pill-lg {{ job.match_score|score_badge_class }}">
+        {{ job.match_category or "Match" }}
+      </span>
+      <span class="status-badge-lg {{ job.status|status_badge_class }}">
+        {{ job.status.value if job.status.value is defined else job.status }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Status Control & Quick Action Card -->
+  <div class="card status-action-card">
+    <div class="status-action-header">
+      <h3>Application Status Management</h3>
+      {% if job.status_updated_at %}
+        <span class="cell-subtle">Last updated: {{ job.status_updated_at|format_datetime }}</span>
+      {% endif %}
+    </div>
+
+    <div class="status-action-body">
+      <!-- Status Selection Form -->
+      <form method="post" action="/jobs/{{ job.id }}/status" class="status-select-form">
+        <label for="status">Current Status:</label>
+        <select id="status" name="status" class="form-select">
+          {% for st in all_statuses %}
+            <option value="{{ st }}" {% if (job.status.value if job.status.value is defined else job.status) == st %}selected{% endif %}>
+              {{ st }}
+            </option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Update Status</button>
+      </form>
+
+      <!-- Quick Action Buttons -->
+      <div class="quick-btn-group">
+        <form method="post" action="/jobs/{{ job.id }}/status" style="display:inline;">
+          <input type="hidden" name="status" value="SHORTLISTED">
+          <button type="submit" class="btn btn-sm btn-outline">⭐ Shortlist</button>
+        </form>
+
+        <form method="post" action="/jobs/{{ job.id }}/status" style="display:inline;">
+          <input type="hidden" name="status" value="APPLIED">
+          <button type="submit" class="btn btn-sm btn-outline">📨 Mark Applied</button>
+        </form>
+
+        <form method="post" action="/jobs/{{ job.id }}/status" style="display:inline;">
+          <input type="hidden" name="status" value="INTERVIEW">
+          <button type="submit" class="btn btn-sm btn-outline">🎯 Interview</button>
+        </form>
+
+        <form method="post" action="/jobs/{{ job.id }}/status" style="display:inline;">
+          <input type="hidden" name="status" value="OFFER">
+          <button type="submit" class="btn btn-sm btn-outline">🎉 Offer</button>
+        </form>
+
+        <form method="post" action="/jobs/{{ job.id }}/status" style="display:inline;">
+          <input type="hidden" name="status" value="REJECTED">
+          <button type="submit" class="btn btn-sm btn-danger-outline">🚫 Reject</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 11: Application Timeline Card -->
+  <div class="timeline-card">
+    <div class="timeline-header">
+      <div>
+        <h3 style="margin: 0; font-size: 15px; font-weight: 700;">⏱ Application Timeline</h3>
+        <span class="cell-subtle" style="font-size: 12px;">Chronological progression of actual milestones reached</span>
+      </div>
+      <div>
+        {% if job.applied_at %}
+          <span style="font-size: 11px; background: rgba(99, 102, 241, 0.15); color: #818cf8; padding: 4px 10px; border-radius: 4px; font-weight: 600;">
+            Applied: {{ job.applied_at.strftime('%b %d, %Y') if job.applied_at.strftime is defined else job.applied_at }}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="timeline-stepper">
+      <!-- Step 1: Found -->
+      <div class="timeline-step completed">
+        <div class="timeline-step-icon">🔍</div>
+        <div class="timeline-step-title">Discovered</div>
+        <div class="timeline-step-date">{{ job.first_seen_at.strftime('%b %d, %Y') if job.first_seen_at else "Found" }}</div>
+      </div>
+
+      <!-- Step 2: Viewed -->
+      {% set status_val = job.status.value if job.status.value is defined else job.status %}
+      <div class="timeline-step {% if status_val in ['VIEWED', 'SHORTLISTED', 'APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED', 'NOT_INTERESTED'] %}completed{% else %}upcoming{% endif %}">
+        <div class="timeline-step-icon">👁️</div>
+        <div class="timeline-step-title">Viewed</div>
+        <div class="timeline-step-date">{% if status_val != 'NEW' %}Reviewed{% else %}Pending{% endif %}</div>
+      </div>
+
+      <!-- Step 3: Shortlisted -->
+      <div class="timeline-step {% if status_val in ['SHORTLISTED', 'APPLIED', 'INTERVIEW', 'OFFER'] %}completed{% elif status_val == 'VIEWED' %}current{% else %}upcoming{% endif %}">
+        <div class="timeline-step-icon">⭐</div>
+        <div class="timeline-step-title">Shortlisted</div>
+        <div class="timeline-step-date">{% if status_val in ['SHORTLISTED', 'APPLIED', 'INTERVIEW', 'OFFER'] %}Selected{% else %}—{% endif %}</div>
+      </div>
+
+      <!-- Step 4: Resume Prepared -->
+      {% set prep_val = job.interview_preparation_status.value if job.interview_preparation_status.value is defined else (job.interview_preparation_status or 'NOT_STARTED') %}
+      <div class="timeline-step {% if prep_val in ['READY', 'COMPLETED'] or job.resume_alignment_score is not none %}completed{% elif status_val == 'SHORTLISTED' %}current{% else %}upcoming{% endif %}">
+        <div class="timeline-step-icon">📝</div>
+        <div class="timeline-step-title">Resume Prep</div>
+        <div class="timeline-step-date">{{ prep_val if prep_val != 'NOT_STARTED' else ('Score: ' ~ job.resume_alignment_score if job.resume_alignment_score is not none else 'Pending') }}</div>
+      </div>
+
+      <!-- Step 5: Applied -->
+      <div class="timeline-step {% if status_val in ['APPLIED', 'INTERVIEW', 'OFFER'] or job.applied_at %}completed{% elif status_val == 'SHORTLISTED' and prep_val in ['READY', 'COMPLETED'] %}current{% else %}upcoming{% endif %}">
+        <div class="timeline-step-icon">📨</div>
+        <div class="timeline-step-title">Applied</div>
+        <div class="timeline-step-date">
+          {% if job.applied_at %}
+            {{ job.applied_at.strftime('%b %d') if job.applied_at.strftime is defined else job.applied_at }}
+          {% elif status_val in ['APPLIED', 'INTERVIEW', 'OFFER'] %}
+            Submitted
+          {% else %}
+            —
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Step 6: Follow-up -->
+      {% if job.follow_up_date %}
+        <div class="timeline-step completed">
+          <div class="timeline-step-icon">📅</div>
+          <div class="timeline-step-title">Follow-up</div>
+          <div class="timeline-step-date">{{ job.follow_up_date }}</div>
+        </div>
+      {% endif %}
+
+      <!-- Step 7: Interview -->
+      {% set int_status = job.interview_status.value if job.interview_status.value is defined else (job.interview_status or 'NOT_SCHEDULED') %}
+      <div class="timeline-step {% if status_val == 'INTERVIEW' or int_status in ['SCHEDULED', 'COMPLETED', 'PASSED'] or job.interview_date %}{% if int_status in ['COMPLETED', 'PASSED'] %}completed{% else %}current{% endif %}{% else %}upcoming{% endif %}">
+        <div class="timeline-step-icon">🎯</div>
+        <div class="timeline-step-title">Interview</div>
+        <div class="timeline-step-date">
+          {% if job.interview_date %}
+            {{ job.interview_date }}
+          {% elif status_val == 'INTERVIEW' %}
+            Active
+          {% else %}
+            —
+          {% endif %}
+        </div>
+        {% if job.interview_stage %}
+          <div class="timeline-step-extra">{{ job.interview_stage.value if job.interview_stage.value is defined else job.interview_stage }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Step 8: Outcome -->
+      {% if status_val == 'OFFER' %}
+        <div class="timeline-step completed">
+          <div class="timeline-step-icon" style="background: rgba(16, 185, 129, 0.3); border-color: #10b981; color: #10b981;">🎉</div>
+          <div class="timeline-step-title" style="color: #10b981;">Offer</div>
+          <div class="timeline-step-date">Received</div>
+        </div>
+      {% elif status_val == 'REJECTED' %}
+        <div class="timeline-step" style="opacity: 0.8;">
+          <div class="timeline-step-icon" style="background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #ef4444;">🚫</div>
+          <div class="timeline-step-title" style="color: #ef4444;">Closed</div>
+          <div class="timeline-step-date">Rejected</div>
+        </div>
+      {% elif status_val == 'NOT_INTERESTED' %}
+        <div class="timeline-step" style="opacity: 0.8;">
+          <div class="timeline-step-icon" style="background: rgba(148, 163, 184, 0.2); border-color: #94a3b8; color: #94a3b8;">✖</div>
+          <div class="timeline-step-title">Archived</div>
+          <div class="timeline-step-date">Not Interested</div>
+        </div>
+      {% else %}
+        <div class="timeline-step upcoming">
+          <div class="timeline-step-icon">🏁</div>
+          <div class="timeline-step-title">Decision</div>
+          <div class="timeline-step-date">Pending</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Phase 9: Application Recommendation & Decision Card -->
+  <div class="card" style="border-left: 4px solid #6366f1;">
+    <div class="card-header">
+      <div>
+        <h3>🚀 Application Recommendation & Workflow</h3>
+        <p class="section-subtitle">Deterministic readiness analysis and preparation guidance.</p>
+      </div>
+      <div class="header-badges">
+        <span class="priority-pill-lg {{ job.application_priority|priority_badge_class }}">
+          Priority: {{ job.application_priority.value if job.application_priority.value is defined else (job.application_priority or "NORMAL") }}
+        </span>
+        <span class="score-badge-lg {{ job.application_readiness_score|readiness_badge_class }}">
+          Application Readiness: {{ job.application_readiness_score if job.application_readiness_score is not none else "N/A" }}/100
+        </span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="grid-two-col">
+        <!-- Match Reasons & Profile Alignment -->
+        <div>
+          <div class="meta-row">
+            <span class="meta-label">Profile Alignment:</span>
+            <span class="meta-value"><strong>{{ job.profile_alignment or "Good alignment" }}</strong></span>
+          </div>
+
+          <h4 style="margin-top: 1rem; color: #10b981;">Why This Job Matches</h4>
+          <ul class="rec-reason-list">
+            {% for reason in job.recommendation_reasons %}
+              <li class="reason-item-match">{{ reason }}</li>
+            {% else %}
+              <li class="cell-subtle">Deterministic alignment with target role and skills</li>
+            {% endfor %}
+          </ul>
+
+          <div style="margin-top: 1rem;">
+            <div class="skills-label"><strong>Matched Skills ({{ job.matched_skills|length }}):</strong></div>
+            <div class="pill-container" style="margin-top: 5px;">
+              {% for s in job.matched_skills %}
+                <span class="pill pill-skill">{{ s }}</span>
+              {% else %}
+                <span class="cell-subtle">None identified</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Risk Factors & Skill Gaps -->
+        <div>
+          <h4 style="color: #f59e0b;">Possible Concerns</h4>
+          <ul class="rec-reason-list">
+            {% for risk in job.risk_reasons %}
+              <li class="reason-item-risk">⚠ {{ risk }}</li>
+            {% else %}
+              <li class="reason-item-clean">✓ No major critical risk factors detected</li>
+            {% endfor %}
+          </ul>
+
+          {% if job.missing_skills %}
+            <div style="margin-top: 1rem;">
+              <div class="skills-label"><strong>Missing Skills / Required Technologies:</strong></div>
+              <div class="pill-container" style="margin-top: 5px;">
+                {% for s in job.critical_gaps %}
+                  <span class="pill pill-danger" title="Critical requirement gap">{{ s }} (Critical)</span>
+                {% endfor %}
+                {% for s in job.moderate_gaps %}
+                  <span class="pill pill-warning" title="Moderate gap">{{ s }}</span>
+                {% endfor %}
+                {% for s in job.minor_gaps %}
+                  <span class="pill pill-minor" title="Minor gap">{{ s }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Application Checklist -->
+      <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color, #334155);">
+        <h4>📋 Application Checklist</h4>
+        <div class="checklist-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.5rem; margin-top: 0.75rem;">
+          {% for item in job.checklist %}
+            <div class="checklist-item" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+              <span style="color: var(--accent-color, #38bdf8);">[ ]</span>
+              <span>{{ item }}</span>
+            </div>
+          {% else %}
+            <div class="checklist-item" style="font-size: 0.9rem;">[ ] Review job description</div>
+            <div class="checklist-item" style="font-size: 0.9rem;">[ ] Confirm location / remote eligibility</div>
+            <div class="checklist-item" style="font-size: 0.9rem;">[ ] Check experience requirements</div>
+            <div class="checklist-item" style="font-size: 0.9rem;">[ ] Open application URL & submit manually</div>
+            <div class="checklist-item" style="font-size: 0.9rem;">[ ] Update tracking status & add notes</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  <!-- Phase 10: Resume Intelligence & Preparation Card -->
+  <div id="resume-prep" class="card" style="border-left: 4px solid #8b5cf6;">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem;">
+      <div>
+        <h3>📝 Resume Intelligence & Job-Specific Preparation</h3>
+        <p class="section-subtitle">Deterministic resume alignment, truthful skill emphasis, and preparation package.</p>
+      </div>
+      <div class="header-badges">
+        {% set r_score = job.resume_alignment_score or 0 %}
+        <span class="score-badge-lg" style="
+          {% if r_score >= 80 %}background: #dcfce7; color: #15803d;
+          {% elif r_score >= 65 %}background: #e0f2fe; color: #0369a1;
+          {% elif r_score >= 50 %}background: #fef3c7; color: #b45309;
+          {% else %}background: #fee2e2; color: #b91c1c;{% endif %} font-weight: 700;">
+          Resume Alignment: {{ r_score }}/100
+        </span>
+        <span class="priority-pill-lg" style="background: #ede9fe; color: #6d28d9;">
+          {{ job.resume_alignment_category or 'Alignment' }}
+        </span>
+        {% if job.recommended_resume %}
+        <span class="priority-pill-lg" style="background: #f1f5f9; color: #334155;">
+          Version: {{ job.recommended_resume }}
+        </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card-body">
+      <!-- Workflow Status & Notes Form -->
+      <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+        <form method="post" action="/jobs/{{ job.id }}/preparation" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <input type="hidden" name="redirect_to" value="/jobs/{{ job.id }}#resume-prep">
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+            <div style="min-width: 200px;">
+              <label for="preparation_status" style="font-size: 0.85rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.25rem;">Preparation Status:</label>
+              {% set curr_prep = job.preparation_status.value if job.preparation_status and job.preparation_status.value is defined else (job.preparation_status or 'NOT_REVIEWED') %}
+              <select id="preparation_status" name="preparation_status" class="form-select" style="padding: 0.4rem 0.75rem; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 500;">
+                <option value="NOT_REVIEWED" {% if curr_prep == 'NOT_REVIEWED' %}selected{% endif %}>NOT_REVIEWED</option>
+                <option value="REVIEWED" {% if curr_prep == 'REVIEWED' %}selected{% endif %}>REVIEWED</option>
+                <option value="RESUME_READY" {% if curr_prep == 'RESUME_READY' %}selected{% endif %}>RESUME_READY</option>
+                <option value="READY_TO_APPLY" {% if curr_prep == 'READY_TO_APPLY' %}selected{% endif %}>READY_TO_APPLY</option>
+              </select>
+            </div>
+            <div style="flex: 1; min-width: 250px;">
+              <label for="preparation_notes" style="font-size: 0.85rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.25rem;">Resume Preparation Notes:</label>
+              <input type="text" id="preparation_notes" name="preparation_notes" value="{{ job.preparation_notes or '' }}" placeholder="e.g. Put FastAPI project first, highlight SQL query optimizations..." class="form-input" style="width: 100%; padding: 0.4rem 0.75rem; border-radius: 6px; border: 1px solid #cbd5e1;">
+            </div>
+            <div style="align-self: flex-end;">
+              <button type="submit" class="btn btn-primary" style="padding: 0.45rem 1rem;">Save Preparation</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="grid-two-col">
+        <!-- Left Column: Skills to Emphasize & Keyword Analysis -->
+        <div>
+          <!-- Skills to Emphasize -->
+          <div style="margin-bottom: 1.25rem;">
+            <h4 style="color: #6366f1; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span>⭐</span> Skills to Emphasize
+            </h4>
+            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.5rem;">
+              Candidate skills directly matching required and preferred job responsibilities:
+            </p>
+            <div class="pill-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+              {% for s in job.skills_to_emphasize %}
+                <span class="pill" style="background: #e0e7ff; color: #3730a3; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.85rem;">
+                  ✓ {{ s }}
+                </span>
+              {% else %}
+                <span class="cell-subtle">Review profile skills against job requirements</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Keyword Coverage -->
+          <div style="margin-bottom: 1.25rem;">
+            <h4 style="color: #0f172a; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span>🔍</span> Resume Keyword Analysis
+            </h4>
+            <div style="margin-bottom: 0.75rem;">
+              <span style="font-size: 0.8rem; font-weight: 600; color: #166534; display: block; margin-bottom: 0.25rem;">
+                Covered in Resume / Profile:
+              </span>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+                {% for kw in job.resume_matched_keywords %}
+                  <span style="background: #dcfce7; color: #166534; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">
+                    ✓ {{ kw }}
+                  </span>
+                {% else %}
+                  <span class="cell-subtle">No matched keywords</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            {% if job.resume_missing_keywords and job.resume_missing_keywords|length > 0 %}
+            <div>
+              <span style="font-size: 0.8rem; font-weight: 600; color: #9a3412; display: block; margin-bottom: 0.25rem;">
+                Not Currently Visible in Resume:
+              </span>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+                {% for kw in job.resume_missing_keywords %}
+                  <span style="background: #ffedd5; color: #9a3412; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">
+                    ○ {{ kw }}
+                  </span>
+                {% endfor %}
+              </div>
+              <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.35rem; font-style: italic;">
+                Note: Consider highlighting if you genuinely have this experience. Never add technologies you do not possess.
+              </p>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Application Checklist -->
+          <div>
+            <h4 style="color: #0f172a; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span>📋</span> Application Preparation Checklist
+            </h4>
+            <div class="checklist-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem;">
+              <div class="checklist-item" style="font-size: 0.85rem; margin-bottom: 0.35rem;">[ ] Review job requirements & company overview</div>
+              <div class="checklist-item" style="font-size: 0.85rem; margin-bottom: 0.35rem;">[ ] Tailor resume putting matched skills first</div>
+              <div class="checklist-item" style="font-size: 0.85rem; margin-bottom: 0.35rem;">[ ] Verify portfolio demo and GitHub links</div>
+              <div class="checklist-item" style="font-size: 0.85rem; margin-bottom: 0.35rem;">[ ] Open application link: <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer" style="color: #6366f1;">Apply Portal ↗</a></div>
+              <div class="checklist-item" style="font-size: 0.85rem; margin-bottom: 0.35rem;">[ ] Submit manual application on career board</div>
+              <div class="checklist-item" style="font-size: 0.85rem;">[ ] Update dashboard status to APPLIED</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Project & Experience Recommendations, Concerns, Focus -->
+        <div>
+          <!-- Recommended Project -->
+          {% if job.recommended_project %}
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #6366f1; text-transform: uppercase; margin-bottom: 0.25rem;">
+              🚀 Recommended Project to Emphasize
+            </div>
+            <div style="font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.4rem;">
+              {{ job.recommended_project }}
+            </div>
+            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 0;">
+              Feature this project prominently in your resume and portfolio demonstration to showcase relevant hands-on engineering capabilities.
+            </p>
+          </div>
+          {% endif %}
+
+          <!-- Relevant Experience -->
+          {% if job.recommended_experience %}
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #059669; text-transform: uppercase; margin-bottom: 0.25rem;">
+              💼 Relevant Experience to Highlight
+            </div>
+            <div style="font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.4rem;">
+              {{ job.recommended_experience }}
+            </div>
+            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 0;">
+              Emphasize contributions and metrics from this role that map directly to the employer's tech stack.
+            </p>
+          </div>
+          {% endif %}
+
+          <!-- Potential Concerns -->
+          {% if job.resume_concerns and job.resume_concerns|length > 0 %}
+          <div style="margin-bottom: 1.25rem;">
+            <h4 style="color: #b45309; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span>⚠</span> Potential Resume Concerns
+            </h4>
+            <ul style="list-style: none; padding-left: 0; margin-bottom: 0; display: flex; flex-direction: column; gap: 0.4rem;">
+              {% for concern in job.resume_concerns %}
+                <li style="background: #fffbeb; color: #92400e; padding: 0.45rem 0.65rem; border-radius: 6px; font-size: 0.85rem; border-left: 3px solid #f59e0b;">
+                  {{ concern }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <!-- Suggested Resume Focus -->
+          {% if job.resume_suggestions and job.resume_suggestions|length > 0 %}
+          <div>
+            <h4 style="color: #0f172a; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span>💡</span> Suggested Resume Focus
+            </h4>
+            <ol style="padding-left: 1.2rem; margin-bottom: 0; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; color: #334155;">
+              {% for sug in job.resume_suggestions %}
+                <li>{{ sug }}</li>
+              {% endfor %}
+            </ol>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Follow-up Tracking Card (Phase 9) -->
+  <div class="card" style="border-left: 4px solid #f59e0b;">
+    <div class="card-header">
+      <h3>📅 Follow-up Tracking</h3>
+      <span class="cell-subtle">Set reminder dates for manual application follow-ups</span>
+    </div>
+    <div class="card-body">
+      <form method="post" action="/jobs/{{ job.id }}/follow-up" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
+        <div style="flex: 1; min-width: 200px;">
+          <label for="follow_up_date" style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Follow-up Target Date:</label>
+          <input type="date" id="follow_up_date" name="follow_up_date" value="{{ job.follow_up_date or '' }}" class="form-input" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color, #475569); background: var(--bg-card, #1e293b); color: var(--text-color, #f8fafc);">
+        </div>
+        <div style="flex: 2; min-width: 250px;">
+          <label for="follow_up_notes" style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Follow-up Notes / Action Item:</label>
+          <input type="text" id="follow_up_notes" name="follow_up_notes" value="{{ job.follow_up_notes or '' }}" placeholder="e.g., Check recruiter response on LinkedIn, send follow-up email..." class="form-input" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color, #475569); background: var(--bg-card, #1e293b); color: var(--text-color, #f8fafc);">
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Save Follow-up</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Phase 11: Interview Tracking & Preparation Card -->
+  <div class="card" style="border-left: 4px solid #10b981;">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h3>🎯 Interview Tracking & Preparation</h3>
+        <span class="cell-subtle">Schedule rounds, track interview outcomes, and prepare talking points</span>
+      </div>
+      <div>
+        <a href="/interview-prep?job_id={{ job.id }}" class="btn btn-primary" style="background: #10b981;">
+          📚 Open Interview Prep Workspace ↗
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      <form method="post" action="/jobs/{{ job.id }}/interview">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <label for="interview_date" style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Interview Date:</label>
+            <input type="date" id="interview_date" name="interview_date" value="{{ job.interview_date or '' }}" class="form-input" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color, #475569); background: var(--bg-card, #1e293b); color: var(--text-color, #f8fafc);">
+          </div>
+          <div>
+            <label for="interview_stage" style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Interview Stage:</label>
+            <select id="interview_stage" name="interview_stage" class="form-select" style="width: 100%;">
+              <option value="">— Select Stage —</option>
+              {% set curr_stage = job.interview_stage.value if job.interview_stage.value is defined else (job.interview_stage or '') %}
+              {% for stg in ['HR', 'Technical Screening', 'Coding Round', 'Technical Interview', 'Managerial', 'System Design', 'Behavioral', 'Final', 'Other'] %}
+                <option value="{{ stg }}" {% if curr_stage == stg %}selected{% endif %}>{{ stg }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="interview_status" style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Interview Status:</label>
+            <select id="interview_status" name="interview_status" class="form-select" style="width: 100%;">
+              {% set curr_int_status = job.interview_status.value if job.interview_status.value is defined else (job.interview_status or 'NOT_SCHEDULED') %}
+              {% for stat in ['NOT_SCHEDULED', 'SCHEDULED', 'COMPLETED', 'PASSED', 'FAILED', 'RESCHEDULED'] %}
+                <option value="{{ stat }}" {% if curr_int_status == stat %}selected{% endif %}>{{ stat.replace('_', ' ') }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="interview_preparation_status" style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Preparation Status:</label>
+            <select id="interview_preparation_status" name="interview_preparation_status" class="form-select" style="width: 100%;">
+              {% set curr_prep_stat = job.interview_preparation_status.value if job.interview_preparation_status.value is defined else (job.interview_preparation_status or 'NOT_STARTED') %}
+              {% for pstat in ['NOT_STARTED', 'IN_PROGRESS', 'READY', 'COMPLETED'] %}
+                <option value="{{ pstat }}" {% if curr_prep_stat == pstat %}selected{% endif %}>{{ pstat.replace('_', ' ') }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label for="interview_notes" style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Interview Notes & Questions Faced:</label>
+          <input type="text" id="interview_notes" name="interview_notes" value="{{ job.interview_notes or '' }}" placeholder="e.g., Round 1 with Engineering Manager went well, asked about system design and Redis caching..." class="form-input" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color, #475569); background: var(--bg-card, #1e293b); color: var(--text-color, #f8fafc);">
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary" style="background: #10b981;">Save Interview Details</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Two Column Analysis & Details Grid -->
+  <div class="grid-two-col">
+    <!-- Match Explanation Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Match Analysis</h3>
+        <span class="score-badge {{ job.match_score|score_badge_class }}">
+          {{ job.match_score if job.match_score is not none else "N/A" }}/100
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="meta-row">
+          <span class="meta-label">Category:</span>
+          <span class="meta-value"><strong>{{ job.match_category or "Uncategorized" }}</strong></span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Matched Roles:</span>
+          <div class="pill-container">
+            {% for r in job.matched_roles %}
+              <span class="pill pill-role">{{ r }}</span>
+            {% else %}
+              <span class="cell-subtle">None identified</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Matched Skills:</span>
+          <div class="pill-container">
+            {% for s in job.matched_skills %}
+              <span class="pill pill-skill">{{ s }}</span>
+            {% else %}
+              <span class="cell-subtle">None identified</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Matched Locations:</span>
+          <div class="pill-container">
+            {% for loc in job.matched_locations %}
+              <span class="pill pill-location">{{ loc }}</span>
+            {% else %}
+              <span class="cell-subtle">None identified</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Experience Match:</span>
+          <span class="meta-value">
+            {% if job.experience_match %}
+              <span class="text-success">✓ Matches criteria</span>
+            {% else %}
+              <span class="cell-subtle">Standard criteria applied</span>
+            {% endif %}
+          </span>
+        </div>
+
+        {% if job.excluded_reasons %}
+          <div class="meta-row">
+            <span class="meta-label">Excluded / Penalty Reasons:</span>
+            <ul class="excluded-list">
+              {% for reason in job.excluded_reasons %}
+                <li>{{ reason }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Job Core Metadata Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Listing Details</h3>
+        {% if job.url %}
+          <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+            Open Original Posting ↗
+          </a>
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <div class="meta-row">
+          <span class="meta-label">Company:</span>
+          <span class="meta-value"><strong>{{ job.company }}</strong></span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Location:</span>
+          <span class="meta-value">{{ job.location or "Not Specified" }}</span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Source Platform:</span>
+          <span class="meta-value">{{ job.source|capitalize }}</span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Easy Apply:</span>
+          <span class="meta-value">{{ "Yes" if job.easy_apply else "No" }}</span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Employment Type:</span>
+          <span class="meta-value">{{ job.employment_type or "Not Specified" }}</span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Experience:</span>
+          <span class="meta-value">{{ job.experience_required or "Not Specified" }}</span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Salary:</span>
+          <span class="meta-value">{{ job.salary or "Not Disclosed" }}</span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Date Posted:</span>
+          <span class="meta-value">{{ job.date_posted or "Unknown" }}</span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">First Seen:</span>
+          <span class="meta-value">{{ job.first_seen_at|format_datetime }}</span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-label">Last Seen:</span>
+          <span class="meta-value">{{ job.last_seen_at|format_datetime }}</span>
+        </div>
+
+        {% if job.last_seen_run_id %}
+          <div class="meta-row">
+            <span class="meta-label">Last Run ID:</span>
+            <span class="meta-value"><code>{{ job.last_seen_run_id }}</code></span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Persistent User Notes Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Personal Application Notes</h3>
+      <span class="cell-subtle">Preserved across daily discovery runs</span>
+    </div>
+    <div class="card-body">
+      <form method="post" action="/jobs/{{ job.id }}/notes">
+        <textarea name="notes" rows="4" class="notes-textarea" placeholder="Add custom notes (e.g., Applied via company portal, recruiter contact info, interview scheduled for Friday...)">{{ job.notes or "" }}</textarea>
+        <div style="margin-top: 10px;">
+          <button type="submit" class="btn btn-primary">Save Notes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Full Job Description Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Job Description</h3>
+      {% if job.url %}
+        <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer" class="cell-subtle">View on {{ job.source|capitalize }} ↗</a>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      {% if job.description %}
+        <!-- Safe sanitized rendering with pre-wrap whitespace to prevent XSS -->
+        <div class="job-description-text">{{ job.description }}</div>
+      {% else %}
+        <p class="cell-subtle">No description was captured for this listing.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+
+{% block title %}Search Intelligence & Source Optimization{% endblock %}
+{% block page_title %}Job Search Intelligence & Source Optimization{% endblock %}
+{% block page_subtitle %}Deterministic, local-first search strategy learning from real historical collections to guide future daily runs.{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+
+  <!-- Strategy Overview Header Cards -->
+  <div class="kpi-grid mb-24">
+    <div class="kpi-card highlight-card">
+      <div class="kpi-icon">💡</div>
+      <div class="kpi-info">
+        <div class="kpi-value">
+          <span class="status-badge status-{{ report.strategy.overall_status.value | lower }}">
+            {{ report.strategy.overall_status.value }}
+          </span>
+        </div>
+        <div class="kpi-label">Strategy Status</div>
+        <div class="kpi-subtext">Collection health & stability</div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">🛡️</div>
+      <div class="kpi-info">
+        <div class="kpi-value">
+          <span class="confidence-badge conf-{{ report.data_confidence.value | lower }}">
+            {{ report.data_confidence.value }}
+          </span>
+        </div>
+        <div class="kpi-label">Data Confidence</div>
+        <div class="kpi-subtext">Small-sample protection active</div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-info">
+        <div class="kpi-value">{{ report.total_jobs }}</div>
+        <div class="kpi-label">Historical Listings</div>
+        <div class="kpi-subtext">{{ report.relevant_jobs }} relevant ({{ (report.relevant_jobs / report.total_jobs * 100) | round(1) if report.total_jobs > 0 else 0 }}% yield)</div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-info">
+        <div class="kpi-value">{{ report.recommended_jobs }}</div>
+        <div class="kpi-label">Recommended Jobs</div>
+        <div class="kpi-subtext">{{ report.applied_jobs }} manual application(s)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Operational Warnings & Safeguards -->
+  {% if report.warnings %}
+  <div class="alert-banner alert-warning mb-24">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-content">
+      <strong>Active Search Intelligence Safeguards & Observations:</strong>
+      <ul style="margin: 6px 0 0 16px; padding: 0;">
+        {% for w in report.warnings %}
+        <li style="margin-bottom: 4px;">{{ w }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Today's Recommended Search Priorities & Key Actions -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="card-icon">⚡</span>
+        <h3>Today's Recommended Search Priorities</h3>
+      </div>
+      <span class="card-badge">Deterministic Strategy</span>
+    </div>
+    <div class="card-body">
+      <div class="grid-2-col">
+        <div>
+          <h4 style="font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Ranked Discovery Corridors</h4>
+          <ol style="margin: 0; padding-left: 20px; color: #f1f5f9; font-size: 14px; line-height: 1.8;">
+            {% for item in report.strategy.ranked_priorities %}
+            <li><strong>{{ item }}</strong></li>
+            {% endfor %}
+          </ol>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Key Recommended Actions</h4>
+          <ul style="margin: 0; padding-left: 18px; color: #cbd5e1; font-size: 13px; line-height: 1.7;">
+            {% for action in report.strategy.key_actions %}
+            <li>{{ action }}</li>
+            {% endfor %}
+          </ul>
+          <div style="margin-top: 14px; font-size: 12px; color: #94a3b8; background: rgba(30, 41, 59, 0.5); padding: 8px 12px; border-radius: 6px;">
+            🔒 <em>Intelligence recommends search focus only. Your configuration, target roles, and preferred locations are never modified automatically.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommended Search Effort Allocation (Search Budget) -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="card-icon">⚖️</span>
+        <h3>Recommended Search Effort Allocation (Search Budget)</h3>
+      </div>
+      <span class="card-badge">Normalized 100%</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+        Proportional allocation of future daily scraping depth based on source quality score, relevant yield, preferred Indian location match, and API reliability.
+      </p>
+
+      <!-- Multi-segment visual bar -->
+      <div class="budget-bar mb-20" style="display: flex; height: 18px; border-radius: 9px; overflow: hidden; background: #1e293b; margin-bottom: 20px;">
+        {% for b in report.budget_allocations %}
+        <div style="width: {{ b.allocated_percentage }}%; background-color: {% if loop.index == 1 %}#10b981{% elif loop.index == 2 %}#3b82f6{% elif loop.index == 3 %}#f59e0b{% else %}#8b5cf6{% endif %};" title="{{ b.source }}: {{ b.allocated_percentage }}%"></div>
+        {% endfor %}
+      </div>
+
+      <div class="grid-2-col">
+        {% for b in report.budget_allocations %}
+        <div class="bucket-block">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong style="color: #fff; font-size: 14px;">{{ b.source }}</strong>
+            <span style="font-size: 16px; font-weight: 700; color: #38bdf8;">{{ b.allocated_percentage }}%</span>
+          </div>
+          <div style="font-size: 12px; color: #94a3b8; line-height: 1.5;">
+            {{ b.basis }}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Source Search Performance & Recommendations -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="card-icon">🔌</span>
+        <h3>Source Performance & Depth Recommendations</h3>
+      </div>
+      <span class="card-badge">{{ report.sources | length }} Sources Evaluated</span>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Listings</th>
+              <th>Relevant</th>
+              <th>Recommended</th>
+              <th>Relevance %</th>
+              <th>Preferred Loc %</th>
+              <th>India Eligible</th>
+              <th>Quality Score</th>
+              <th>Reliability</th>
+              <th>Confidence</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in report.sources %}
+            <tr>
+              <td><strong>{{ s.source }}</strong></td>
+              <td>{{ s.jobs_found }}</td>
+              <td>{{ s.relevant_jobs }}</td>
+              <td>{{ s.recommended_jobs }}</td>
+              <td>{% if s.relevance_rate is not none %}{{ s.relevance_rate }}%{% else %}—{% endif %}</td>
+              <td>{% if s.preferred_location_rate is not none %}{{ s.preferred_location_rate }}%{% else %}—{% endif %}</td>
+              <td>
+                <span title="{{ s.india_eligible_jobs }} India-eligible / {{ s.foreign_remote_jobs }} foreign-only remote">
+                  {{ s.india_eligible_jobs }}
+                  {% if s.foreign_remote_jobs > 0 %}
+                  <span style="font-size: 11px; color: #f87171;">({{ s.foreign_remote_jobs }} foreign)</span>
+                  {% endif %}
+                </span>
+              </td>
+              <td>
+                {% if s.source_quality_score is not none %}
+                <span class="quality-badge">{{ s.source_quality_score }} ({{ s.quality_label }})</span>
+                {% else %}
+                <span style="color: #94a3b8; font-size: 12px;">Insufficient data</span>
+                {% endif %}
+              </td>
+              <td>
+                <span class="rel-badge rel-{{ s.reliability | lower }}">{{ s.reliability }}</span>
+              </td>
+              <td>
+                <span class="confidence-pill conf-{{ s.confidence.value | lower }}">{{ s.confidence.value }}</span>
+              </td>
+              <td>
+                <div class="action-rec rec-{{ s.recommendation.value | lower }}">
+                  <strong>{{ s.recommendation.value }}</strong>
+                  <div style="font-size: 11px; font-weight: normal; margin-top: 2px;">{{ s.recommendation_reason }}</div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Role & Location Intelligence (2 Columns) -->
+  <div class="grid-2-col mb-24">
+    <!-- Top Role Priorities -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span class="card-icon">💼</span>
+          <h3>Target Role Intelligence</h3>
+        </div>
+        <span class="card-badge">Profile Alignment</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Found</th>
+                <th>Relevant</th>
+                <th>Avg Match</th>
+                <th>Avg Readiness</th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in report.roles %}
+              <tr>
+                <td><strong>{{ r.role_name }}</strong></td>
+                <td>{{ r.jobs_found }}</td>
+                <td>{{ r.relevant_jobs }}</td>
+                <td>{% if r.avg_match_score is not none %}{{ r.avg_match_score }}{% else %}—{% endif %}</td>
+                <td>{% if r.avg_readiness_score is not none %}{{ r.avg_readiness_score }}{% else %}—{% endif %}</td>
+                <td>
+                  <span class="prio-pill prio-{{ r.priority.value | lower }}">{{ r.priority.value }}</span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Location Priorities -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span class="card-icon">📍</span>
+          <h3>Geographic Corridor Intelligence</h3>
+        </div>
+        <span class="card-badge">India & Remote Focus</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Found</th>
+                <th>Relevant</th>
+                <th>Avg Match</th>
+                <th>India Eligible</th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for loc in report.locations %}
+              <tr>
+                <td><strong>{{ loc.location_name }}</strong></td>
+                <td>{{ loc.jobs_found }}</td>
+                <td>{{ loc.relevant_jobs }}</td>
+                <td>{% if loc.avg_match_score is not none %}{{ loc.avg_match_score }}{% else %}—{% endif %}</td>
+                <td>
+                  {{ loc.india_eligible_remote }}
+                  {% if loc.foreign_remote > 0 %}
+                  <span style="font-size: 11px; color: #f87171;">({{ loc.foreign_remote }} foreign)</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <span class="prio-pill prio-{{ loc.priority.value | lower }}">{{ loc.priority.value }}</span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Role + Location Combinations (Matrix Table) -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="card-icon">🧩</span>
+        <h3>Top Role × Location Combinations</h3>
+      </div>
+      <span class="card-badge">Corridor Matrix</span>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Location Corridor</th>
+              <th>Listings</th>
+              <th>Relevant</th>
+              <th>Recommended</th>
+              <th>Avg Match</th>
+              <th>Avg Readiness</th>
+              <th>Status</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rl in report.role_locations %}
+            <tr>
+              <td><strong>{{ rl.role_name }}</strong></td>
+              <td>{{ rl.location_name }}</td>
+              <td>{{ rl.jobs_found }}</td>
+              <td>{{ rl.relevant_jobs }}</td>
+              <td>{{ rl.recommended_jobs }}</td>
+              <td>{% if rl.avg_match_score is not none %}{{ rl.avg_match_score }}{% else %}—{% endif %}</td>
+              <td>{% if rl.avg_readiness_score is not none %}{{ rl.avg_readiness_score }}{% else %}—{% endif %}</td>
+              <td>{{ rl.status_label }}</td>
+              <td>
+                <span class="prio-pill prio-{{ rl.priority.value | lower }}">{{ rl.priority.value }}</span>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="9" style="text-align: center; color: #94a3b8; padding: 16px;">
+                No matching role + location combination data accumulated yet.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Coverage Gaps (Underrepresented Target Areas) -->
+  <div class="card mb-24">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="card-icon">🔍</span>
+        <h3>Search Coverage Gaps</h3>
+      </div>
+      <span class="card-badge">Target Exploration</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+        Configured profile roles or preferred locations with little to no representation in historical collections. Indicates areas for future search expansion.
+      </p>
+
+      {% if report.search_gaps %}
+      <div class="grid-3-col">
+        {% for gap in report.search_gaps %}
+        <div class="bucket-block" style="border-left: 3px solid #f59e0b;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong style="color: #fff; font-size: 13px;">{{ gap.item_name }}</strong>
+            <span class="gap-type-pill">{{ gap.gap_type.value }}</span>
+          </div>
+          <div style="font-size: 12px; color: #f87171; margin-bottom: 4px;">{{ gap.details }}</div>
+          <div style="font-size: 11px; color: #94a3b8; line-height: 1.4;">{{ gap.suggestion }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div style="color: #34d399; font-size: 13px; padding: 10px 0;">
+        ✓ Excellent search coverage! All configured profile targets have historical representations.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

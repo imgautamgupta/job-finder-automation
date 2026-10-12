@@ -1,0 +1,183 @@
+[
+  {
+    "company": "pocketfm",
+    "platform": "Lever",
+    "endpoint": "https://api.lever.co/v0/postings/pocketfm?mode=json",
+    "http_status": 200,
+    "available": 9,
+    "india_jobs": 2,
+    "bengaluru_jobs": 2,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 7,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 1,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Audio Engineer (Tokyo remote)",
+      "Director - Analytics (Bangalore onsite)",
+      "Junior Visual Quality Control (Mexico remote)",
+      "Junior Writer (Latam) (Mexico remote)",
+      "Manager - Business Finance (Bangalore hybrid)"
+    ],
+    "error": null
+  },
+  {
+    "company": "fampay",
+    "platform": "Lever",
+    "endpoint": "https://api.lever.co/v0/postings/fampay?mode=json",
+    "http_status": 200,
+    "available": 16,
+    "india_jobs": 16,
+    "bengaluru_jobs": 16,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 5,
+    "potentially_relevant": 4,
+    "sample_relevant": [
+      "Copy Intern [Bengaluru onsite]",
+      "Data Engineer (SDE 2) [Bengaluru onsite]",
+      "SDE 2 Infra [Bengaluru onsite]",
+      "Security Engineer Intern [Bengaluru onsite]"
+    ],
+    "sample_titles": [
+      "Assistant Manager(Controllership) (Bengaluru onsite)",
+      "Brand Marketing Manager (Bengaluru onsite)",
+      "Business & Partnerships Associate (Bengaluru onsite)",
+      "Copy Intern (Bengaluru onsite)",
+      "Copywriter (Bengaluru onsite)"
+    ],
+    "error": null
+  },
+  {
+    "company": "epifi",
+    "platform": "Lever",
+    "endpoint": "https://api.lever.co/v0/postings/epifi?mode=json",
+    "http_status": 200,
+    "available": 2,
+    "india_jobs": 2,
+    "bengaluru_jobs": 2,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 1,
+    "potentially_relevant": 1,
+    "sample_relevant": [
+      "DS/ML Intern [Bangalore onsite]"
+    ],
+    "sample_titles": [
+      "DS/ML Intern (Bangalore onsite)",
+      "GTM - sales (Bangalore hybrid)"
+    ],
+    "error": null
+  },
+  {
+    "company": "cred",
+    "platform": "Lever",
+    "endpoint": "https://api.lever.co/v0/postings/cred?mode=json",
+    "http_status": 200,
+    "available": 8,
+    "india_jobs": 8,
+    "bengaluru_jobs": 7,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 3,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "accounts payable manager (hyderabad onsite)",
+      "business development & partnerships (bengaluru onsite)",
+      "business development & partnerships \u2013 commercial lead (bengaluru onsite)",
+      "business development & strategic partnerships - d2c (bengaluru onsite)",
+      "copywriter (bengaluru onsite)"
+    ],
+    "error": null
+  },
+  {
+    "company": "meesho",
+    "platform": "Lever",
+    "endpoint": "https://api.lever.co/v0/postings/meesho?mode=json",
+    "http_status": 200,
+    "available": 61,
+    "india_jobs": 58,
+    "bengaluru_jobs": 54,
+    "delhi_jobs": 1,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 20,
+    "potentially_relevant": 2,
+    "sample_relevant": [
+      "Software Development Engineer III Data [Bangalore, Karnataka onsite]",
+      "Software Development Engineer III DevOps [Bangalore, Karnataka hybrid]"
+    ],
+    "sample_titles": [
+      "AM/ Manager - Risk & Decision Science (Bangalore, Karnataka onsite)",
+      "AM/M - Risk Analytics - User Lending (Bangalore, Karnataka onsite)",
+      "Assistant Manager - Business Finance (Bangalore, Karnataka onsite)",
+      "Assistant Manager - Performance Marketing (Bangalore, Karnataka onsite)",
+      "Assistant Manager Finance \u2013 Logistics Intelligence (Bangalore, Karnataka onsite)"
+    ],
+    "error": null
+  },
+  {
+    "company": "paytm",
+    "platform": "Lever",
+    "endpoint": "https://api.lever.co/v0/postings/paytm?mode=json",
+    "http_status": 200,
+    "available": 177,
+    "india_jobs": 139,
+    "bengaluru_jobs": 17,
+    "delhi_jobs": 1,
+    "noida_jobs": 87,
+    "remote_jobs": 2,
+    "ahmedabad_jobs": 3,
+    "engineering_jobs": 32,
+    "potentially_relevant": 6,
+    "sample_relevant": [
+      "Backend - TL/STL [Bangalore, Karnataka onsite]",
+      "HR Internship - Talent Acquisition [Noida, Uttar Pradesh onsite]",
+      "Intern-Talent Acquisition [Bangalore, Karnataka onsite]",
+      "Internship - Talent Acquisition [Noida, Uttar Pradesh onsite]",
+      "Talent Acquisition Intern - Bangalore [Bangalore, Karnataka onsite]"
+    ],
+    "sample_titles": [
+      "Account Executive/ Director - AI Agentic Enterprise Sales (Dubai onsite)",
+      "AM/Manager\u2013 Procurement (Admin, Real Estate & HR) (Noida, Uttar Pradesh onsite)",
+      "Analytics Lead - UPI Product | Experience : 7-9 yrs (Noida, Uttar Pradesh onsite)",
+      "Analytics Lead- User Growth I Exp- 8- 10 Years (Noida, Uttar Pradesh onsite)",
+      "Area Collection Manager - Manager - Lending Collections (Frontend) (Patna, Bihar onsite)"
+    ],
+    "error": null
+  },
+  {
+    "company": "zeta",
+    "platform": "Lever",
+    "endpoint": "https://api.lever.co/v0/postings/zeta?mode=json",
+    "http_status": 200,
+    "available": 25,
+    "india_jobs": 23,
+    "bengaluru_jobs": 12,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 2,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 11,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Associate / Sr. Associate- People Experience (Bangalore - WF onsite)",
+      "Associate Director - Legal (Mumbai / Bangalore onsite)",
+      "Cloud Network Engineer II (Hyderabad onsite)",
+      "Corporate Risk and Compliance - Associate II (Bangalore onsite)",
+      "Director - Solution Engineering (East Coast remote)"
+    ],
+    "error": null
+  }
+]

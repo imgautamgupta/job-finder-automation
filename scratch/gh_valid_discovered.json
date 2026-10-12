@@ -1,0 +1,827 @@
+[
+  {
+    "company": "hackerrank",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/hackerrank/jobs?content=true",
+    "http_status": 200,
+    "available": 28,
+    "india_jobs": 18,
+    "bengaluru_jobs": 18,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 4,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 17,
+    "potentially_relevant": 2,
+    "sample_relevant": [
+      "Software Development Engineer Intern [Onsite in Bangalore]",
+      "Software Development Engineer in Test II [Hybrid in Bangalore, India]"
+    ],
+    "sample_titles": [
+      "Account Executive - Strategic (Remote in San Francisco Bay Area, Los Angeles, Seattle)",
+      "Campus Crew Ambassador (Student Program) (Remote Globally)",
+      "Creative Content Lead (In-office in Bangalore, India)",
+      "Customer Account Manager - Mid Market (Hybrid in Santa Clara, CA)",
+      "Customer Account Manager - SMB (Hybrid in Santa Clara, CA)"
+    ],
+    "error": null
+  },
+  {
+    "company": "druva",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/druva/jobs?content=true",
+    "http_status": 200,
+    "available": 37,
+    "india_jobs": 14,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 21,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Account Executive, LATAM (Texas, US)",
+      "Bay Area Sales - Future Opportunities (Santa Clara, CA)",
+      "Cloud Operations Support Engineer (Santa Clara, CA)",
+      "Data Operations Specialist  (Pune, Maharashtra, India)",
+      "Director, Creative & Brand (Santa Clara, CA)"
+    ],
+    "error": null
+  },
+  {
+    "company": "slice",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/slice/jobs?content=true",
+    "http_status": 200,
+    "available": 29,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 6,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 9,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Account Management Team Lead (Pristina)",
+      "Account Manager (Skopje, Ohrid, Debar)",
+      "Associate Account Manager (Skopje, Ohrid, Debar)",
+      "Customer Experience Representative (Pristina)",
+      "Customer Experience Representative (Skopje)"
+    ],
+    "error": null
+  },
+  {
+    "company": "inmobi",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/inmobi/jobs?content=true",
+    "http_status": 200,
+    "available": 71,
+    "india_jobs": 37,
+    "bengaluru_jobs": 32,
+    "delhi_jobs": 2,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 33,
+    "potentially_relevant": 2,
+    "sample_relevant": [
+      "Intern - Creative & Communications, People Team  [Bangalore]",
+      "SDE III - Devops [Bangalore]"
+    ],
+    "sample_titles": [
+      "Account Manager - Microsoft Ads - Cairo - Egypt (Egypt)",
+      "Account Manager - Microsoft Advertising (Bangalore)",
+      "Account Manager - Performance Marketing - Search Ads (India)",
+      "Account Specialist (Bing Ads Analyst) (Lucknow)",
+      "Applied Scientist III (Bangalore)"
+    ],
+    "error": null
+  },
+  {
+    "company": "anthropic",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/anthropic/jobs?content=true",
+    "http_status": 200,
+    "available": 639,
+    "india_jobs": 4,
+    "bengaluru_jobs": 2,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 55,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 384,
+    "potentially_relevant": 1,
+    "sample_relevant": [
+      "Research Engineer, Machine Learning (RL Velocity) [Remote-Friendly (Travel-Required) | San Francisco, CA | New York City, NY]"
+    ],
+    "sample_titles": [
+      "Account Executive, AI Native (New York City, NY; San Francisco, CA | New York City, NY)",
+      "Account Executive - DNB (Singapore)",
+      "Account Executive - Public Sector (ASEAN) (Singapore)",
+      "Account Executive, Startups (San Francisco, CA | New York City, NY)",
+      "Account Executive, Startups (Dublin, IE)"
+    ],
+    "error": null
+  },
+  {
+    "company": "databricks",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/databricks/jobs?content=true",
+    "http_status": 200,
+    "available": 889,
+    "india_jobs": 92,
+    "bengaluru_jobs": 78,
+    "delhi_jobs": 2,
+    "noida_jobs": 0,
+    "remote_jobs": 66,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 649,
+    "potentially_relevant": 3,
+    "sample_relevant": [
+      "Sr Full Stack Developer (AI Agents) [Bengaluru, India]",
+      "Sr Software Engineer - Backend [Bengaluru, India]",
+      "Sr. Software Engineer - Observability [Bengaluru, India]"
+    ],
+    "sample_titles": [
+      "\u30c7\u30ea\u30d0\u30ea\u30fc\u30bd\u30ea\u30e5\u30fc\u30b7\u30e7\u30f3\u30a2\u30fc\u30ad\u30c6\u30af\u30c8 (Tokyo, Japan)",
+      "Account Executive  (Bengaluru, India; Mumbai, India)",
+      "Account Executive, Commercial - Hunter (Tokyo, Japan)",
+      "Account Executive, Singapore (Singapore)",
+      "Accounting Manager, Accounts Receivable (Austin, Texas; Denver, Colorado; Portland, Oregon; Scottsdale, Arizona, United States)"
+    ],
+    "error": null
+  },
+  {
+    "company": "launchdarkly",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/launchdarkly/jobs?content=true",
+    "http_status": 200,
+    "available": 56,
+    "india_jobs": 6,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 39,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 26,
+    "potentially_relevant": 3,
+    "sample_relevant": [
+      "Backend Engineer (Multiple Positions) [Remote - US]",
+      "Full Stack Engineer, Experimentation [Remote - US]",
+      "Full Stack Engineer (Multiple Positions) [Remote - US]"
+    ],
+    "sample_titles": [
+      "Accounts Payable & Expense Specialist (India)",
+      "Associate Collections Specialist (India)",
+      "Backend Engineer (Multiple Positions) (Remote - US)",
+      "Corporate Account Executive - EMEA (Hybrid - EMEA)",
+      "Data Analyst \u2013 Revenue & Metrics (Ireland)"
+    ],
+    "error": null
+  },
+  {
+    "company": "circleci",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/circleci/jobs?content=true",
+    "http_status": 200,
+    "available": 13,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 5,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 4,
+    "potentially_relevant": 1,
+    "sample_relevant": [
+      "Software Engineer [Canada (Remote), United States (Remote)]"
+    ],
+    "sample_titles": [
+      "Agentic Operator, Growth Marketing (Remote (USA))",
+      "Digital Customer Success Program Manager  (San Francisco)",
+      "Director, Demand Generation (San Francisco)",
+      "Lead Accountant (San Francisco (hybrid))",
+      "Senior GTM Strategy & Operations Manager (San Francisco)"
+    ],
+    "error": null
+  },
+  {
+    "company": "jfrog",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/jfrog/jobs?content=true",
+    "http_status": 200,
+    "available": 66,
+    "india_jobs": 6,
+    "bengaluru_jobs": 6,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 7,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 35,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Accountant (Sunnyvale, California, United States)",
+      "Account Executive (Taipei, Taiwan)",
+      "AI Solutions Builder (Tel Aviv/ Netanya, Israel)",
+      "Associate Account Manager, Revenue Retention (Atlanta)",
+      "Associate Account Manager, Revenue Retention (Sunnyvale)"
+    ],
+    "error": null
+  },
+  {
+    "company": "pagerduty",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/pagerduty/jobs?content=true",
+    "http_status": 200,
+    "available": 51,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 12,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 10,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Account Manager (Atlanta)",
+      "Account Manager - Boston (Remote (USA - Boston, MA))",
+      "Account Manager- DC (Remote (USA))",
+      "Account Manager - Toronto (Toronto)",
+      "Account Manager (US) (Remote (USA))"
+    ],
+    "error": null
+  },
+  {
+    "company": "mozilla",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/mozilla/jobs?content=true",
+    "http_status": 200,
+    "available": 91,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 91,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 55,
+    "potentially_relevant": 2,
+    "sample_relevant": [
+      "Contract Software Engineer - DOM Core Firefox/Gecko [Remote France; Remote Germany; Remote UK]",
+      "Contract Software Engineer - WebCompat Tooling (Dashboards and Reporting), Firefox [Remote Canada; Remote France; Remote Germany; Remote UK]"
+    ],
+    "sample_titles": [
+      "Contract Software Engineer - DOM Core Firefox/Gecko (Remote France; Remote Germany; Remote UK)",
+      "Contract Software Engineer - WebCompat Tooling (Dashboards and Reporting), Firefox (Remote Canada; Remote France; Remote Germany; Remote UK)",
+      "Contract Staff Front End Engineer (Web Conference/Screen Sharing) (Remote Canada)",
+      "Contract Staff Software Engineer-FireFox Layout  (Remote Canada)",
+      "Contract Staff Software Engineer - Performance Graphics (C++,Rust, WebGL) (Remote Canada)"
+    ],
+    "error": null
+  },
+  {
+    "company": "brave",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/brave/jobs?content=true",
+    "http_status": 200,
+    "available": 12,
+    "india_jobs": 1,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 2,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 8,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "AI Security Researcher/Research Engineer (North America, EU, UK)",
+      "AI Systems Researcher/Engineer (North America, EU, UK)",
+      "BDR/SDR - Brave Search API (USA)",
+      "Client Success Manager (USA)",
+      "Enterprise Business Development Manager, India (India)"
+    ],
+    "error": null
+  },
+  {
+    "company": "sumologic",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/sumologic/jobs?content=true",
+    "http_status": 200,
+    "available": 9,
+    "india_jobs": 5,
+    "bengaluru_jobs": 2,
+    "delhi_jobs": 0,
+    "noida_jobs": 3,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 6,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Principal Product Manager (Noida, Uttar Pradesh, India)",
+      "Principal Product Manager (Bengaluru, Karnataka, India)",
+      "Senior Partner Sales Manager (London, England, United Kingdom)",
+      "Senior Sales Engineer (London, England, United Kingdom)",
+      "Senior Solutions Engineer (Melbourne, Victoria, Australia)"
+    ],
+    "error": null
+  },
+  {
+    "company": "newrelic",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/newrelic/jobs?content=true",
+    "http_status": 200,
+    "available": 48,
+    "india_jobs": 11,
+    "bengaluru_jobs": 5,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 26,
+    "potentially_relevant": 1,
+    "sample_relevant": [
+      "Software Engineer 1 [Hyderabad, India]"
+    ],
+    "sample_titles": [
+      "Account Executive - Enterprise Sales (Berlin, Germany; Munich, Germany)",
+      "Account Executive - Enterprise Sales (Greenfield) (Los Angeles, California, USA; San Diego, California, USA)",
+      "Account Executive - Enterprise Sales (Japan) (Tokyo, Japan)",
+      "Account Executive - Mid-Enterprise Sales (Atlanta, Georgia, USA; Boston, Massachusetts, USA; New York City, New York, USA)",
+      "Associate HRBP (Tokyo, Japan)"
+    ],
+    "error": null
+  },
+  {
+    "company": "elastic",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/elastic/jobs?content=true",
+    "http_status": 200,
+    "available": 414,
+    "india_jobs": 17,
+    "bengaluru_jobs": 12,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 219,
+    "potentially_relevant": 1,
+    "sample_relevant": [
+      "Agentic AI Engineer [Bangalore, India]"
+    ],
+    "sample_titles": [
+      "ABM Manager, Global Public Sector (United States)",
+      "ABM Regional Manager, AMER (United States)",
+      "Account Executive (South Africa)",
+      "Account Executive Federal Civilian (Financial Regulatory & SSA) (United States)",
+      "Account Executive Public Sector (Belgium)"
+    ],
+    "error": null
+  },
+  {
+    "company": "stripe",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/stripe/jobs?content=true",
+    "http_status": 200,
+    "available": 732,
+    "india_jobs": 45,
+    "bengaluru_jobs": 45,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 119,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 273,
+    "potentially_relevant": 8,
+    "sample_relevant": [
+      "Backend Engineer, Core Technology [US-Remote, Chicago, Seattle, San Francisco]",
+      "Backend Engineer, Payments [Toronto, Canada Remote]",
+      "Software Engineer, Intern [Bengaluru]",
+      "Software Engineer, Internal Systems [Bengaluru, India]",
+      "Software Engineer, Metronome Infrastructure [Toronto, Vancouver, Canada-Remote]"
+    ],
+    "sample_titles": [
+      "Abuse Investigator (Dublin)",
+      "Abuse Investigator (Dublin)",
+      "Abuse Investigator (Seattle, San Francisco, New York City)",
+      "Abuse Research Engineer (Remote from the US)",
+      "Account Executive, AI Sales (San Francisco, CA)"
+    ],
+    "error": null
+  },
+  {
+    "company": "gitlab",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/gitlab/jobs?content=true",
+    "http_status": 200,
+    "available": 210,
+    "india_jobs": 28,
+    "bengaluru_jobs": 26,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 185,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 116,
+    "potentially_relevant": 10,
+    "sample_relevant": [
+      "Backend Engineer, AI Engineering: Duo Chat [Remote, Canada; Remote, United States]",
+      "Backend Engineer, Create: Repository Management [Remote, United Kingdom]",
+      "Backend Engineer, Create: Source Code Experience (Ruby)    [Remote, Canada]",
+      "Backend Engineer (Python),AI Engineering: Agent Foundations [Remote, Canada; Remote, Poland; Remote, United Kingdom]",
+      "Backend Engineer (Ruby), AI Engineering: Agent Foundations [Remote, Canada; Remote, Poland; Remote, United Kingdom]"
+    ],
+    "sample_titles": [
+      "Account Executive - France (Remote, France)",
+      "AI Transformation Owner, CRO (Remote, United States)",
+      "AI Transformation Owner, Product & Design (Remote, Canada; Remote, United Kingdom; Remote, United States)",
+      "Associate Renewals Manager (Remote Ireland; Remote, Israel)",
+      "Associate Renewals Manager    (Remote, Canada; Remote, United States)"
+    ],
+    "error": null
+  },
+  {
+    "company": "airbnb",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/airbnb/jobs?content=true",
+    "http_status": 200,
+    "available": 160,
+    "india_jobs": 8,
+    "bengaluru_jobs": 4,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 24,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 82,
+    "potentially_relevant": 2,
+    "sample_relevant": [
+      "Software Engineer, Passport & Commerce, Android [Remote, USA]",
+      "Software Engineer, Passport & Commerce, iOS [Remote, USA]"
+    ],
+    "sample_titles": [
+      "Account Manager  (London, United Kingdom)",
+      "Associate Legal Counsel, Japan (Tokyo, Japan)",
+      "Associate Principal, Procurement Innovation Supplier Programs (United States )",
+      "Business Development Manager (Berlin, Germany )",
+      "Community Engagement Lead, Spain and Portugal (Barcelona, Spain)"
+    ],
+    "error": null
+  },
+  {
+    "company": "datadog",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/datadog/jobs?content=true",
+    "http_status": 200,
+    "available": 434,
+    "india_jobs": 9,
+    "bengaluru_jobs": 8,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 56,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 178,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Accounts Payable Analyst (New York, New York, USA)",
+      "AI Research Engineer - Datadog AI Research (DAIR) (Paris, France)",
+      "AI Research Scientist - Datadog AI Research (DAIR) (Paris, France)",
+      "AI Research Scientist - Datadog AI Research (DAIR) (New York, New York, USA; Pittsburgh, Pennsylvania, USA)",
+      "Applied Science Intern (Paris, France)"
+    ],
+    "error": null
+  },
+  {
+    "company": "mongodb",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/mongodb/jobs?content=true",
+    "http_status": 200,
+    "available": 394,
+    "india_jobs": 82,
+    "bengaluru_jobs": 13,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 180,
+    "potentially_relevant": 8,
+    "sample_relevant": [
+      "Software Engineer 3 [Gurugram]",
+      "Software Engineer 3 [Gurugram]",
+      "Software Engineer 3 [Gurugram]",
+      "Software Engineer 3 [Gurugram]",
+      "Software Engineer 3 [Gurugram]"
+    ],
+    "sample_titles": [
+      "Account Development Representative (New York City)",
+      "Account Development Representative (Gurugram)",
+      "Account Development Representative (Bengaluru)",
+      "Account Development Representative (Boston)",
+      "Account Development Representative - Benelux/Nordics (Dublin)"
+    ],
+    "error": null
+  },
+  {
+    "company": "instawork",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/instawork/jobs?content=true",
+    "http_status": 200,
+    "available": 58,
+    "india_jobs": 37,
+    "bengaluru_jobs": 37,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 21,
+    "potentially_relevant": 8,
+    "sample_relevant": [
+      "Hardware Intern \u2014 Robotics & AI [Bengaluru, Karnataka, India]",
+      "HR Intern [Bengaluru, Karnataka, India]",
+      "Internal Coordinator  [Bengaluru, Karnataka, India]",
+      " IT Intern \u2013 Gadget & Tech Support Operations [Bengaluru, Karnataka, India]",
+      "Operations Management Intern [Bengaluru, Karnataka, India]"
+    ],
+    "sample_titles": [
+      "Assistant Manager - Operations - Instawork Robotics Labs (Bengaluru, Karnataka, India)",
+      "Associate Director - Operations - Instawork Robotics Labs (Bengaluru, Karnataka, India)",
+      "Business Development Executive (Bengaluru, Karnataka, India)",
+      "Business Development Executive (Bengaluru, Karnataka, India)",
+      "Business Operations Associate, AI & Automation (San Francisco, California, United States)"
+    ],
+    "error": null
+  },
+  {
+    "company": "twilio",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/twilio/jobs?content=true",
+    "http_status": 200,
+    "available": 131,
+    "india_jobs": 13,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 131,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 71,
+    "potentially_relevant": 8,
+    "sample_relevant": [
+      "Machine Learning Engineer [Remote - Ireland]",
+      "Machine Learning Engineer [Remote - Spain]",
+      "Software Development Engineer (L3) [Remote - Colombia]",
+      "Software Engineer L2 - Cloud Infrastructure  [Remote - US]",
+      "Software Engineer L3 [Remote - India]"
+    ],
+    "sample_titles": [
+      "Account Executive 3 (Remote - US)",
+      "Account Executive 4 (Remote - Colombia)",
+      "Applications Engineer 2 (Remote - India)",
+      "Business Intelligence Analyst 2 (Remote - Colombia)",
+      "Carrier Deal Desk Manager (Remote - US)"
+    ],
+    "error": null
+  },
+  {
+    "company": "okta",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/okta/jobs?content=true",
+    "http_status": 200,
+    "available": 372,
+    "india_jobs": 118,
+    "bengaluru_jobs": 116,
+    "delhi_jobs": 1,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 242,
+    "potentially_relevant": 1,
+    "sample_relevant": [
+      "Software Engineer, Professional Services R&D [Bengaluru, India]"
+    ],
+    "sample_titles": [
+      "Account Executive Auth0 (Madrid, Spain)",
+      "Account Executive Large Enterprise Public Sector (London, United Kingdom)",
+      "AI Trainer (Toronto, Ontario, Canada)",
+      "Area Sales Director, Enterprise (Auth0) (Florida; Georgia; North Carolina; Tennessee)",
+      "Area Vice President, Strategic Sales (Connecticut; Massachusetts; New York, New York; Pennsylvania; Washington, DC)"
+    ],
+    "error": null
+  },
+  {
+    "company": "coinbase",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/coinbase/jobs?content=true",
+    "http_status": 200,
+    "available": 225,
+    "india_jobs": 9,
+    "bengaluru_jobs": 1,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 185,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 111,
+    "potentially_relevant": 11,
+    "sample_relevant": [
+      "Compliance, International Investigations Associate [Remote - UK]",
+      "Machine Learning Engineer [Remote - India]",
+      "Machine Learning Engineer, CX Intelligence [Remote - Brazil]",
+      "Software Engineer [Remote - Canada]",
+      "Software Engineer, Blockchain Platform Nodes [Remote - USA]"
+    ],
+    "sample_titles": [
+      "Accelerations Programs Intern (Hybrid - New York, NY)",
+      "Accountant, Cyprus (Remote - Cyprus)",
+      "Accounting Intern (Hybrid - New York, NY)",
+      "Accounting Manager, GL Operations & Intercompany (Remote - USA)",
+      "Accounting Manager, GL Operations & Intercompany (Remote - Canada)"
+    ],
+    "error": null
+  },
+  {
+    "company": "samsara",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/samsara/jobs?content=true",
+    "http_status": 200,
+    "available": 240,
+    "india_jobs": 6,
+    "bengaluru_jobs": 6,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 208,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 137,
+    "potentially_relevant": 8,
+    "sample_relevant": [
+      "AI Engineer, Customer Success [Remote - US]",
+      "People Analytics AI Engineer [Remote - Seattle]",
+      "Software Engineer - Data Platform [Remote - Canada]",
+      "Software Engineer - Data Platform [Remote - US]",
+      "Software Engineer II [Remote - US]"
+    ],
+    "sample_titles": [
+      "Account Development Representative - Canada (Remote - Toronto)",
+      "Account Development Representative - DACH (Remote - Germany)",
+      "Account Development Representative - France (Remote - France)",
+      "Account Development Representative II (Remote - Toronto)",
+      "Account Development Representative II (Atlanta, Georgia, United States)"
+    ],
+    "error": null
+  },
+  {
+    "company": "rubrik",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/rubrik/jobs?content=true",
+    "http_status": 200,
+    "available": 133,
+    "india_jobs": 35,
+    "bengaluru_jobs": 29,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 15,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 49,
+    "potentially_relevant": 6,
+    "sample_relevant": [
+      "ENG Project/ Program - Intern [Bangalore]",
+      "Software Engineer - Cloud: Azure [Bangalore ]",
+      "Software Engineer (CPD) - Winter Intern [Bangalore]",
+      "Software Engineer - IAM [Pune]",
+      "Software Engineer- SaaS O365 [Bangalore ]"
+    ],
+    "sample_titles": [
+      "Account Executive (Paris, France )",
+      "Account Executive, Named - Germany (Germany, Remote)",
+      "Account Executive, SaaS Product Line Specialist (Central or Western US)",
+      "Account Executive, Sweden (Stockholm, Sweden)",
+      "AI Product Sales Manager (Southeast, U.S.)"
+    ],
+    "error": null
+  },
+  {
+    "company": "gusto",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/gusto/jobs?content=true",
+    "http_status": 200,
+    "available": 95,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 11,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 41,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Account Coordinator (Retirement Sponsor Support) (Scottsdale, AZ - Hybrid)",
+      "AI/IT Controls Engineer, Enterprise Applications (Denver, CO - Hybrid; New York, NY - Hybrid; San Francisco, CA - Hybrid)",
+      "Benefits Advising (Renewals) Leader (Denver, CO - Hybrid)",
+      "Business Development Representative  (Denver, CO - Hybrid)",
+      "Channel Partnerships Manager, Investor Ecosystems (VC & PE) (Atlanta, GA - Hybrid; Denver, CO - Hybrid; New York, NY - Hybrid; San Francisco, CA - Hybrid; Toronto, Ontario - Remote)"
+    ],
+    "error": null
+  },
+  {
+    "company": "canonical",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/canonical/jobs?content=true",
+    "http_status": 200,
+    "available": 311,
+    "india_jobs": 0,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 0,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 206,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Accountant (Home based - EMEA)",
+      "Accounts Payable Clerk (Home based - EMEA; Office Based - London, UK)",
+      "Accounts Receivable Clerk (Home based - EMEA)",
+      "Alliances & Channels Leader (Home Based - Americas; Home based - EMEA; Home based - Worldwide)",
+      "Alliances Field Engineer (Home based - Worldwide)"
+    ],
+    "error": null
+  },
+  {
+    "company": "cloudflare",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/cloudflare/jobs?content=true",
+    "http_status": 200,
+    "available": 419,
+    "india_jobs": 1,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 60,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 262,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Account Executive, FedCiv (Hybrid)",
+      "Account Executive, Indonesia (Hybrid)",
+      "AI Security Research & Red Team Engineer (Hybrid)",
+      "Associate General Counsel, Privacy Compliance (Hybrid)",
+      "Business Development Representative - Bahasa Indonesia Speaking (Hybrid)"
+    ],
+    "error": null
+  },
+  {
+    "company": "deliveroo",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/deliveroo/jobs?content=true",
+    "http_status": 200,
+    "available": 195,
+    "india_jobs": 4,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 1,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 91,
+    "potentially_relevant": 0,
+    "sample_relevant": [],
+    "sample_titles": [
+      "Account Associate - Retail & Grocery (H/F) (Paris, France)",
+      "Account Management Lead - Editions France (Paris, France)",
+      "Account Manager - French Speaking  (Manchester, United Kingdom)",
+      "Account Manager - Groceries & Retail (Paris, France)",
+      "Account Manager - Ile de France - CDI (Paris, France)"
+    ],
+    "error": null
+  },
+  {
+    "company": "vercel",
+    "platform": "Greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/vercel/jobs?content=true",
+    "http_status": 200,
+    "available": 84,
+    "india_jobs": 2,
+    "bengaluru_jobs": 0,
+    "delhi_jobs": 0,
+    "noida_jobs": 0,
+    "remote_jobs": 8,
+    "ahmedabad_jobs": 0,
+    "engineering_jobs": 39,
+    "potentially_relevant": 2,
+    "sample_relevant": [
+      "Software Engineer, Backend [Remote - United States]",
+      "Software Engineer - Data Platform [Remote - United States]"
+    ],
+    "sample_titles": [
+      "Account Executive, Commercial (Hybrid - London)",
+      "Account Executive, Majors (Hybrid - London)",
+      "Account Executive, Majors (APAC) (Hybrid - Sydney)",
+      "Account Executive, Majors- Install Base (APAC) (Hybrid - Sydney)",
+      "Account Executive-Startups, EMEA (French Speaker) (Hybrid - London)"
+    ],
+    "error": null
+  }
+]

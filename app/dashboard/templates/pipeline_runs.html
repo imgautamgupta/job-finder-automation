@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Pipeline Execution Runs{% endblock %}
+{% block page_title %}Pipeline Execution History{% endblock %}
+{% block page_subtitle %}Audit trail of automated and manual job discovery pipeline runs.{% endblock %}
+
+{% block content %}
+<div class="pipeline-runs-container">
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Run ID</th>
+          <th>Started At</th>
+          <th>Completed At</th>
+          <th>Status</th>
+          <th>Sources Attempted</th>
+          <th>Collected</th>
+          <th>Filtered</th>
+          <th>Relevant</th>
+          <th>Strong</th>
+          <th>New</th>
+          <th>Duplicates</th>
+          <th>Errors</th>
+          <th>Notes / Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for run in runs %}
+          <tr>
+            <td><code class="code-pill">{{ run.run_id }}</code></td>
+            <td class="cell-date">{{ run.started_at|format_datetime }}</td>
+            <td class="cell-date">{{ run.completed_at|format_datetime }}</td>
+            <td>
+              {% if run.status == "COMPLETED" %}
+                <span class="badge-status-completed">Completed</span>
+              {% elif run.status == "COMPLETED_WITH_SOURCE_WARNINGS" %}
+                <span class="badge-status-warning" title="Completed with handled warnings">Warnings</span>
+              {% elif run.status == "RUNNING" %}
+                <span class="badge-status-running">Running</span>
+              {% else %}
+                <span class="badge-status-failed">{{ run.status }}</span>
+              {% endif %}
+            </td>
+            <td><span class="cell-subtle">{{ run.sources_attempted or "All" }}</span></td>
+            <td><strong>{{ run.raw_collected }}</strong></td>
+            <td>{{ run.filtered }}</td>
+            <td><strong>{{ run.relevant }}</strong></td>
+            <td>{{ run.strong }}</td>
+            <td><span class="text-success">+{{ run.new_jobs }}</span></td>
+            <td>{{ run.duplicate_jobs }}</td>
+            <td>
+              {% if run.error_count > 0 %}
+                <span class="text-danger">⚠️ {{ run.error_count }}</span>
+              {% else %}
+                <span class="text-success">0</span>
+              {% endif %}
+            </td>
+            <td class="cell-subtle">{{ run.notes or "-" }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="13" class="text-center">No pipeline executions recorded yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

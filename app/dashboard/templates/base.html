@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Job Review Dashboard{% endblock %} - Daily Job Finder</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">💼</div>
+        <div class="brand-info">
+          <h2>Job Finder</h2>
+          <span class="brand-badge">Personal Review</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">OVERVIEW</div>
+        <a href="/job-agent" class="nav-item {% if active_tab == 'job-agent' %}active{% endif %}">
+          <span class="nav-icon">🤖</span>
+          <span class="nav-text">Job Agent</span>
+        </a>
+        <a href="/dashboard" class="nav-item {% if active_tab == 'dashboard' %}active{% endif %}">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="/analytics" class="nav-item {% if active_tab == 'analytics' %}active{% endif %}">
+          <span class="nav-icon">📈</span>
+          <span class="nav-text">Analytics</span>
+        </a>
+        <a href="/search-intelligence" class="nav-item {% if active_tab == 'search-intelligence' %}active{% endif %}">
+          <span class="nav-icon">💡</span>
+          <span class="nav-text">Search Intelligence</span>
+        </a>
+        <a href="/applications" class="nav-item {% if active_tab == 'applications' %}active{% endif %}">
+          <span class="nav-icon">💼</span>
+          <span class="nav-text">Applications</span>
+        </a>
+        <a href="/today" class="nav-item {% if active_tab == 'today' %}active{% endif %}">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-text">Today</span>
+        </a>
+        <a href="/jobs" class="nav-item {% if active_tab == 'jobs' %}active{% endif %}">
+          <span class="nav-icon">📋</span>
+          <span class="nav-text">All Jobs</span>
+        </a>
+        <a href="/new-matches" class="nav-item {% if active_tab == 'new-matches' %}active{% endif %}">
+          <span class="nav-icon">✨</span>
+          <span class="nav-text">New Matches</span>
+        </a>
+
+        <div class="nav-section-label">APPLICATION PIPELINE</div>
+        <a href="/apply-today" class="nav-item {% if active_tab == 'apply-today' %}active{% endif %}">
+          <span class="nav-icon">🚀</span>
+          <span class="nav-text">Apply Today</span>
+        </a>
+        <a href="/interview-prep" class="nav-item {% if active_tab == 'interview-prep' %}active{% endif %}">
+          <span class="nav-icon">🎯</span>
+          <span class="nav-text">Interview Prep</span>
+        </a>
+        <a href="/resume-preparation" class="nav-item {% if active_tab == 'resume-preparation' %}active{% endif %}">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">Resume Prep</span>
+        </a>
+        <a href="/shortlisted" class="nav-item {% if active_tab == 'shortlisted' %}active{% endif %}">
+          <span class="nav-icon">⭐</span>
+          <span class="nav-text">Shortlisted</span>
+        </a>
+        <a href="/applied" class="nav-item {% if active_tab == 'applied' %}active{% endif %}">
+          <span class="nav-icon">📨</span>
+          <span class="nav-text">Applied</span>
+        </a>
+        <a href="/interviews" class="nav-item {% if active_tab == 'interviews' %}active{% endif %}">
+          <span class="nav-icon">🗣️</span>
+          <span class="nav-text">Interviews</span>
+        </a>
+        <a href="/offers" class="nav-item {% if active_tab == 'offers' %}active{% endif %}">
+          <span class="nav-icon">🎉</span>
+          <span class="nav-text">Offers</span>
+        </a>
+
+        <div class="nav-section-label">SYSTEM & RUNS</div>
+        <a href="/pipeline-runs" class="nav-item {% if active_tab == 'pipeline-runs' %}active{% endif %}">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-text">Pipeline Runs</span>
+        </a>
+        <a href="/source-health" class="nav-item {% if active_tab == 'source-health' %}active{% endif %}">
+          <span class="nav-icon">🏥</span>
+          <span class="nav-text">Source Health</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="local-pill">🔒 Local Tool Only</div>
+        <p class="footer-note">No automatic applies. Personal tracking.</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+          <p class="topbar-subtitle">{% block page_subtitle %}Review collected listings, track applications, and inspect metrics.{% endblock %}</p>
+        </div>
+        <div class="topbar-actions">
+          <a href="/jobs" class="btn btn-primary">Browse All Jobs</a>
+        </div>
+      </header>
+
+      <div class="content-body">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/dashboard.js"></script>
+</body>
+</html>

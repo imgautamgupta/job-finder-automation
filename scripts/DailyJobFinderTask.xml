@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<!--
+  Task Scheduler XML Template for Daily Job Finder Automation
+  
+  BEFORE IMPORTING:
+  Replace the following placeholders with your actual machine values:
+  1. PROJECT_ROOT_PATH -> Full path to your job-finder-automation directory (e.g. C:\Users\Username\job-finder-automation)
+  2. START_TIME        -> Desired daily start time in HH:MM:SS format (e.g. 09:00:00)
+-->
+<Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>Daily Job Finder Automation - automatic daily discovery, matching, and Excel export.</Description>
+    <URI>\Daily Job Finder Automation</URI>
+  </RegistrationInfo>
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2026-01-01T09:00:00</StartBoundary>
+      <Enabled>true</Enabled>
+      <ScheduleByDay>
+        <DaysInterval>1</DaysInterval>
+      </ScheduleByDay>
+    </CalendarTrigger>
+  </Triggers>
+  <Principals>
+    <Principal id="Author">
+      <LogonType>InteractiveToken</LogonType>
+      <RunLevel>LeastPrivilege</RunLevel>
+    </Principal>
+  </Principals>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <AllowHardTerminate>true</AllowHardTerminate>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <RunOnlyIfNetworkAvailable>true</RunOnlyIfNetworkAvailable>
+    <IdleSettings>
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <AllowStartOnDemand>true</AllowStartOnDemand>
+    <Enabled>true</Enabled>
+    <Hidden>false</Hidden>
+    <RunOnlyIfIdle>false</RunOnlyIfIdle>
+    <WakeToRun>false</WakeToRun>
+    <ExecutionTimeLimit>PT1H</ExecutionTimeLimit>
+    <Priority>7</Priority>
+  </Settings>
+  <Actions Context="Author">
+    <Exec>
+      <Command>PROJECT_ROOT_PATH\scripts\run_daily_job_finder.bat</Command>
+      <WorkingDirectory>PROJECT_ROOT_PATH</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>

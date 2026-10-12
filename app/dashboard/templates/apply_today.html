@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block title %}Apply Today - Decision Queue{% endblock %}
+{% block page_title %}Apply Today Queue{% endblock %}
+{% block page_subtitle %}Actionable recommendations prioritized by application readiness and profile fit.{% endblock %}
+
+{% block content %}
+<div class="jobs-view-container">
+  <!-- Filter & Search Toolbar -->
+  <form method="get" action="/apply-today" class="filter-card">
+    <div class="filter-grid">
+      <!-- Priority Filter -->
+      <div class="filter-field">
+        <label for="priority">Priority</label>
+        <select id="priority" name="priority">
+          <option value="all" {% if priority == 'all' or not priority %}selected{% endif %}>All Priorities</option>
+          <option value="URGENT" {% if priority == 'URGENT' %}selected{% endif %}>🔥 Urgent</option>
+          <option value="HIGH" {% if priority == 'HIGH' %}selected{% endif %}>⭐ High</option>
+          <option value="NORMAL" {% if priority == 'NORMAL' %}selected{% endif %}>📋 Normal</option>
+          <option value="LOW" {% if priority == 'LOW' %}selected{% endif %}>💤 Low</option>
+        </select>
+      </div>
+
+      <!-- Readiness Score Filter -->
+      <div class="filter-field">
+        <label for="min_readiness">Min Readiness</label>
+        <select id="min_readiness" name="min_readiness">
+          <option value="any" {% if min_readiness == 'any' or not min_readiness %}selected{% endif %}>Any Score</option>
+          <option value="90" {% if min_readiness == '90' %}selected{% endif %}>90+ Ready</option>
+          <option value="80" {% if min_readiness == '80' %}selected{% endif %}>80+ Ready</option>
+          <option value="70" {% if min_readiness == '70' %}selected{% endif %}>70+ Ready</option>
+          <option value="60" {% if min_readiness == '60' %}selected{% endif %}>60+ Ready</option>
+          <option value="50" {% if min_readiness == '50' %}selected{% endif %}>50+ Ready</option>
+        </select>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="filter-field">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          <option value="all" {% if status == 'all' or not status %}selected{% endif %}>Actionable (New / Shortlisted)</option>
+          {% for st in all_statuses %}
+            <option value="{{ st }}" {% if status == st %}selected{% endif %}>{{ st }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Sorting Column -->
+      <div class="filter-field">
+        <label for="sort_by">Sort By</label>
+        <select id="sort_by" name="sort_by">
+          <option value="priority" {% if sort_by == 'priority' %}selected{% endif %}>Application Priority</option>
+          <option value="application_readiness_score" {% if sort_by == 'application_readiness_score' or sort_by == 'readiness' %}selected{% endif %}>Readiness Score</option>
+          <option value="match_score" {% if sort_by == 'match_score' %}selected{% endif %}>Match Score</option>
+          <option value="date_posted" {% if sort_by == 'date_posted' %}selected{% endif %}>Date Posted</option>
+          <option value="first_seen_at" {% if sort_by == 'first_seen_at' %}selected{% endif %}>First Seen</option>
+        </select>
+      </div>
+
+      <!-- Sort Order -->
+      <div class="filter-field">
+        <label for="order">Order</label>
+        <select id="order" name="order">
+          <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascending (Urgent First)</option>
+          <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descending (Highest First)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button type="submit" class="btn btn-primary">Apply Filters</button>
+      <a href="/apply-today" class="btn btn-outline">Reset</a>
+    </div>
+  </form>
+
+  <!-- Decision Queue List -->
+  <div class="recommendations-container">
+    {% for job in jobs %}
+      <div class="recommendation-card card">
+        <div class="rec-card-header">
+          <div class="rec-title-block">
+            <div class="rec-badges">
+              <span class="priority-pill-lg {{ job.application_priority|priority_badge_class }}">
+                {{ job.application_priority.value if job.application_priority.value is defined else job.application_priority }}
+              </span>
+              <span class="score-badge-lg {{ job.application_readiness_score|readiness_badge_class }}">
+                Readiness: {{ job.application_readiness_score if job.application_readiness_score is not none else "N/A" }}/100
+              </span>
+              <span class="score-badge {{ job.match_score|score_badge_class }}">
+                Match: {{ job.match_score if job.match_score is not none else "N/A" }}/100 ({{ job.match_category }})
+              </span>
+              <span class="status-badge {{ job.status|status_badge_class }}">
+                {{ job.status.value if job.status.value is defined else job.status }}
+              </span>
+            </div>
+            <h3 class="rec-job-title">
+              <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer" class="external-job-link">
+                {{ job.title }} ↗
+              </a>
+            </h3>
+            <div class="rec-company-meta">
+              <strong>{{ job.company }}</strong> • {{ job.location or "Location Not Specified" }} • Source: <span class="source-tag source-{{ job.source|lower }}">{{ job.source|capitalize }}</span>
+            </div>
+          </div>
+
+          <div class="rec-actions-block">
+            <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              🚀 Open Application URL
+            </a>
+            <a href="/jobs/{{ job.id }}" class="btn btn-outline">
+              📋 Full Details & Checklist
+            </a>
+          </div>
+        </div>
+
+        <div class="rec-card-body grid-two-col">
+          <!-- Why This Job Matches -->
+          <div class="rec-reasons-box">
+            <h4>Why This Job Matches</h4>
+            <ul class="rec-reason-list">
+              {% for reason in job.recommendation_reasons %}
+                <li class="reason-item-match">{{ reason }}</li>
+              {% else %}
+                <li class="cell-subtle">Deterministic alignment with profile criteria</li>
+              {% endfor %}
+            </ul>
+
+            <div class="rec-skills-summary">
+              <div class="skills-label">Matched Skills:</div>
+              <div class="pill-container">
+                {% for s in job.matched_skills %}
+                  <span class="pill pill-skill">{{ s }}</span>
+                {% else %}
+                  <span class="cell-subtle">None identified</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Possible Concerns & Skill Gaps -->
+          <div class="rec-risks-box">
+            <h4>Possible Concerns & Gaps</h4>
+            <ul class="rec-reason-list">
+              {% for risk in job.risk_reasons %}
+                <li class="reason-item-risk">⚠ {{ risk }}</li>
+              {% else %}
+                <li class="reason-item-clean">✓ No major critical risk factors detected</li>
+              {% endfor %}
+            </ul>
+
+            {% if job.missing_skills %}
+              <div class="rec-skills-summary">
+                <div class="skills-label">Missing / Required Skills:</div>
+                <div class="pill-container">
+                  {% for s in job.critical_gaps %}
+                    <span class="pill pill-danger" title="Critical requirement gap">{{ s }} (Critical)</span>
+                  {% endfor %}
+                  {% for s in job.moderate_gaps %}
+                    <span class="pill pill-warning" title="Moderate gap">{{ s }}</span>
+                  {% endfor %}
+                  {% for s in job.minor_gaps %}
+                    <span class="pill pill-minor" title="Minor gap">{{ s }}</span>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Quick Status & Follow-up Footer -->
+        <div class="rec-card-footer">
+          <div class="rec-quick-status">
+            <span class="cell-subtle">Quick Action:</span>
+            <form method="post" action="/jobs/{{ job.id }}/status" style="display:inline;">
+              <input type="hidden" name="status" value="APPLIED">
+              <input type="hidden" name="redirect_to" value="/apply-today">
+              <button type="submit" class="btn btn-sm btn-outline">📨 Mark Applied</button>
+            </form>
+            <form method="post" action="/jobs/{{ job.id }}/status" style="display:inline;">
+              <input type="hidden" name="status" value="SHORTLISTED">
+              <input type="hidden" name="redirect_to" value="/apply-today">
+              <button type="submit" class="btn btn-sm btn-outline">⭐ Shortlist</button>
+            </form>
+            <form method="post" action="/jobs/{{ job.id }}/status" style="display:inline;">
+              <input type="hidden" name="status" value="NOT_INTERESTED">
+              <input type="hidden" name="redirect_to" value="/apply-today">
+              <button type="submit" class="btn btn-sm btn-danger-outline">Hide</button>
+            </form>
+          </div>
+
+          {% if job.follow_up_date %}
+            <div class="rec-follow-up-badge">
+              📅 Follow-up Due: <strong>{{ job.follow_up_date }}</strong>
+              {% if job.follow_up_notes %}<span class="cell-subtle">({{ job.follow_up_notes }})</span>{% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="card empty-state-card">
+        <div class="empty-icon">🎉</div>
+        <h3>No Actionable Recommendations Found</h3>
+        <p>All matching jobs have been applied to, shortlisted, or filtered out. Check back after the next daily automated pipeline run or review <a href="/jobs">All Jobs</a>.</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination Controls -->
+  {% if total_pages > 1 %}
+    <div class="pagination-container">
+      <div class="pagination-info">
+        Page {{ page }} of {{ total_pages }} ({{ total_count }} actionable jobs)
+      </div>
+      <div class="pagination-links">
+        {% if page > 1 %}
+          <a href="/apply-today?page={{ page - 1 }}&priority={{ priority }}&min_readiness={{ min_readiness }}&status={{ status }}&sort_by={{ sort_by }}&order={{ order }}" class="btn btn-sm btn-outline">← Previous</a>
+        {% endif %}
+        {% if page < total_pages %}
+          <a href="/apply-today?page={{ page + 1 }}&priority={{ priority }}&min_readiness={{ min_readiness }}&status={{ status }}&sort_by={{ sort_by }}&order={{ order }}" class="btn btn-sm btn-outline">Next →</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

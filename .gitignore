@@ -1,0 +1,47 @@
+# Byte-compiled / Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment configuration
+.env
+
+# SQLite databases & export outputs
+data/*.db
+data/*.bak
+*.bak
+data/*.lock
+*.lock
+scratch/*.db
+data/exports/*
+!data/exports/.gitkeep
+data/logs/*
+!data/logs/.gitkeep
+data/backups/*
+!data/backups/.gitkeep
+!data/profile.json
+
+# IDE / Editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Playwright artifacts
+test-results/
+playwright-report/

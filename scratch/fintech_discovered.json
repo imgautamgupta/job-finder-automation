@@ -1,0 +1,54 @@
+{
+  "lever": [
+    {
+      "company": "porter",
+      "platform": "Lever",
+      "endpoint": "https://api.lever.co/v0/postings/porter?mode=json",
+      "http_status": 200,
+      "available": 26,
+      "india_jobs": 0,
+      "bengaluru_jobs": 0,
+      "delhi_jobs": 0,
+      "noida_jobs": 0,
+      "remote_jobs": 0,
+      "ahmedabad_jobs": 0,
+      "engineering_jobs": 1,
+      "potentially_relevant": 0,
+      "sample_relevant": [],
+      "sample_titles": [
+        "1099 Nurse Practitioner (Hampden County) (Springfield, MA onsite)",
+        "1099 Nurse Practitioner (Hampshire County) (Amherst, MA onsite)",
+        "1099 Nurse Practitioner (Worcester, MA) (Massachusetts, US onsite)",
+        "1099 Travel Nurse Practitioner - Michigan (Michigan onsite)",
+        "Account Manager, Client Success (Healthcare) (Pompano Beach, FL onsite)"
+      ],
+      "error": null
+    }
+  ],
+  "greenhouse": [
+    {
+      "company": "porter",
+      "platform": "Greenhouse",
+      "endpoint": "https://boards-api.greenhouse.io/v1/boards/porter/jobs?content=true",
+      "http_status": 200,
+      "available": 5,
+      "india_jobs": 0,
+      "bengaluru_jobs": 0,
+      "delhi_jobs": 0,
+      "noida_jobs": 0,
+      "remote_jobs": 0,
+      "ahmedabad_jobs": 0,
+      "engineering_jobs": 0,
+      "potentially_relevant": 0,
+      "sample_relevant": [],
+      "sample_titles": [
+        "Barista (Los Angeles, CA)",
+        "Cafe Server (Seattle)",
+        "Dishwasher (Seattle, WA)",
+        "Lead Barista (San Francisco, CA)",
+        "Line Cook (Seattle, WA)"
+      ],
+      "error": null
+    }
+  ]
+}

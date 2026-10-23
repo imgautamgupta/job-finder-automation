@@ -604,6 +604,31 @@ class DatabaseManager:
                 if "preparation_notes" in existing_row.keys() and existing_row["preparation_notes"]:
                     job.preparation_notes = existing_row["preparation_notes"]
 
+                # Preserve application tracking
+                if "applied_at" in existing_row.keys() and existing_row["applied_at"]:
+                    if not job.applied_at:
+                        try:
+                            job.applied_at = datetime.fromisoformat(existing_row["applied_at"])
+                        except Exception:
+                            pass
+
+                # Preserve interview tracking
+                if "interview_date" in existing_row.keys() and existing_row["interview_date"]:
+                    if not job.interview_date:
+                        job.interview_date = existing_row["interview_date"]
+                if "interview_stage" in existing_row.keys() and existing_row["interview_stage"]:
+                    if not job.interview_stage:
+                        job.interview_stage = existing_row["interview_stage"]
+                if "interview_status" in existing_row.keys() and existing_row["interview_status"]:
+                    if not job.interview_status:
+                        job.interview_status = existing_row["interview_status"]
+                if "interview_notes" in existing_row.keys() and existing_row["interview_notes"]:
+                    if not job.interview_notes:
+                        job.interview_notes = existing_row["interview_notes"]
+                if "interview_preparation_status" in existing_row.keys() and existing_row["interview_preparation_status"]:
+                    if not job.interview_preparation_status:
+                        job.interview_preparation_status = existing_row["interview_preparation_status"]
+
                 # Update last seen tracking
                 job.last_seen_at = now_dt
                 if effective_run_id:
@@ -980,6 +1005,117 @@ class DatabaseManager:
             )
             conn.commit()
             return cursor.rowcount > 0
+
+    def get_job_by_source_id(self, source_job_id: str, company: Optional[str] = None) -> Optional[Job]:
+        """Fetch a single Job from SQLite by source_job_id (and optional company)."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            if company:
+                cursor.execute(
+                    "SELECT * FROM jobs WHERE source_job_id = ? AND lower(company) = lower(?) ORDER BY id DESC LIMIT 1;",
+                    (str(source_job_id).strip(), company.strip()),
+                )
+            else:
+                cursor.execute(
+                    "SELECT * FROM jobs WHERE source_job_id = ? ORDER BY id DESC LIMIT 1;",
+                    (str(source_job_id).strip(),),
+                )
+            row = cursor.fetchone()
+            return self._row_to_job(row) if row else None
+
+    def get_job_by_url(self, url: str) -> Optional[Job]:
+        """Fetch a single Job from SQLite by canonical URL."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            norm_u = normalize_url(url)
+            cursor.execute(
+                "SELECT * FROM jobs WHERE url = ? OR url = ? ORDER BY id DESC LIMIT 1;",
+                (url.strip(), norm_u),
+            )
+            row = cursor.fetchone()
+            return self._row_to_job(row) if row else None
+
+    def update_job_tracking(
+        self,
+        company: str,
+        source_job_id: Optional[str] = None,
+        url: Optional[str] = None,
+        status: Optional[str] = None,
+        follow_up_date: Optional[str] = None,
+        notes: Optional[str] = None,
+    ) -> bool:
+        """Update tracking status, follow-up date, and notes for a job by (company, source_job_id) or URL.
+
+        Never overwrites existing non-empty database values with None/blanks.
+        """
+        if not company:
+            return False
+
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            target_id = None
+
+            if source_job_id:
+                cursor.execute(
+                    "SELECT id FROM jobs WHERE lower(company) = lower(?) AND source_job_id = ? ORDER BY id DESC LIMIT 1;",
+                    (company.strip(), str(source_job_id).strip()),
+                )
+                row = cursor.fetchone()
+                if row:
+                    target_id = row["id"]
+
+            if not target_id and url:
+                norm_u = normalize_url(url)
+                cursor.execute(
+                    "SELECT id FROM jobs WHERE lower(company) = lower(?) AND (url = ? OR url = ?) ORDER BY id DESC LIMIT 1;",
+                    (company.strip(), url.strip(), norm_u),
+                )
+                row = cursor.fetchone()
+                if row:
+                    target_id = row["id"]
+
+            if not target_id:
+                return False
+
+            now_iso = datetime.now(timezone.utc).isoformat()
+            cursor.execute(
+                """
+                UPDATE jobs SET
+                    status = COALESCE(?, status),
+                    status_updated_at = CASE WHEN ? IS NOT NULL THEN ? ELSE status_updated_at END,
+                    applied_at = CASE WHEN ? = 'APPLIED' AND applied_at IS NULL THEN ? ELSE applied_at END,
+                    follow_up_date = COALESCE(?, follow_up_date),
+                    notes = COALESCE(?, notes),
+                    updated_at = ?
+                WHERE id = ?;
+                """,
+                (
+                    status,
+                    status, now_iso,
+                    status, now_iso,
+                    follow_up_date,
+                    notes,
+                    now_iso,
+                    target_id,
+                ),
+            )
+            conn.commit()
+            return cursor.rowcount > 0
+
+    def get_active_tracked_jobs(self) -> List[Job]:
+        """Fetch all stored jobs with an active tracking status (other than 'NEW', 'NOT_APPLIED', or empty)."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT * FROM jobs
+                WHERE status IS NOT NULL
+                  AND upper(trim(status)) NOT IN ('NEW', 'NOT_APPLIED', 'NOT APPLIED', '')
+                ORDER BY updated_at DESC, id DESC;
+                """
+            )
+            rows = cursor.fetchall()
+            return [self._row_to_job(r) for r in rows]
 
     def update_preparation_status(
         self,
@@ -1942,24 +2078,36 @@ class DatabaseManager:
         configured_sources = [
             ("lever", settings.LEVER_ENABLED, "api.lever.co"),
             ("greenhouse", settings.GREENHOUSE_ENABLED, "boards-api.greenhouse.io"),
+            ("accenture", getattr(settings, "ACCENTURE_ENABLED", False), "accenture.com/careers"),
+            ("workday", getattr(settings, "WORKDAY_ENABLED", False), "myworkdayjobs.com (CXS)"),
+            ("smartrecruiters", getattr(settings, "SMARTRECRUITERS_ENABLED", False), "api.smartrecruiters.com"),
             ("naukri", settings.NAUKRI_ENABLED, "naukri.com (Playwright)"),
-            ("linkedin", True, "linkedin.com (Placeholder)"),
+            ("linkedin", getattr(settings, "LINKEDIN_ENABLED", False), "linkedin.com (Placeholder)"),
         ]
 
         health_list = []
         for src_name, is_enabled, endpoint in configured_sources:
             s_data = source_results.get(src_name, {})
             status = s_data.get("status")
-            if not status:
-                if not is_enabled:
-                    status = "DISABLED"
-                elif latest_run:
-                    status = "COMPLETED" if latest_run.get("status") in ("COMPLETED", "COMPLETED_WITH_SOURCE_WARNINGS") else "UNKNOWN"
-                else:
-                    status = "IDLE"
-
             coll = s_data.get("collected", 0)
             err = s_data.get("error")
+            if not is_enabled:
+                status = "DISABLED"
+                coll = 0
+                err = None
+            else:
+                if status in ("PARTIAL", "BLOCKED", "ERROR", "UNAVAILABLE"):
+                    pass
+                elif err and str(err).lower() not in ("none", ""):
+                    if coll > 0:
+                        status = "PARTIAL"
+                    else:
+                        status = "FAILED"
+                elif not status:
+                    if latest_run:
+                        status = "COMPLETED" if latest_run.get("status") in ("COMPLETED", "COMPLETED_WITH_SOURCE_WARNINGS") else "UNKNOWN"
+                    else:
+                        status = "IDLE"
 
             health_list.append({
                 "source": src_name.capitalize(),

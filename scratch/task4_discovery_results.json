@@ -1,0 +1,232 @@
+[
+  {
+    "company": "Amazon",
+    "platform": "Company JSON feed (amazon.jobs)",
+    "endpoint": "https://www.amazon.jobs/en/search.json?country=IND",
+    "status": 200,
+    "returned": 10,
+    "india_jobs": 2336,
+    "job_id_apply_url": "Yes (id_icims e.g. 10411470, URL: amazon.jobs/en/jobs/10411470/...)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Microsoft",
+    "platform": "Eightfold.ai",
+    "endpoint": "https://apply.careers.microsoft.com/api/pcsx/search",
+    "status": 429,
+    "returned": 0,
+    "india_jobs": 0,
+    "job_id_apply_url": "No (requires auth session / bot challenge)",
+    "verdict": "Blocked"
+  },
+  {
+    "company": "Google",
+    "platform": "Custom Angular SPA (careers.google.com)",
+    "endpoint": "https://careers.google.com/jobs/results/",
+    "status": 200,
+    "returned": 0,
+    "india_jobs": 0,
+    "job_id_apply_url": "No open REST API (SPA internal RPCs only)",
+    "verdict": "Blocked"
+  },
+  {
+    "company": "Adobe",
+    "platform": "Workday CXS",
+    "endpoint": "https://adobe.wd5.myworkdayjobs.com/wday/cxs/adobe/external_experienced/jobs",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": 55,
+    "job_id_apply_url": "Yes (R169338 / externalPath)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Intel",
+    "platform": "Workday CXS",
+    "endpoint": "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": 74,
+    "job_id_apply_url": "Yes (JR0283198 / externalPath)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "NVIDIA",
+    "platform": "Workday CXS",
+    "endpoint": "https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite/jobs",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": 273,
+    "job_id_apply_url": "Yes (JR2024311 / externalPath)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Dell",
+    "platform": "Oracle Cloud HCM",
+    "endpoint": "https://enterpriseplatform.dell.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList&finder=findReqs;siteNumber=CX_1,keyword=India",
+    "status": 200,
+    "returned": 1,
+    "india_jobs": 1,
+    "job_id_apply_url": "N/A",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Salesforce",
+    "platform": "Workday CXS",
+    "endpoint": "https://salesforce.wd12.myworkdayjobs.com/wday/cxs/salesforce/External_Career_Site/jobs",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": 232,
+    "job_id_apply_url": "Yes (JR359415 / externalPath)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Capgemini",
+    "platform": "SAP SuccessFactors (RSS feed)",
+    "endpoint": "https://careers.capgemini.com/services/rss/job/?locale=en_US&keywords=(India)",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": "Feed stream (active listings)",
+    "job_id_apply_url": "Yes (guid / link with job ID)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Cognizant",
+    "platform": "Phenom People",
+    "endpoint": "https://careers.cognizant.com/global/en/search-results",
+    "status": 403,
+    "returned": 0,
+    "india_jobs": 0,
+    "job_id_apply_url": "No (Phenom bot protection 403)",
+    "verdict": "Blocked"
+  },
+  {
+    "company": "IBM",
+    "platform": "Eightfold.ai",
+    "endpoint": "https://ibm.eightfold.ai/api/apply/v2/jobs?domain=ibm.com",
+    "status": 403,
+    "returned": 0,
+    "india_jobs": 0,
+    "job_id_apply_url": "No (Eightfold bot protection 403)",
+    "verdict": "Blocked"
+  },
+  {
+    "company": "Oracle",
+    "platform": "Oracle Cloud HCM",
+    "endpoint": "https://eeho.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList&finder=findReqs;siteNumber=CX_45001,keyword=India",
+    "status": 200,
+    "returned": 1,
+    "india_jobs": 1,
+    "job_id_apply_url": "N/A",
+    "verdict": "Usable"
+  },
+  {
+    "company": "SAP",
+    "platform": "SAP SuccessFactors",
+    "endpoint": "https://jobs.sap.com/services/rss/job/?locale=en_US&keywords=(India)",
+    "status": 403,
+    "returned": 0,
+    "india_jobs": 0,
+    "job_id_apply_url": "No (Cloudflare/Akamai bot protection)",
+    "verdict": "Blocked"
+  },
+  {
+    "company": "Infosys",
+    "platform": "Company JSON feed (IntapGateway)",
+    "endpoint": "https://intapgateway.infosysapps.com/careersci/search/intapjbsrch/getCareerSearchJobs?sourceId=1&searchText=India",
+    "status": 200,
+    "returned": 1726,
+    "india_jobs": 1726,
+    "job_id_apply_url": "Yes (jobReferenceCode, URL career.infosys.com/jobdescription?...)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "TCS",
+    "platform": "TCS iBegin Portal",
+    "endpoint": "https://ibegin.tcsapps.com/iBegin/",
+    "status": 200,
+    "returned": 0,
+    "india_jobs": 0,
+    "job_id_apply_url": "No (Requires authentication; marketing portal blocks non-browser traffic)",
+    "verdict": "Blocked"
+  },
+  {
+    "company": "Wipro",
+    "platform": "SAP SuccessFactors (RSS feed)",
+    "endpoint": "https://careers.wipro.com/services/rss/job/?locale=en_US&keywords=(India)",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": "Feed stream (active listings)",
+    "job_id_apply_url": "Yes (guid / link with job ID)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "HCLTech",
+    "platform": "SAP SuccessFactors (RSS feed)",
+    "endpoint": "https://careers.hcltech.com/services/rss/job/?locale=en_US&keywords=(India)",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": "Feed stream (active listings)",
+    "job_id_apply_url": "Yes (guid / link with job ID)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Tech Mahindra",
+    "platform": "ASP.NET WebForms",
+    "endpoint": "https://careers.techmahindra.com/JobSearch.aspx",
+    "status": 200,
+    "returned": 0,
+    "india_jobs": 0,
+    "job_id_apply_url": "No (Requires __VIEWSTATE interactive postback session)",
+    "verdict": "Empty"
+  },
+  {
+    "company": "Flipkart",
+    "platform": "TurboHire API",
+    "endpoint": "https://api.turbohire.co/api/careerpagev2/filteredjobs?orgId=4d757ba0-3d57-448a-b82c-238ed87ac90f&pageType=public",
+    "status": 401,
+    "returned": 0,
+    "india_jobs": 0,
+    "job_id_apply_url": "Yes (JobId & JobCode, URL flipkart.turbohire.co/job/...)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Walmart",
+    "platform": "Workday CXS",
+    "endpoint": "https://walmart.wd504.myworkdayjobs.com/wday/cxs/walmart/WalmartExternal/jobs",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": 2000,
+    "job_id_apply_url": "Yes (R-2631811 / externalPath)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Mastercard",
+    "platform": "Workday CXS",
+    "endpoint": "https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/CorporateCareers/jobs",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": 259,
+    "job_id_apply_url": "Yes (R-292972 / externalPath)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "Visa",
+    "platform": "Workday CXS",
+    "endpoint": "https://visa.wd5.myworkdayjobs.com/wday/cxs/visa/visa/jobs",
+    "status": 200,
+    "returned": 20,
+    "india_jobs": 105,
+    "job_id_apply_url": "Yes (REF089273W / externalPath)",
+    "verdict": "Usable"
+  },
+  {
+    "company": "PayPal",
+    "platform": "Workday CXS",
+    "endpoint": "https://paypal.wd1.myworkdayjobs.com/wday/cxs/paypal/jobs/jobs",
+    "status": 200,
+    "returned": 17,
+    "india_jobs": 17,
+    "job_id_apply_url": "Yes (R0138329 / externalPath)",
+    "verdict": "Usable"
+  }
+]

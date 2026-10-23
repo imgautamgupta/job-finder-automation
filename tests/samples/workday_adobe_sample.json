@@ -1,0 +1,243 @@
+{
+  "total": 55,
+  "jobPostings": [
+    {
+      "title": "People Analytics, India Leader",
+      "externalPath": "/job/Bangalore/Senior-Manager--Advanced-People-Analytics---Reporting_R169338",
+      "locationsText": "2 Locations",
+      "postedOn": "Posted 30+ Days Ago",
+      "bulletFields": [
+        "R169338"
+      ]
+    },
+    {
+      "title": "Manager - Sales Development, India",
+      "externalPath": "/job/Bangalore/BDR-Manager---India_R170508",
+      "locationsText": "4 Locations",
+      "postedOn": "Posted 30+ Days Ago",
+      "bulletFields": [
+        "R170508"
+      ]
+    },
+    {
+      "title": "Solutions Consultant",
+      "externalPath": "/job/Remote-India/Solutions-Consultant_R169899",
+      "locationsText": "Remote India",
+      "postedOn": "Posted 30+ Days Ago",
+      "bulletFields": [
+        "R169899"
+      ]
+    },
+    {
+      "title": "Customer Success Account Manager",
+      "externalPath": "/job/Remote-India/Customer-Success-Account-Manager_R144410",
+      "locationsText": "Remote India",
+      "postedOn": "Posted 30+ Days Ago",
+      "bulletFields": [
+        "R144410"
+      ]
+    },
+    {
+      "title": "Sr Manager, Integrated Security Operations",
+      "externalPath": "/job/Noida/Sr-Manager--Integrated-Security-Operations_R171954",
+      "locationsText": "2 Locations",
+      "postedOn": "Posted 28 Days Ago",
+      "bulletFields": [
+        "R171954"
+      ]
+    }
+  ],
+  "facets": [
+    {
+      "facetParameter": "jobFamilyGroup",
+      "descriptor": "Job Category",
+      "values": [
+        {
+          "descriptor": "Sales",
+          "id": "591af8b812fa10737b29d343f646ef95",
+          "count": 20
+        },
+        {
+          "descriptor": "Engineering",
+          "id": "591af8b812fa10737af39db3d96eed9f",
+          "count": 20
+        },
+        {
+          "descriptor": "Finance & Operations",
+          "id": "591af8b812fa10737b00b5059406ee76",
+          "count": 5
+        },
+        {
+          "descriptor": "Marketing",
+          "id": "591af8b812fa10737b21f9f23c2eef58",
+          "count": 4
+        },
+        {
+          "descriptor": "Employee Experience",
+          "id": "591af8b812fa10737ae25403419eecd0",
+          "count": 3
+        },
+        {
+          "descriptor": "University",
+          "id": "591af8b812fa10737b43a1662896f01c",
+          "count": 1
+        },
+        {
+          "descriptor": "Business",
+          "id": "65b0152ed709100171ddf1dcc92c0000",
+          "count": 1
+        },
+        {
+          "descriptor": "Legal",
+          "id": "591af8b812fa10737b171b99fa16ef27",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facetParameter": "workerSubType",
+      "descriptor": "Job Type",
+      "values": [
+        {
+          "descriptor": "Regular",
+          "id": "3ba4ecdf4893100b2f8d06b0870c6c8b",
+          "count": 54
+        },
+        {
+          "descriptor": "Intern (Fixed Term)",
+          "id": "3ba4ecdf4893100b2f8d08d56d8d6c8e",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facetParameter": "timeType",
+      "descriptor": "Time Type",
+      "values": [
+        {
+          "descriptor": "Full time",
+          "id": "262714769a02100a80d2a64ac4e040c0",
+          "count": 55
+        }
+      ]
+    },
+    {
+      "facetParameter": "locationMainGroup",
+      "values": [
+        {
+          "facetParameter": "locationCountry",
+          "descriptor": "Country",
+          "values": [
+            {
+              "descriptor": "Australia",
+              "id": "d903bb3fedad45039383f6de334ad4db",
+              "count": 1
+            },
+            {
+              "descriptor": "India",
+              "id": "c4f78be1a8f14da0ab49ce1162348a5e",
+              "count": 9
+            },
+            {
+              "descriptor": "Japan",
+              "id": "8b705da2becf43cfaccc091da0988ab2",
+              "count": 1
+            },
+            {
+              "descriptor": "Korea, Republic of",
+              "id": "7a5a2aadf9d34086a2bfbfd408bc28da",
+              "count": 1
+            },
+            {
+              "descriptor": "Singapore",
+              "id": "80938777cac5440fab50d729f9634969",
+              "count": 1
+            },
+            {
+              "descriptor": "United Kingdom",
+              "id": "29247e57dbaf46fb855b224e03170bc7",
+              "count": 1
+            },
+            {
+              "descriptor": "United States of America",
+              "id": "bc33aa3152ec42d4995f4791a106ed09",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "facetParameter": "locations",
+          "descriptor": "Locations",
+          "values": [
+            {
+              "descriptor": "Austin",
+              "id": "c5c6352929d2108dccfb87293a8addc8",
+              "count": 1
+            },
+            {
+              "descriptor": "Bangalore",
+              "id": "3ba4ecdf4893100bc84a8e6d38d46b70",
+              "count": 6
+            },
+            {
+              "descriptor": "Gurgaon",
+              "id": "be861cd9d27b0175ea17563fcd00e189",
+              "count": 1
+            },
+            {
+              "descriptor": "London",
+              "id": "3ba4ecdf4893100bc84aaa846b246b9d",
+              "count": 1
+            },
+            {
+              "descriptor": "Mumbai",
+              "id": "be861cd9d27b01999e8ad1c1ce0068a1",
+              "count": 1
+            },
+            {
+              "descriptor": "Noida",
+              "id": "3ba4ecdf4893100bc84aa7a3f1e46b98",
+              "count": 5
+            },
+            {
+              "descriptor": "Remote India",
+              "id": "3ba4ecdf4893100bc84b027718b86c38",
+              "count": 2
+            },
+            {
+              "descriptor": "San Francisco",
+              "id": "3ba4ecdf4893100bc84cb08fd7b86d33",
+              "count": 2
+            },
+            {
+              "descriptor": "San Jose",
+              "id": "3ba4ecdf4893100bc84cada7a9e46d2e",
+              "count": 2
+            },
+            {
+              "descriptor": "Seoul",
+              "id": "3ba4ecdf4893100bc84ca7e048d96d24",
+              "count": 1
+            },
+            {
+              "descriptor": "Singapore",
+              "id": "3ba4ecdf4893100bc84d1a405ef16ddd",
+              "count": 1
+            },
+            {
+              "descriptor": "Sydney",
+              "id": "3ba4ecdf4893100bc84ca4ffde7e6d1f",
+              "count": 1
+            },
+            {
+              "descriptor": "Tokyo",
+              "id": "3ba4ecdf4893100bc84d2327a08e6dec",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userAuthenticated": false
+}

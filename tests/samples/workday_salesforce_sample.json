@@ -1,0 +1,668 @@
+{
+  "total": 233,
+  "jobPostings": [
+    {
+      "title": "Customer Success Manager, Senior Manager - Core Clouds (Sales & Service)",
+      "externalPath": "/job/New-York---New-York/Customer-Success-Manager--Senior-Manager---Core-Clouds--Sales---Service-_JR349284",
+      "locationsText": "4 Locations",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "JR349284"
+      ]
+    },
+    {
+      "title": "Senior Analyst of Strategic Planning / Data Analytics",
+      "externalPath": "/job/Indiana---Indianapolis/Senior-Analyst-of-Strategic-Planning---Data-Analytics_JR359415",
+      "locationsText": "7 Locations",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "JR359415"
+      ]
+    },
+    {
+      "title": "Program Delivery Leader (Multiple Levels)",
+      "externalPath": "/job/Georgia---Remote/Engagement-Delivery-Director_JR346225",
+      "locationsText": "6 Locations",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "JR346225"
+      ]
+    },
+    {
+      "title": "Senior Solution Architect/Solution Consulting Director (Field Service)",
+      "externalPath": "/job/Illinois---Chicago/Senior-Solution-Architect-Solution-Consulting-Director--Field-Service-_JR364842-1",
+      "locationsText": "8 Locations",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "JR364842"
+      ]
+    },
+    {
+      "title": "Technical Support Engineer- Sales",
+      "externalPath": "/job/Washington---Seattle/Technical-Support-Engineer--Sales_JR356393-1",
+      "locationsText": "3 Locations",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "JR356393"
+      ]
+    }
+  ],
+  "facets": [
+    {
+      "facetParameter": "CF_-_REC_-_LRV_-_Job_Posting_Anchor_-_Country_from_Job_Posting_Location_Extended",
+      "descriptor": "Country",
+      "values": [
+        {
+          "descriptor": "India",
+          "id": "c4f78be1a8f14da0ab49ce1162348a5e",
+          "count": 119
+        },
+        {
+          "descriptor": "United States of America",
+          "id": "bc33aa3152ec42d4995f4791a106ed09",
+          "count": 112
+        },
+        {
+          "descriptor": "Canada",
+          "id": "a30a87ed25634629aa6c3958aa2b91ea",
+          "count": 1
+        },
+        {
+          "descriptor": "Brazil",
+          "id": "1a29bb1357b240ab99a2fa755cc87c0e",
+          "count": 1
+        },
+        {
+          "descriptor": "Argentina",
+          "id": "e42ad5eac46d4cc9b367ceaef42577c5",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facetParameter": "jobFamilyGroup",
+      "descriptor": "Job Category",
+      "values": [
+        {
+          "descriptor": "Customer Success",
+          "id": "14fa3452ec7c1011f90ce62273ea0000",
+          "count": 120
+        },
+        {
+          "descriptor": "Sales",
+          "id": "14fa3452ec7c1011f90d030426db0000",
+          "count": 32
+        },
+        {
+          "descriptor": "Software Engineering",
+          "id": "14fa3452ec7c1011f90d0002a2100000",
+          "count": 19
+        },
+        {
+          "descriptor": "Finance",
+          "id": "14fa3452ec7c1011f90ceaf258770000",
+          "count": 18
+        },
+        {
+          "descriptor": "Marketing & Communications",
+          "id": "14fa3452ec7c1011f90cecc098e70000",
+          "count": 11
+        },
+        {
+          "descriptor": "Program & Project Management",
+          "id": "14fa3452ec7c1011f90cfc667aed0000",
+          "count": 10
+        },
+        {
+          "descriptor": "Employee Success",
+          "id": "14fa3452ec7c1011f90cfa981ed60000",
+          "count": 9
+        },
+        {
+          "descriptor": "Product",
+          "id": "14fa3452ec7c1011f90cf2c552640000",
+          "count": 3
+        },
+        {
+          "descriptor": "Operations",
+          "id": "14fa3452ec7c1011f90cfe3492140000",
+          "count": 3
+        },
+        {
+          "descriptor": "User Experience",
+          "id": "14fa3452ec7c1011f90d056a9bc80000",
+          "count": 2
+        },
+        {
+          "descriptor": "Global Affairs",
+          "id": "14fa3452ec7c1011f90cef28c8a30000",
+          "count": 2
+        },
+        {
+          "descriptor": "Real Estate & Facility Management",
+          "id": "14fa3452ec7c1011f90cf0f6f3580000",
+          "count": 1
+        },
+        {
+          "descriptor": "Fixed Term & Temporary",
+          "id": "14fa3452ec7c1011f90ce92475890000",
+          "count": 1
+        },
+        {
+          "descriptor": "Enterprise Technology & Infrastructure",
+          "id": "14fa3452ec7c1011f90cf8c9c5960000",
+          "count": 1
+        },
+        {
+          "descriptor": "Data",
+          "id": "14fa3452ec7c1011f90cf661a7c80000",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facetParameter": "workerSubType",
+      "descriptor": "Job Type",
+      "values": [
+        {
+          "descriptor": "Regular",
+          "id": "3a910852b2c31010f48d2bbc8b020000",
+          "count": 230
+        },
+        {
+          "descriptor": "Intern (Fixed Term)",
+          "id": "3a910852b2c31010f48d2cefdccd0000",
+          "count": 1
+        },
+        {
+          "descriptor": "Fixed Term (Fixed Term)",
+          "id": "3a910852b2c31010f48d2c561f3d0000",
+          "count": 1
+        },
+        {
+          "descriptor": "Contractor",
+          "id": "d603833528ba1010f55f939cce500000",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facetParameter": "timeType",
+      "descriptor": "Time Type",
+      "values": [
+        {
+          "descriptor": "Full time",
+          "id": "0e28126347c3100fe3b402cf26290000",
+          "count": 233
+        }
+      ]
+    },
+    {
+      "facetParameter": "locationMainGroup",
+      "values": [
+        {
+          "facetParameter": "locations",
+          "descriptor": "Locations",
+          "values": [
+            {
+              "descriptor": "Alabama - Remote",
+              "id": "1038e944b1101012453f52aa5ae90000",
+              "count": 3
+            },
+            {
+              "descriptor": "Argentina - Remote",
+              "id": "8ef61f627eb01012453aa67dbdfe0000",
+              "count": 1
+            },
+            {
+              "descriptor": "Arizona - Remote",
+              "id": "1038e944b1101012453b3ba9ad1f0000",
+              "count": 6
+            },
+            {
+              "descriptor": "Arkansas - Remote",
+              "id": "1038e944b1101012453a750f42b60000",
+              "count": 3
+            },
+            {
+              "descriptor": "Brazil - Remote",
+              "id": "1038e944b1101012453ffb4aa4d60000",
+              "count": 1
+            },
+            {
+              "descriptor": "California - Irvine",
+              "id": "1038e944b1101012453b514614620000",
+              "count": 10
+            },
+            {
+              "descriptor": "California - Palo Alto",
+              "id": "1038e944b1101012453aeffdcf990000",
+              "count": 7
+            },
+            {
+              "descriptor": "California - Remote",
+              "id": "1038e944b1101012453ae52d34d90000",
+              "count": 8
+            },
+            {
+              "descriptor": "California - San Francisco",
+              "id": "1038e944b1101012453f6677d95a0000",
+              "count": 38
+            },
+            {
+              "descriptor": "California - San Francisco Metro - Remote",
+              "id": "1038e944b1101012453a808340ba0000",
+              "count": 1
+            },
+            {
+              "descriptor": "Canada - Toronto",
+              "id": "1038e944b1101012453ab2868c050000",
+              "count": 1
+            },
+            {
+              "descriptor": "Colorado - Denver",
+              "id": "1038e944b110101245402a1aa0900000",
+              "count": 20
+            },
+            {
+              "descriptor": "Colorado - Remote",
+              "id": "1038e944b1101012453bcb4b56f50000",
+              "count": 10
+            },
+            {
+              "descriptor": "Connecticut - New York City Metro - Remote",
+              "id": "1038e944b1101012453aa849296c0000",
+              "count": 1
+            },
+            {
+              "descriptor": "Connecticut - Remote",
+              "id": "1038e944b1101012453bb77c6a9b0000",
+              "count": 4
+            },
+            {
+              "descriptor": "Delaware - Remote",
+              "id": "1038e944b1101012453e67f9d6440000",
+              "count": 2
+            },
+            {
+              "descriptor": "District of Columbia - Washington",
+              "id": "a26a2e385bb51001cfab0315f6a20000",
+              "count": 13
+            },
+            {
+              "descriptor": "Florida - Remote",
+              "id": "1038e944b1101012453afacdb9690000",
+              "count": 10
+            },
+            {
+              "descriptor": "Georgia - Atlanta",
+              "id": "1038e944b1101012453b7e549d150000",
+              "count": 84
+            },
+            {
+              "descriptor": "Georgia - Atlanta Metro - Remote",
+              "id": "1038e944b1101012453b72506c400000",
+              "count": 1
+            },
+            {
+              "descriptor": "Georgia - Remote",
+              "id": "1038e944b1101012453cc894946c0000",
+              "count": 11
+            },
+            {
+              "descriptor": "Idaho - Remote",
+              "id": "1038e944b1101012453e93cbafc20000",
+              "count": 3
+            },
+            {
+              "descriptor": "Illinois - Chicago",
+              "id": "1038e944b1101012453a519010ae0000",
+              "count": 76
+            },
+            {
+              "descriptor": "Illinois - Chicago Metro - Remote",
+              "id": "1038e944b1101012453f7a44a4600000",
+              "count": 3
+            },
+            {
+              "descriptor": "Illinois - Remote",
+              "id": "1038e944b1101012453fb2ac8e470000",
+              "count": 12
+            },
+            {
+              "descriptor": "India - Bangalore",
+              "id": "1038e944b1101012453f5b10dc370000",
+              "count": 85
+            },
+            {
+              "descriptor": "India - Chennai",
+              "id": "8772d0b5bde71001d43f73ac65140000",
+              "count": 1
+            },
+            {
+              "descriptor": "India - Gurgaon",
+              "id": "1038e944b11010124539eb4950f50000",
+              "count": 32
+            },
+            {
+              "descriptor": "India - Hyderabad",
+              "id": "8ef61f627eb01012453a9ce004d20000",
+              "count": 83
+            },
+            {
+              "descriptor": "India - Jaipur",
+              "id": "1038e944b11010124540abb921b00000",
+              "count": 2
+            },
+            {
+              "descriptor": "India - Mumbai",
+              "id": "2c2bf80869591012453ab08dba870000",
+              "count": 22
+            },
+            {
+              "descriptor": "Indiana - Chicago Metro - Remote",
+              "id": "1038e944b1101012453bf5e8f2000000",
+              "count": 3
+            },
+            {
+              "descriptor": "Indiana - Indianapolis",
+              "id": "1038e944b11010124540a2b92d130000",
+              "count": 98
+            },
+            {
+              "descriptor": "Indiana - Remote",
+              "id": "1038e944b1101012453eb26824540000",
+              "count": 14
+            },
+            {
+              "descriptor": "India - Pune",
+              "id": "1038e944b1101012453acb52a3810000",
+              "count": 24
+            },
+            {
+              "descriptor": "Iowa - Remote",
+              "id": "1038e944b1101012453fbf48a1020000",
+              "count": 3
+            },
+            {
+              "descriptor": "Kansas - Remote",
+              "id": "1038e944b1101012453e752dddd20000",
+              "count": 4
+            },
+            {
+              "descriptor": "Kentucky - Remote",
+              "id": "1038e944b1101012453d773f5ec70000",
+              "count": 4
+            },
+            {
+              "descriptor": "Louisiana - Remote",
+              "id": "1038e944b1101012453c7c5be2910000",
+              "count": 3
+            },
+            {
+              "descriptor": "Maine - Remote",
+              "id": "1038e944b1101012453e542afffd0000",
+              "count": 3
+            },
+            {
+              "descriptor": "Maryland - Remote",
+              "id": "1038e944b1101012453b06cedb360000",
+              "count": 5
+            },
+            {
+              "descriptor": "Maryland - Washington DC Metro - Remote",
+              "id": "1038e944b1101012453dec47bfbf0000",
+              "count": 3
+            },
+            {
+              "descriptor": "Massachusetts - Boston",
+              "id": "1038e944b1101012453b66e461660000",
+              "count": 14
+            },
+            {
+              "descriptor": "Massachusetts - Boston Metro - Remote",
+              "id": "1038e944b1101012453a46bc0d2d0000",
+              "count": 2
+            },
+            {
+              "descriptor": "Massachusetts - Burlington",
+              "id": "1038e944b1101012453d5cd568f30000",
+              "count": 5
+            },
+            {
+              "descriptor": "Massachusetts - Remote",
+              "id": "1038e944b1101012453c57bcbca30000",
+              "count": 5
+            },
+            {
+              "descriptor": "Michigan - Remote",
+              "id": "1038e944b1101012453ef20addc20000",
+              "count": 7
+            },
+            {
+              "descriptor": "Minnesota - Remote",
+              "id": "1038e944b1101012453a9b0091a90000",
+              "count": 5
+            },
+            {
+              "descriptor": "Mississippi - Remote",
+              "id": "1038e944b1101012453daca8d7e50000",
+              "count": 3
+            },
+            {
+              "descriptor": "Missouri - Remote",
+              "id": "1038e944b1101012453bd7e5a1fd0000",
+              "count": 4
+            },
+            {
+              "descriptor": "Montana - Remote",
+              "id": "1038e944b1101012453b9546602d0000",
+              "count": 3
+            },
+            {
+              "descriptor": "Nebraska - Remote",
+              "id": "1038e944b1101012453bacae4b800000",
+              "count": 3
+            },
+            {
+              "descriptor": "Nevada - Remote",
+              "id": "1038e944b1101012453c6324b0730000",
+              "count": 3
+            },
+            {
+              "descriptor": "New Hampshire - Remote",
+              "id": "1038e944b1101012453fdae3eeae0000",
+              "count": 2
+            },
+            {
+              "descriptor": "New Jersey - New York City Metro - Remote",
+              "id": "1038e944b11010124540b7b942ff0000",
+              "count": 3
+            },
+            {
+              "descriptor": "New Jersey - Remote",
+              "id": "1038e944b1101012453fa5782d020000",
+              "count": 6
+            },
+            {
+              "descriptor": "New Mexico - Remote",
+              "id": "1038e944b1101012453c1eb806300000",
+              "count": 2
+            },
+            {
+              "descriptor": "New York - New York",
+              "id": "1038e944b1101012453ce26572b10000",
+              "count": 38
+            },
+            {
+              "descriptor": "New York - New York City Metro - Remote",
+              "id": "1038e944b1101012453ba0ad55760000",
+              "count": 4
+            },
+            {
+              "descriptor": "New York - Remote",
+              "id": "1038e944b1101012453b89242f400000",
+              "count": 4
+            },
+            {
+              "descriptor": "North Carolina - Remote",
+              "id": "1038e944b1101012453a1fa1473d0000",
+              "count": 8
+            },
+            {
+              "descriptor": "North Dakota - Remote",
+              "id": "1038e944b1101012454077860ed90000",
+              "count": 3
+            },
+            {
+              "descriptor": "Ohio - Remote",
+              "id": "1038e944b1101012453d8c4078900000",
+              "count": 7
+            },
+            {
+              "descriptor": "Oklahoma - Remote",
+              "id": "1038e944b1101012453cbd2d67600000",
+              "count": 3
+            },
+            {
+              "descriptor": "Oregon - Remote",
+              "id": "1038e944b1101012453ca35f71700000",
+              "count": 4
+            },
+            {
+              "descriptor": "Pennsylvania - Remote",
+              "id": "1038e944b1101012453ec204a4ef0000",
+              "count": 4
+            },
+            {
+              "descriptor": "Rhode Island - Remote",
+              "id": "1038e944b1101012453a384e92c20000",
+              "count": 2
+            },
+            {
+              "descriptor": "South Carolina - Remote",
+              "id": "1038e944b1101012453e3d578beb0000",
+              "count": 3
+            },
+            {
+              "descriptor": "South Dakota - Remote",
+              "id": "1038e944b1101012453a69065a450000",
+              "count": 3
+            },
+            {
+              "descriptor": "Tennessee - Remote",
+              "id": "1038e944b1101012453a1133a4b90000",
+              "count": 3
+            },
+            {
+              "descriptor": "Texas - Austin",
+              "id": "1038e944b1101012453b1104bc1b0000",
+              "count": 28
+            },
+            {
+              "descriptor": "Texas - Austin Metro - Remote",
+              "id": "1038e944b1101012453df715ee030000",
+              "count": 2
+            },
+            {
+              "descriptor": "Texas - Dallas",
+              "id": "1038e944b1101012453f1ca83d0a0000",
+              "count": 26
+            },
+            {
+              "descriptor": "Texas - Dallas Metro - Remote",
+              "id": "1038e944b1101012453f280fd4fe0000",
+              "count": 2
+            },
+            {
+              "descriptor": "Texas - Houston Metro - Remote",
+              "id": "1038e944b1101012453a2d796e9f0000",
+              "count": 1
+            },
+            {
+              "descriptor": "Texas - Remote",
+              "id": "1038e944b11010124539fe8ad1340000",
+              "count": 12
+            },
+            {
+              "descriptor": "US, Remote",
+              "id": "837ce96d41ed1003d810709470e50000",
+              "count": 1
+            },
+            {
+              "descriptor": "Utah - Remote",
+              "id": "27cc52fb221f1012453a325b2e3a0000",
+              "count": 4
+            },
+            {
+              "descriptor": "Vermont - Remote",
+              "id": "1038e944b1101012453a5d98e1030000",
+              "count": 2
+            },
+            {
+              "descriptor": "Virginia - Mclean",
+              "id": "1038e944b1101012453edf70c4ef0000",
+              "count": 16
+            },
+            {
+              "descriptor": "Virginia - Remote",
+              "id": "1038e944b11010124540c3b8ffe80000",
+              "count": 6
+            },
+            {
+              "descriptor": "Virginia - Washington DC Metro - Remote",
+              "id": "1038e944b1101012453b30da001a0000",
+              "count": 2
+            },
+            {
+              "descriptor": "Washington - Bellevue",
+              "id": "1038e944b1101012453e88646a9a0000",
+              "count": 22
+            },
+            {
+              "descriptor": "Washington D.C. - Remote",
+              "id": "1038e944b1101012453c3c21cd850000",
+              "count": 2
+            },
+            {
+              "descriptor": "Washington - Remote",
+              "id": "1038e944b1101012453b2570616b0000",
+              "count": 9
+            },
+            {
+              "descriptor": "Washington - Seattle",
+              "id": "27cc52fb221f1012453a6392417f0000",
+              "count": 67
+            },
+            {
+              "descriptor": "Washington - Seattle Metro - Remote",
+              "id": "1038e944b1101012453e9e9943f20000",
+              "count": 1
+            },
+            {
+              "descriptor": "West Virginia - Remote",
+              "id": "1038e944b1101012453b471152910000",
+              "count": 3
+            },
+            {
+              "descriptor": "West Virginia - Washington DC Metro - Remote",
+              "id": "1038e944b1101012453b5c1626e70000",
+              "count": 2
+            },
+            {
+              "descriptor": "Wisconsin - Remote",
+              "id": "1038e944b1101012453d9f7427640000",
+              "count": 4
+            },
+            {
+              "descriptor": "Wyoming - Remote",
+              "id": "1038e944b1101012453d0c693d090000",
+              "count": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userAuthenticated": false
+}

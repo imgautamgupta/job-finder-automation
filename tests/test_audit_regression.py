@@ -79,21 +79,29 @@ class TestRoleMatchGaps:
         flt = JobFilter(profile=_make_profile())
         assert flt.is_match(_job("Machine Learning Engineer (L3)", "Hybrid in Bengaluru, India")) is True
 
-    def test_sde_ii_passes_role_check(self):
+    def test_sde_i_passes_role_check(self):
         flt = JobFilter(profile=_make_profile())
-        assert flt.is_match(_job("SDE II", "Noida, Uttar Pradesh")) is True
+        assert flt.is_match(_job("SDE I", "Noida, Uttar Pradesh")) is True
 
-    def test_sde_iii_passes_role_check(self):
+    def test_sde_1_infra_passes(self):
         flt = JobFilter(profile=_make_profile())
-        assert flt.is_match(_job("SDE III", "Bangalore, India")) is True
+        assert flt.is_match(_job("SDE 1 Infra", "Noida, Uttar Pradesh")) is True
 
-    def test_sde_iv_passes_role_check(self):
+    def test_sde_ii_excluded_by_level_check(self):
         flt = JobFilter(profile=_make_profile())
-        assert flt.is_match(_job("SDE IV", "Bangalore, India")) is True
+        assert flt.is_match(_job("SDE II", "Noida, Uttar Pradesh")) is False
 
-    def test_sde_2_infra_passes(self):
+    def test_sde_iii_excluded_by_level_check(self):
         flt = JobFilter(profile=_make_profile())
-        assert flt.is_match(_job("SDE 2 Infra", "Noida, Uttar Pradesh")) is True
+        assert flt.is_match(_job("SDE III", "Bangalore, India")) is False
+
+    def test_sde_iv_excluded_by_level_check(self):
+        flt = JobFilter(profile=_make_profile())
+        assert flt.is_match(_job("SDE IV", "Bangalore, India")) is False
+
+    def test_sde_2_infra_excluded_by_level_check(self):
+        flt = JobFilter(profile=_make_profile())
+        assert flt.is_match(_job("SDE 2 Infra", "Noida, Uttar Pradesh")) is False
 
     def test_ds_ml_intern_passes(self):
         flt = JobFilter(profile=_make_profile())
@@ -505,9 +513,9 @@ class TestRealProfileIntegration:
         job = _job("Software Development Engineer Intern", "Bangalore, India")
         assert real_filter.is_match(job) is True
 
-    def test_sde_ii_matches_real_profile(self, real_filter):
+    def test_sde_ii_excluded_by_real_profile_level_check(self, real_filter):
         job = _job("SDE II", "Noida, Uttar Pradesh")
-        assert real_filter.is_match(job) is True
+        assert real_filter.is_match(job) is False
 
     def test_senior_backend_engineer_excluded_by_real_profile(self, real_filter):
         job = _job("Senior Backend Engineer", "Bangalore, India")

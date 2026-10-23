@@ -417,7 +417,7 @@ def test_excel_export_includes_job_agent_sheet(temp_db, tmp_path):
     jobs = temp_db.get_all_jobs()
 
     exporter = ExcelExporter(exports_dir=str(tmp_path))
-    file_path = exporter.export(jobs)
+    file_path = exporter.export(jobs, full_report=True)
 
     assert file_path.exists()
 

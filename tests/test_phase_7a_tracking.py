@@ -313,6 +313,7 @@ def test_excel_distinguishes_new_matches_from_all_relevant():
         export_path = exporter.export(
             [j_new, j_old_top, j_old_relevant, j_low],
             current_run_id="RUN-100",
+            full_report=True,
         )
 
         wb = openpyxl.load_workbook(str(export_path))
@@ -349,7 +350,7 @@ def test_excel_contains_all_20_columns_and_tracking_headers():
             notes="Need review",
             status=JobStatus.SHORTLISTED,
         )
-        file_path = exporter.export([job])
+        file_path = exporter.export([job], full_report=True)
 
         wb = openpyxl.load_workbook(str(file_path))
         ws = wb["All Relevant Jobs"]

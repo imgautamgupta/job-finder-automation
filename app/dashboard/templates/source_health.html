@@ -17,6 +17,8 @@
           <div>
             {% if s.status == "COMPLETED" %}
               <span class="badge-health-ok">✓ Active</span>
+            {% elif s.status == "PARTIAL" %}
+              <span class="badge-health-blocked">⚠️ Partial</span>
             {% elif s.status == "BLOCKED" %}
               <span class="badge-health-blocked">⚠️ Blocked</span>
             {% elif s.status == "DISABLED" %}
@@ -67,6 +69,8 @@
             <p class="source-tip">Official public Lever Postings API. Publicly accessible without authentication.</p>
           {% elif s.source|lower == 'greenhouse' %}
             <p class="source-tip">Official public Greenhouse Job Board API. Publicly accessible without authentication.</p>
+          {% elif s.source|lower == 'accenture' %}
+            <p class="source-tip">Official Accenture Careers portal search interface. Publicly accessible without authentication.</p>
           {% elif s.source|lower == 'linkedin' %}
             <p class="source-tip">LinkedIn connector placeholder. Configured for future integration.</p>
           {% endif %}

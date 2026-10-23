@@ -1,0 +1,762 @@
+[
+  {
+    "index": 1,
+    "job_id": "AIOC-S01667413",
+    "title": "Learning Exp Design & Dev Manager",
+    "location": "Bengaluru, India",
+    "experience_required": "10-12 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Manager'",
+      "Role mismatch: title 'Learning Exp Design & Dev Manager' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 2,
+    "job_id": "AIOC-S01667452",
+    "title": "Learning Exp Design & Dev Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 3,
+    "job_id": "AIOC-S01666211",
+    "title": "Bus & Technology Delivery Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Bus & Technology Delivery Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 4,
+    "job_id": "AIOC-S01667411",
+    "title": "Learning Exp Design & Dev Manager",
+    "location": "Bengaluru, India",
+    "experience_required": "10-12 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Manager'",
+      "Role mismatch: title 'Learning Exp Design & Dev Manager' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 5,
+    "job_id": "14485173",
+    "title": "RIS Solution Architect associate Manager",
+    "location": "Bengaluru, India",
+    "experience_required": "5-10 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Manager'",
+      "Title negative keyword: 'Architect'",
+      "Role mismatch: title 'RIS Solution Architect associate Manager' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 6,
+    "job_id": "AIOC-S01667546",
+    "title": "Quality Auditing Specialist",
+    "location": "Bengaluru, India",
+    "experience_required": "5-10 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Quality Auditing Specialist' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 7,
+    "job_id": "AIOC-S01667537",
+    "title": "Candidate Source & Screen Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Candidate Source & Screen Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 8,
+    "job_id": "AIOC-S01667459",
+    "title": "Learning Exp Design & Dev Associate",
+    "location": "Mumbai, India",
+    "experience_required": "0-2 years",
+    "desc_min_exp": null,
+    "eligibility": "Eligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Associate' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 9,
+    "job_id": "AIOC-S01667505",
+    "title": "Learning Operations Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Operations Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 10,
+    "job_id": "AIOC-S01667444",
+    "title": "Delivery Operations Specialist",
+    "location": "Mumbai, India",
+    "experience_required": "5-10 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Delivery Operations Specialist' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 11,
+    "job_id": "AIOC-S01667426",
+    "title": "HR Service Delivery Associate",
+    "location": "Bengaluru, India",
+    "experience_required": "0-2 years",
+    "desc_min_exp": null,
+    "eligibility": "Eligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'HR Service Delivery Associate' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 12,
+    "job_id": "AIOC-S01667499",
+    "title": "Learning Operations Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Learning Operations Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 13,
+    "job_id": "AIOC-S01666182",
+    "title": "Visual Design Associate Manager",
+    "location": "Bengaluru, India",
+    "experience_required": "5-10 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Manager'",
+      "Role mismatch: title 'Visual Design Associate Manager' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 14,
+    "job_id": "AIOC-S01667474",
+    "title": "Delivery Operations Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Delivery Operations Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 15,
+    "job_id": "AIOC-S01667508",
+    "title": "Recruiting Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Recruiting Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 16,
+    "job_id": "AIOC-S01667449",
+    "title": "Learning Exp Design & Dev Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Learning Exp Design & Dev Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 17,
+    "job_id": "AIOC-S01667453",
+    "title": "Learning Exp Design & Dev Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 18,
+    "job_id": "AIOC-S01666133",
+    "title": "Bus & Technology Delivery Analyst",
+    "location": "Bengaluru, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Bus & Technology Delivery Analyst' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 19,
+    "job_id": "AIOC-S01666227",
+    "title": "Learning Exp Design & Dev Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 20,
+    "job_id": "AIOC-S01664850",
+    "title": "Delivery Lead Manager",
+    "location": "Bengaluru, India",
+    "experience_required": "10-12 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Lead'",
+      "Title negative keyword: 'Manager'",
+      "Role mismatch: title 'Delivery Lead Manager' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 21,
+    "job_id": "AIOC-S01667479",
+    "title": "HR Service Delivery Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'HR Service Delivery Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 22,
+    "job_id": "AIOC-S01667529",
+    "title": "Instructor Specialist",
+    "location": "Mumbai, India",
+    "experience_required": "5-10 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Instructor Specialist' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 23,
+    "job_id": "AIOC-S01667502",
+    "title": "Learning Operations Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Operations Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 24,
+    "job_id": "AIOC-S01667504",
+    "title": "Learning Operations Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Operations Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 25,
+    "job_id": "AIOC-S01667483",
+    "title": "HR Service Delivery Associate",
+    "location": "Mumbai, India",
+    "experience_required": "0-2 years",
+    "desc_min_exp": null,
+    "eligibility": "Eligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'HR Service Delivery Associate' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 26,
+    "job_id": "AIOC-S01667510",
+    "title": "Recruiting Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Recruiting Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 27,
+    "job_id": "AIOC-S01667531",
+    "title": "Instructor Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Instructor Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 28,
+    "job_id": "AIOC-S01666123",
+    "title": "Bus & Technology Delivery Associate",
+    "location": "Bengaluru, India",
+    "experience_required": "0-2 years",
+    "desc_min_exp": null,
+    "eligibility": "Eligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Bus & Technology Delivery Associate' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 29,
+    "job_id": "AIOC-S01666179",
+    "title": "Bus & Technology Delivery Senior Analyst",
+    "location": "Bengaluru, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Bus & Technology Delivery Senior Analyst' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 30,
+    "job_id": "AIOC-S01666205",
+    "title": "Learning Exp Design & Dev Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Learning Exp Design & Dev Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 31,
+    "job_id": "AIOC-S01666140",
+    "title": "Learning Exp Design & Dev Analyst",
+    "location": "Bengaluru, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Analyst' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 32,
+    "job_id": "AIOC-S01667534",
+    "title": "Candidate Source & Screen Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Candidate Source & Screen Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 33,
+    "job_id": "AIOC-S01667458",
+    "title": "Learning Exp Design & Dev Associate",
+    "location": "Mumbai, India",
+    "experience_required": "0-2 years",
+    "desc_min_exp": null,
+    "eligibility": "Eligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Associate' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 34,
+    "job_id": "AIOC-S01667496",
+    "title": "Learning Operations Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Learning Operations Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 35,
+    "job_id": "AIOC-S01667503",
+    "title": "Learning Operations Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Operations Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 36,
+    "job_id": "AIOC-S01667482",
+    "title": "HR Service Delivery Associate",
+    "location": "Mumbai, India",
+    "experience_required": "0-2 years",
+    "desc_min_exp": null,
+    "eligibility": "Eligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'HR Service Delivery Associate' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 37,
+    "job_id": "AIOC-S01667491",
+    "title": "Learning Operations Associate",
+    "location": "Mumbai, India",
+    "experience_required": "0-2 years",
+    "desc_min_exp": null,
+    "eligibility": "Eligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Operations Associate' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 38,
+    "job_id": "AIOC-S01667455",
+    "title": "Learning Exp Design & Dev Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 39,
+    "job_id": "AIOC-S01667447",
+    "title": "Learning Exp Design & Dev Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Learning Exp Design & Dev Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 40,
+    "job_id": "AIOC-S01666138",
+    "title": "Learning Exp Design & Dev Analyst",
+    "location": "Bengaluru, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Analyst' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 41,
+    "job_id": "AIOC-S01666209",
+    "title": "Bus & Technology Delivery Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Bus & Technology Delivery Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 42,
+    "job_id": "AIOC-S01656924",
+    "title": "Delivery Lead Manager",
+    "location": "Bengaluru, India",
+    "experience_required": "10-12 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Lead'",
+      "Title negative keyword: 'Manager'",
+      "Role mismatch: title 'Delivery Lead Manager' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 43,
+    "job_id": "AIOC-S01667532",
+    "title": "Instructor Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Instructor Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 44,
+    "job_id": "AIOC-S01667412",
+    "title": "Learning Exp Design & Dev Manager",
+    "location": "Bengaluru, India",
+    "experience_required": "10-12 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Manager'",
+      "Role mismatch: title 'Learning Exp Design & Dev Manager' does not match any profile target role"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 45,
+    "job_id": "AIOC-S01667486",
+    "title": "Delivery Operations Specialist",
+    "location": "Mumbai, India",
+    "experience_required": "5-10 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Delivery Operations Specialist' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 46,
+    "job_id": "AIOC-S01667473",
+    "title": "Delivery Operations Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Delivery Operations Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 47,
+    "job_id": "AIOC-S01667513",
+    "title": "Recruiting Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Recruiting Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 48,
+    "job_id": "AIOC-S01667456",
+    "title": "Learning Exp Design & Dev Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Learning Exp Design & Dev Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 49,
+    "job_id": "AIOC-S01667450",
+    "title": "Learning Exp Design & Dev Senior Analyst",
+    "location": "Mumbai, India",
+    "experience_required": "2-5 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Title negative keyword: 'Senior'",
+      "Role mismatch: title 'Learning Exp Design & Dev Senior Analyst' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  },
+  {
+    "index": 50,
+    "job_id": "AIOC-S01666215",
+    "title": "Bus & Technology Delivery Specialist",
+    "location": "Mumbai, India",
+    "experience_required": "5-10 years",
+    "desc_min_exp": null,
+    "eligibility": "Ineligible",
+    "rejection_reasons": [
+      "Role mismatch: title 'Bus & Technology Delivery Specialist' does not match any profile target role",
+      "Excluded location: contains ['mumbai']"
+    ],
+    "is_filter_match": false,
+    "assessment": "CORRECT_REJECTION (Irrelevant role)"
+  }
+]

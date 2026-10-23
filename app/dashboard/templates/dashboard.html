@@ -338,6 +338,8 @@
                 <td>
                   {% if s.status == "COMPLETED" %}
                     <span class="badge-health-ok">Active</span>
+                  {% elif s.status == "PARTIAL" %}
+                    <span class="badge-health-blocked">Partial</span>
                   {% elif s.status == "BLOCKED" %}
                     <span class="badge-health-blocked">Blocked</span>
                   {% elif s.status == "DISABLED" %}

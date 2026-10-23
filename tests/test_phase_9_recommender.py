@@ -531,7 +531,7 @@ def test_excel_export_phase_9_sheets_and_columns():
             status=JobStatus.NEW,
             follow_up_date="2026-10-12",
         )
-        file_path = exporter.export([job])
+        file_path = exporter.export([job], full_report=True)
 
         wb = openpyxl.load_workbook(str(file_path))
         # Check sheets

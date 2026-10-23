@@ -37,7 +37,7 @@ class JobCollector:
     def has_source_warnings(self) -> bool:
         """Check if any enabled source encountered warnings or blocks."""
         for res in self.source_results.values():
-            if res.get("status") in ("BLOCKED", "UNAVAILABLE", "WARNING", "ERROR"):
+            if res.get("status") in ("BLOCKED", "UNAVAILABLE", "WARNING", "ERROR", "PARTIAL"):
                 return True
         return False
 

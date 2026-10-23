@@ -20,7 +20,7 @@ class BaseJobSource(ABC):
 
     def __init__(self, is_enabled: bool = True):
         self.is_enabled = is_enabled
-        self.last_status: str = "IDLE"
+        self.last_status: str = "IDLE" if is_enabled else "DISABLED"
         self.last_error: Optional[str] = None
         self.last_collected_count: int = 0
 

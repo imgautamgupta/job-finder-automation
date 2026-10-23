@@ -1,7 +1,8 @@
 """Deduplication service ensuring jobs are unique across batches and historical runs."""
 
 import logging
-from typing import TYPE_CHECKING, List, Optional, Set
+import re
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple
 
 from app.models.job import Job, normalize_url
 
@@ -137,3 +138,77 @@ class JobDeduplicator:
             len(jobs),
         )
         return unique_jobs
+
+    def deduplicate_for_all_jobs(self, jobs: List[Job]) -> List[Job]:
+        """Deduplicate candidate jobs for the 'All Jobs' worksheet.
+
+        Deduplication rule:
+        1. Company + Job ID (if official job ID / source_job_id / job_id is present)
+        2. Falling back to: Company + normalized title + location + URL
+
+        Never drops jobs silently: every exclusion is logged with count and reason.
+
+        Args:
+            jobs: List of candidate jobs (MATCH, REVIEW, REJECT).
+
+        Returns:
+            List of unique jobs.
+        """
+        return deduplicate_for_all_jobs(jobs)
+
+
+def deduplicate_for_all_jobs(jobs: List[Job]) -> List[Job]:
+    """Deduplicate candidate jobs for the 'All Jobs' worksheet.
+
+    Deduplication rule:
+    1. Company + Job ID (if official job ID / source_job_id / job_id is present)
+    2. Falling back to: Company + normalized title + location + URL
+
+    Never drops jobs silently: every exclusion is logged with count and reason.
+    """
+    unique_jobs: List[Job] = []
+    seen_keys: Set[Tuple] = set()
+    exclusion_counts: Dict[str, int] = {}
+
+    for job in jobs:
+        comp = (job.company or "").strip().lower()
+        official_id = (job.source_job_id or job.job_id or "").strip()
+
+        if official_id:
+            key = ("id", comp, official_id)
+            reason = f"Duplicate company '{job.company}' and Job ID '{official_id}'"
+        else:
+            norm_title = re.sub(r"\s+", " ", (job.title or "").strip().lower())
+            norm_loc = re.sub(r"\s+", " ", (job.location or "").strip().lower())
+            norm_url = normalize_url(job.url or "")
+            key = ("fallback", comp, norm_title, norm_loc, norm_url)
+            reason = f"Duplicate company '{job.company}', title '{norm_title}', location '{norm_loc}', URL '{norm_url}'"
+
+        if key in seen_keys:
+            exclusion_counts[reason] = exclusion_counts.get(reason, 0) + 1
+            logger.info(
+                "[DEDUP] Dropped duplicate job: '%s' (Company: %s, ID: %s) -> Reason: %s",
+                job.title,
+                job.company,
+                official_id or "N/A",
+                reason,
+            )
+            continue
+
+        seen_keys.add(key)
+        unique_jobs.append(job)
+
+    if exclusion_counts:
+        total_dropped = sum(exclusion_counts.values())
+        logger.info(
+            "[DEDUP] All Jobs deduplication: %d duplicate job(s) dropped across %d criteria.",
+            total_dropped,
+            len(exclusion_counts),
+        )
+        for r, cnt in exclusion_counts.items():
+            logger.info("[DEDUP] Exclusion summary: %d job(s) dropped -> %s", cnt, r)
+    else:
+        logger.info("[DEDUP] All Jobs deduplication: all %d candidate jobs were unique.", len(unique_jobs))
+
+    return unique_jobs
+

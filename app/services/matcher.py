@@ -140,6 +140,12 @@ class JobMatcher:
 
         # 1. Negative Keyword Evaluation
         has_negative_title = False
+        from app.services.filter import match_seniority_title
+        senior_t = match_seniority_title(title_text)
+        if senior_t:
+            has_negative_title = True
+            excluded_reasons.append(f"Title contains negative keyword: '{senior_t}'")
+
         for neg_kw in active_profile.negative_keywords:
             neg_clean = neg_kw.strip().lower()
             if not neg_clean:

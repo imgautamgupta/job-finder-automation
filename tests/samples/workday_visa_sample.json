@@ -1,0 +1,369 @@
+{
+  "total": 105,
+  "jobPostings": [
+    {
+      "title": "Sr. SW Engineer (3 - 5 years of exp in Python, AI & Agentic Automation)",
+      "externalPath": "/job/IN---Bengaluru-India/Sr-SW-Engineer--3---5-years-of-exp-in-Python--AI---Agentic-Automation-_REF089273W-1",
+      "locationsText": "IN - Bengaluru, India",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "REF089273W"
+      ]
+    },
+    {
+      "title": "Staff SW Engineer (8-11 years' exp - .NET Core / Backend Engineer with AI-First Development Approach)",
+      "externalPath": "/job/IN---Bengaluru-India/Staff-SW-Engineer--10-12-years--exp---Net-Core---Java---Python--RAG--MCP-_REF087081W-1",
+      "locationsText": "IN - Bengaluru, India",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "REF087081W"
+      ]
+    },
+    {
+      "title": "Sr. SW Engineer",
+      "externalPath": "/job/IN---Bengaluru-India/Sr-SW-Engineer_REF089082W",
+      "locationsText": "IN - Bengaluru, India",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "REF089082W"
+      ]
+    },
+    {
+      "title": "Product Manager",
+      "externalPath": "/job/IN---Bengaluru-India/Product-Manager_REF085044W-1",
+      "locationsText": "IN - Bengaluru, India",
+      "postedOn": "Posted Today",
+      "bulletFields": [
+        "REF085044W"
+      ]
+    },
+    {
+      "title": "Analyst, Client Success",
+      "externalPath": "/job/IN---Bengaluru-India/Analyst--Client-Success_REF089066W",
+      "locationsText": "IN - Bengaluru, India",
+      "postedOn": "Posted 2 Days Ago",
+      "bulletFields": [
+        "REF089066W"
+      ]
+    }
+  ],
+  "facets": [
+    {
+      "facetParameter": "remoteType",
+      "descriptor": "Workplace Type",
+      "values": [
+        {
+          "descriptor": "Hybrid",
+          "id": "f8f7c27e45a11001f3f49cf199e40000",
+          "count": 15
+        },
+        {
+          "descriptor": "Fully Onsite",
+          "id": "5e1dcc7de3551001f3dddb4aae590000",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facetParameter": "jobFamilyGroup",
+      "descriptor": "Teams",
+      "values": [
+        {
+          "descriptor": "Engineering & Technology",
+          "id": "e8c806498390105c6260a580252a0363",
+          "count": 62
+        },
+        {
+          "descriptor": "Consulting",
+          "id": "e45df974e3571000b87f22dbd0f40000",
+          "count": 11
+        },
+        {
+          "descriptor": "Finance",
+          "id": "2745bc1368021016adc53f696daa3b99",
+          "count": 7
+        },
+        {
+          "descriptor": "Product & Design",
+          "id": "2745bc1368021016adc549cafd9a3ba5",
+          "count": 5
+        },
+        {
+          "descriptor": "Corporate Services & Administration",
+          "id": "2745bc1368021016adc536dbe6223b91",
+          "count": 5
+        },
+        {
+          "descriptor": "Sales",
+          "id": "2745bc1368021016adc54d0fd02a3ba9",
+          "count": 4
+        },
+        {
+          "descriptor": "Client Services",
+          "id": "2745bc1368021016adc53acf19523b95",
+          "count": 4
+        },
+        {
+          "descriptor": "Data Science & Analytics",
+          "id": "d48eccdc23121000b8a44df0bd370000",
+          "count": 3
+        },
+        {
+          "descriptor": "Risk",
+          "id": "2745bc1368021016adc54b6dc0ba3ba7",
+          "count": 2
+        },
+        {
+          "descriptor": "Legal & Regulatory Affairs",
+          "id": "2745bc1368021016adc542cae4423b9d",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "facetParameter": "jobFamily",
+      "descriptor": "Roles",
+      "values": [
+        {
+          "descriptor": "Software Engineering",
+          "id": "2745bc1368021016a991f65e710a3b1e",
+          "count": 43
+        },
+        {
+          "descriptor": "Client Consulting",
+          "id": "2745bc1368021016a991e695ab8a3b0a",
+          "count": 11
+        },
+        {
+          "descriptor": "Data Engineering",
+          "id": "ad45ef80fd47018bd5538fe7856817d3",
+          "count": 9
+        },
+        {
+          "descriptor": "Prog/Project Management",
+          "id": "2745bc1368021016a991a0b447f23ac6",
+          "count": 4
+        },
+        {
+          "descriptor": "Product Development/Management",
+          "id": "2745bc1368021016a991db09dc0a3afc",
+          "count": 4
+        },
+        {
+          "descriptor": "Systems Analysis",
+          "id": "2745bc1368021016a991f4f1f08a3b1c",
+          "count": 3
+        },
+        {
+          "descriptor": "Data Science",
+          "id": "31f1c52f685c018679c336da4b46da8e",
+          "count": 3
+        },
+        {
+          "descriptor": "Controller",
+          "id": "2745bc1368021016a99175256ec23a92",
+          "count": 3
+        },
+        {
+          "descriptor": "Systems Engineering",
+          "id": "2745bc1368021016a991a83acf5a3ad0",
+          "count": 2
+        },
+        {
+          "descriptor": "Strategic Sourcing",
+          "id": "2745bc1368021016a991b29fc6623ade",
+          "count": 2
+        },
+        {
+          "descriptor": "Service Experience",
+          "id": "88449a39b143010d996dfd5048860000",
+          "count": 2
+        },
+        {
+          "descriptor": "Risk Management",
+          "id": "2745bc1368021016a991e2314f9a3b04",
+          "count": 2
+        },
+        {
+          "descriptor": "Network & Security Engineering",
+          "id": "2745bc1368021016a991c15cf0123af2",
+          "count": 2
+        },
+        {
+          "descriptor": "Generalist Seller - Account Executive",
+          "id": "a060926dbd8c1000cef010e6d6e80000",
+          "count": 1
+        },
+        {
+          "descriptor": "Financial Analysis",
+          "id": "2745bc1368021016a9917835e6fa3a96",
+          "count": 1
+        },
+        {
+          "descriptor": "Digital Sales \u2013 Digital Sales Representative",
+          "id": "d2416baaf9ed1001abda20271f250000",
+          "count": 1
+        },
+        {
+          "descriptor": "Digital Sales \u2013 Business Development Representative",
+          "id": "4922e189c6b21001f2875be2e8e80000",
+          "count": 1
+        },
+        {
+          "descriptor": "Cyber Security Analyst",
+          "id": "2745bc1368021016a991b40fb9b23ae0",
+          "count": 1
+        },
+        {
+          "descriptor": "Compliance",
+          "id": "89faec33dfd310ec2b606e025e52dfc2",
+          "count": 1
+        },
+        {
+          "descriptor": "Client Success",
+          "id": "2ce6facc687d010e9ae52131023f0000",
+          "count": 1
+        },
+        {
+          "descriptor": "Attorney",
+          "id": "2745bc1368021016a99199e9020a3abe",
+          "count": 1
+        },
+        {
+          "descriptor": "Accounting",
+          "id": "2745bc1368021016a99179ca36e23a98",
+          "count": 1
+        },
+        {
+          "descriptor": "Specialist Seller - Sales Executive",
+          "id": "a060926dbd8c1000ce64068b54660000",
+          "count": 1
+        },
+        {
+          "descriptor": "Safety/Security",
+          "id": "2745bc1368021016a9915743743a3a6c",
+          "count": 1
+        },
+        {
+          "descriptor": "Product/Decision Analytics",
+          "id": "2745bc1368021016a991d810a8da3af8",
+          "count": 1
+        },
+        {
+          "descriptor": "Network & Application Operations",
+          "id": "2745bc1368021016a991bcdde8023aec",
+          "count": 1
+        },
+        {
+          "descriptor": "Machine Learning",
+          "id": "ad45ef80fd4701f3e09a4bdd856804d3",
+          "count": 1
+        },
+        {
+          "descriptor": "Implementations",
+          "id": "ef01101febe401c634936e8a397b1550",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facetParameter": "timeType",
+      "descriptor": "Time Type",
+      "values": [
+        {
+          "descriptor": "Full time",
+          "id": "3d32d47be90110109faf15aa8b2200bf",
+          "count": 105
+        }
+      ]
+    },
+    {
+      "facetParameter": "locationMainGroup",
+      "values": [
+        {
+          "facetParameter": "locationCountry",
+          "descriptor": "Location Country",
+          "values": [
+            {
+              "descriptor": "Colombia",
+              "id": "e8106cd6a3534f2dba6fdee2d41db89d",
+              "count": 1
+            },
+            {
+              "descriptor": "India",
+              "id": "c4f78be1a8f14da0ab49ce1162348a5e",
+              "count": 97
+            },
+            {
+              "descriptor": "Singapore",
+              "id": "80938777cac5440fab50d729f9634969",
+              "count": 1
+            },
+            {
+              "descriptor": "South Africa",
+              "id": "4db3c26940b944919b83612cc1193eed",
+              "count": 1
+            },
+            {
+              "descriptor": "United Kingdom",
+              "id": "29247e57dbaf46fb855b224e03170bc7",
+              "count": 1
+            },
+            {
+              "descriptor": "United States of America",
+              "id": "bc33aa3152ec42d4995f4791a106ed09",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "facetParameter": "locations",
+          "descriptor": "Locations",
+          "values": [
+            {
+              "descriptor": "CO - Bogota, Colombia",
+              "id": "6a6b666e8c601001fe41f0bed1d00000",
+              "count": 1
+            },
+            {
+              "descriptor": "GB - Basingstoke, United Kingdom",
+              "id": "6a6b666e8c601001fe415db43b910000",
+              "count": 1
+            },
+            {
+              "descriptor": "IN - Bengaluru, India",
+              "id": "6a6b666e8c601001fe40e79f253d0000",
+              "count": 86
+            },
+            {
+              "descriptor": "IN - Mumbai, India",
+              "id": "6a6b666e8c601001fe40d756c83e0000",
+              "count": 11
+            },
+            {
+              "descriptor": "SG - Singapore",
+              "id": "6a6b666e8c601001fe3fb345c1690000",
+              "count": 1
+            },
+            {
+              "descriptor": "US - Ashburn, VA",
+              "id": "6a6b666e8c601001fe3f807fd9e60000",
+              "count": 1
+            },
+            {
+              "descriptor": "US - Foster City, CA",
+              "id": "6a6b666e8c601001fe3f62fc882e0000",
+              "count": 1
+            },
+            {
+              "descriptor": "ZA - Johannesburg, South Africa",
+              "id": "6a6b666e8c601001fe3e2d81703a0000",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userAuthenticated": false
+}

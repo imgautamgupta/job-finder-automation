@@ -379,7 +379,7 @@ def test_excel_export_includes_search_intelligence_sheet(tmp_path):
     """Verify Excel export workbook generates 'Search Intelligence' sheet without breaking existing sheets."""
     exporter = ExcelExporter(exports_dir=tmp_path)
     job = _create_mock_job(title="Backend Engineer", source="greenhouse", match_score=85)
-    export_path = exporter.export([job], output_path=tmp_path / "test_report.xlsx")
+    export_path = exporter.export([job], output_path=tmp_path / "test_report.xlsx", full_report=True)
 
     assert export_path.exists()
     import openpyxl

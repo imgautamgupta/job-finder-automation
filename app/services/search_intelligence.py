@@ -261,7 +261,7 @@ class SearchIntelligenceService:
                 rec_action = SourceActionRecommendation.MONITOR
                 rec_prio = RecommendationPriority.MONITOR
                 rec_reason = "Endpoint blocked or rate limited (403/429); could not evaluate source quality reliably."
-            elif reliability in ("Disabled", "Placeholder"):
+            elif reliability in ("Disabled", "Placeholder") and found == 0:
                 rec_action = SourceActionRecommendation.MONITOR
                 rec_prio = RecommendationPriority.MONITOR
                 rec_reason = f"Source connector is {reliability.lower()}; awaiting integration/activation."

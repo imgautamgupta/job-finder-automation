@@ -331,7 +331,7 @@ def test_excel_analytics_sheet_export(temp_db, tmp_path):
     export_path = tmp_path / "test_analytics_export.xlsx"
 
     exporter = ExcelExporter()
-    out = exporter.export(jobs=jobs, output_path=str(export_path))
+    out = exporter.export(jobs=jobs, output_path=str(export_path), full_report=True)
 
     import openpyxl
     wb = openpyxl.load_workbook(out)
@@ -341,6 +341,36 @@ def test_excel_analytics_sheet_export(temp_db, tmp_path):
     assert ws["A1"].value == "Pipeline Metric"
     assert ws["B1"].value == "Count / Value"
     assert ws["C1"].value == "Conversion / Yield"
+
+
+def test_excel_analytics_sheet_counts_all_stored_jobs_and_relevant_separate(tmp_path):
+    """Verify that Analytics sheet counts all stored jobs (e.g. 175) for Jobs Found,
+    with relevant jobs (e.g. 1) counted on its own separate line (Task 11 ADDITIONS Part D).
+    """
+    rel_job = _create_mock_job(company="Adobe", title="Software Engineer", match_score=75, status=JobStatus.NEW)
+    non_rel_jobs = [
+        _create_mock_job(company="Adobe", title=f"Other Role {i}", match_score=30, status=JobStatus.REJECTED)
+        for i in range(1, 10)
+    ]
+    all_stored = [rel_job] + non_rel_jobs  # 10 jobs total, 1 relevant
+
+    export_path = tmp_path / "test_analytics_all_jobs.xlsx"
+    exporter = ExcelExporter()
+    out = exporter.export(jobs=[rel_job], all_jobs=all_stored, output_path=str(export_path), full_report=True)
+
+    import openpyxl
+    wb = openpyxl.load_workbook(out)
+    ws = wb["Analytics"]
+
+    # Funnel Row 2: "1. Jobs Found" should equal len(all_stored) == 10
+    assert ws.cell(row=2, column=1).value == "1. Jobs Found"
+    assert ws.cell(row=2, column=2).value == 10
+
+    # Funnel Row 3: "2. Relevant Jobs" should equal 1 on its own line
+    assert ws.cell(row=3, column=1).value == "2. Relevant Jobs"
+    assert ws.cell(row=3, column=2).value == 1
+    assert "10.0% of found" in str(ws.cell(row=3, column=3).value)
+
 
 
 def test_dashboard_analytics_route_http_200():

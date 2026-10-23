@@ -1,0 +1,57 @@
+{
+  "totalFound": 2,
+  "content": [
+    {
+      "id": "743999999999001",
+      "name": "Software Engineer - Backend",
+      "uuid": "abc-123-def",
+      "releasedDate": "2026-03-15T10:00:00.000Z",
+      "location": {
+        "city": "Bengaluru",
+        "region": "Karnataka",
+        "country": "in"
+      },
+      "industry": {
+        "id": "software"
+      },
+      "department": {
+        "id": "engineering"
+      },
+      "function": {
+        "id": "it"
+      },
+      "typeOfEmployment": {
+        "id": "permanent"
+      },
+      "experienceLevel": {
+        "id": "associate"
+      }
+    },
+    {
+      "id": "743999999999002",
+      "name": "Data Analyst Intern",
+      "uuid": "abc-123-def-2",
+      "releasedDate": "2026-03-18T14:30:00.000Z",
+      "location": {
+        "city": "Pune",
+        "region": "Maharashtra",
+        "country": "in"
+      },
+      "industry": {
+        "id": "software"
+      },
+      "department": {
+        "id": "data"
+      },
+      "function": {
+        "id": "analytics"
+      },
+      "typeOfEmployment": {
+        "id": "internship"
+      },
+      "experienceLevel": {
+        "id": "entry_level"
+      }
+    }
+  ]
+}

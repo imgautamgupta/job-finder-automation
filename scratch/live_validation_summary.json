@@ -1,0 +1,56 @@
+{
+  "status": "COMPLETED",
+  "collected_count": 25,
+  "with_job_ids_count": 25,
+  "passed_filter_count": 1,
+  "excluded_count": 24,
+  "exclusion_reasons": {
+    "Description requires senior experience: '5+ years'": 14,
+    "Description requires senior experience: '7+ years'": 14,
+    "Description requires senior experience: '10+ years'": 14,
+    "Did not pass profile preference criteria (role/location/experience)": 10,
+    "Title contains negative keyword: 'Lead'": 2
+  },
+  "samples": [
+    {
+      "title": "Custom Software Engineer",
+      "job_id": "ATCI-5436805-S1978279",
+      "location": "Bengaluru, India",
+      "url": "https://www.accenture.com/in-en/careers/jobdetails?id=ATCI-5436805-S1978279_en&title=Custom+Software+Engineer",
+      "experience": "5-10 years",
+      "eligibility": "Ineligible"
+    },
+    {
+      "title": "Custom Software Engineer",
+      "job_id": "ATCI-5719651-S2071380",
+      "location": "Hyderabad, India",
+      "url": "https://www.accenture.com/in-en/careers/jobdetails?id=ATCI-5719651-S2071380_en&title=Custom+Software+Engineer",
+      "experience": "5-10 years",
+      "eligibility": "Ineligible"
+    },
+    {
+      "title": "Custom Software Engineer",
+      "job_id": "ATCI-5686139-S2065269",
+      "location": "Pune, India",
+      "url": "https://www.accenture.com/in-en/careers/jobdetails?id=ATCI-5686139-S2065269_en&title=Custom+Software+Engineer",
+      "experience": "2-5 years",
+      "eligibility": "Ineligible"
+    },
+    {
+      "title": "S&C GN - TS&T \u2013Enterprise AI Value Strategy - Consultant",
+      "job_id": "R00350129",
+      "location": "Mumbai, India",
+      "url": "https://www.accenture.com/in-en/careers/jobdetails?id=R00350129_en&title=S%26C+GN+-+TS%26T+%E2%80%93Enterprise+AI+Value+Strategy+-+Consultant",
+      "experience": "5-10 years",
+      "eligibility": "Ineligible"
+    },
+    {
+      "title": "Custom Software Engineer",
+      "job_id": "ATCI-5146538-S1900011",
+      "location": "Bengaluru, India",
+      "url": "https://www.accenture.com/in-en/careers/jobdetails?id=ATCI-5146538-S1900011_en&title=Custom+Software+Engineer",
+      "experience": "5-10 years",
+      "eligibility": "Ineligible"
+    }
+  ]
+}

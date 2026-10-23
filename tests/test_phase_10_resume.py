@@ -466,7 +466,7 @@ class TestExcelPhase10:
         sample_job.recommended_project = "Loan Application Fraud Detection"
         sample_job.preparation_status = PreparationStatus.RESUME_READY
 
-        export_path = exporter.export([sample_job])
+        export_path = exporter.export([sample_job], full_report=True)
         assert export_path.exists()
 
         import openpyxl

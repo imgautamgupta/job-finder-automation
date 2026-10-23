@@ -92,7 +92,7 @@ def sample_jobs():
 def test_workbook_created_successfully(temp_dir, sample_jobs):
     """Test 1: Output file is created and has valid .xlsx extension."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
     assert file_path.exists()
     assert file_path.suffix == ".xlsx"
 
@@ -100,7 +100,7 @@ def test_workbook_created_successfully(temp_dir, sample_jobs):
 def test_both_sheets_exist(temp_dir, sample_jobs):
     """Test 2: Workbook contains 'Top Matches' and 'All Relevant Jobs'."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     sheet_names = wb.sheetnames
@@ -111,7 +111,7 @@ def test_both_sheets_exist(temp_dir, sample_jobs):
 def test_top_matches_threshold_and_count(temp_dir, sample_jobs):
     """Test 3: Top Matches contains only jobs with score >= 80."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws = wb["Top Matches"]
@@ -125,7 +125,7 @@ def test_top_matches_threshold_and_count(temp_dir, sample_jobs):
 def test_all_relevant_jobs_threshold_and_count(temp_dir, sample_jobs):
     """Test 4: All Relevant Jobs contains only jobs with score >= 60."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws = wb["All Relevant Jobs"]
@@ -138,7 +138,7 @@ def test_all_relevant_jobs_threshold_and_count(temp_dir, sample_jobs):
 def test_sorting_by_score_descending(temp_dir, sample_jobs):
     """Test 5: Jobs are sorted by score descending."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws = wb["All Relevant Jobs"]
@@ -149,7 +149,7 @@ def test_sorting_by_score_descending(temp_dir, sample_jobs):
 def test_easy_apply_secondary_sorting(temp_dir, sample_jobs):
     """Test 6: When scores are equal, Easy Apply=Yes comes before Easy Apply=No."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws = wb["Top Matches"]
@@ -168,7 +168,7 @@ def test_easy_apply_secondary_sorting(temp_dir, sample_jobs):
 def test_required_columns_exist_in_order(temp_dir, sample_jobs):
     """Test 7: All 17 required columns exist in the exact required order."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     for sheet_name in ("Top Matches", "All Relevant Jobs"):
@@ -180,7 +180,7 @@ def test_required_columns_exist_in_order(temp_dir, sample_jobs):
 def test_job_url_clickable_hyperlink(temp_dir, sample_jobs):
     """Test 8: Job URL cell contains active hyperlink."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws = wb["Top Matches"]
@@ -204,7 +204,7 @@ def test_priority_generated_correctly():
 def test_empty_input_produces_valid_workbook(temp_dir):
     """Test 10: Empty job list produces a valid 2-sheet workbook with headers without crashing."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export([])
+    file_path = exporter.export([], full_report=True)
 
     assert file_path.exists()
     wb = openpyxl.load_workbook(str(file_path))
@@ -218,7 +218,7 @@ def test_empty_input_produces_valid_workbook(temp_dir):
 def test_matched_roles_exported(temp_dir, sample_jobs):
     """Test 11: Matched roles column populated."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws = wb["Top Matches"]
@@ -229,7 +229,7 @@ def test_matched_roles_exported(temp_dir, sample_jobs):
 def test_matched_skills_exported(temp_dir, sample_jobs):
     """Test 12: Matched skills column populated."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws = wb["Top Matches"]
@@ -241,7 +241,7 @@ def test_matched_skills_exported(temp_dir, sample_jobs):
 def test_matched_locations_exported(temp_dir, sample_jobs):
     """Test 13: Matched locations column populated."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws = wb["Top Matches"]
@@ -252,7 +252,7 @@ def test_matched_locations_exported(temp_dir, sample_jobs):
 def test_experience_match_exported(temp_dir, sample_jobs):
     """Test 14: Experience match exported as Yes/No."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws_top = wb["Top Matches"]
@@ -266,7 +266,7 @@ def test_experience_match_exported(temp_dir, sample_jobs):
 def test_excluded_reasons_exported(temp_dir, sample_jobs):
     """Test 15: Excluded reasons exported when present, blank when none."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     ws_all = wb["All Relevant Jobs"]
@@ -279,7 +279,7 @@ def test_excluded_reasons_exported(temp_dir, sample_jobs):
 def test_workbook_opens_on_top_matches(temp_dir, sample_jobs):
     """Test 16: Active sheet index is 0 (Top Matches)."""
     exporter = ExcelExporter(exports_dir=temp_dir)
-    file_path = exporter.export(sample_jobs)
+    file_path = exporter.export(sample_jobs, full_report=True)
 
     wb = openpyxl.load_workbook(str(file_path))
     assert wb.active.title == "Top Matches"

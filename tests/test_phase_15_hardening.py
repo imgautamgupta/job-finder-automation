@@ -380,12 +380,13 @@ def test_excel_export_edge_cases(isolated_env):
     exporter = ExcelExporter(exports_dir=exports_dir)
 
     # 1. Zero jobs export
-    empty_file = exporter.export([])
+    empty_file = exporter.export([], full_report=True)
     assert empty_file.exists()
 
     import openpyxl
     wb_empty = openpyxl.load_workbook(empty_file)
-    assert len(wb_empty.sheetnames) == 10
+    assert "All Jobs" in wb_empty.sheetnames
+    assert len(wb_empty.sheetnames) == 11
 
     # 2. Unicode and long content export
     unicode_job = Job(
@@ -398,8 +399,9 @@ def test_excel_export_edge_cases(isolated_env):
         match_score=95,
         status=JobStatus.NEW,
     )
-    job_file = exporter.export([unicode_job])
+    job_file = exporter.export([unicode_job], full_report=True)
     assert job_file.exists()
 
     wb_job = openpyxl.load_workbook(job_file)
-    assert len(wb_job.sheetnames) == 10
+    assert "All Jobs" in wb_job.sheetnames
+    assert len(wb_job.sheetnames) == 11

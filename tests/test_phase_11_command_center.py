@@ -498,7 +498,7 @@ def test_excel_export_phase_11_sheets_and_columns(tmp_path, sample_job):
 
     exporter = ExcelExporter(exports_dir=tmp_path)
     output_path = tmp_path / "test_phase11_export.xlsx"
-    exported_file = exporter.export([sample_job], output_path=output_path)
+    exported_file = exporter.export([sample_job], output_path=output_path, full_report=True)
 
     import openpyxl
     wb = openpyxl.load_workbook(exported_file)

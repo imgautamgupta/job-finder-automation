@@ -596,19 +596,19 @@ def test_classify_job_triaging_match_review_reject():
     assert "0-2" in reason or "Eligible" in reason
     assert match_job.extra_metadata["decision"] == "MATCH"
 
-    # 2. REJECT by Gate 1: Target role, preferred location, intermediate 2-5 yrs (requires 2+ years)
+    # 2. REJECT by Gate 1: Target role, preferred location, experience exceeding review_max_years (requires 4+ years)
     review_job = Job(
         title="Software Engineer",
         location="Bengaluru, India",
         company="Accenture",
         source="accenture",
         url="https://example.com/review1",
-        experience_required="2-5 years",
+        experience_required="4-7 years",
         extra_metadata={"eligibility": "Needs Review"},
     )
     decision, reason = job_filter.classify_job(review_job)
     assert decision == "REJECT"
-    assert "requires 2+ years" in reason
+    assert "requires 4+ years" in reason
     assert review_job.extra_metadata["decision"] == "REJECT"
 
     # 3. REVIEW: Target role, preferred location, missing experience (experience not stated)

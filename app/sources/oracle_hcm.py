@@ -50,10 +50,38 @@ DEFAULT_ORACLE_HCM_COMPANIES: Dict[str, Dict[str, Any]] = {
         "site_number": "CX_45001",
         "location": "India",
     },
+    "ofss": {
+        "name": "Oracle Financial Services Software",
+        "base_url": "https://eeho.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
+        "candidate_ui_base": "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_45001/job",
+        "site_number": "CX_45001",
+        "location": "India",
+    },
     "dell": {
         "name": "Dell",
         "base_url": "https://enterpriseplatform.dell.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
         "candidate_ui_base": "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/CX_1/job",
+        "site_number": "CX_1",
+        "location": "India",
+    },
+    "hexaware": {
+        "name": "Hexaware Technologies",
+        "base_url": "https://fa-etqo-saasfaprod1.fa.ocs.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
+        "candidate_ui_base": "https://jobs.hexaware.com",
+        "site_number": "CX_1",
+        "location": "India",
+    },
+    "zensar": {
+        "name": "Zensar Technologies",
+        "base_url": "https://fa-etvl-saasfaprod1.fa.ocs.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
+        "candidate_ui_base": "https://fa-etvl-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job",
+        "site_number": "CX_1",
+        "location": "India",
+    },
+    "eclerx": {
+        "name": "eClerx",
+        "base_url": "https://fa-ewji-saasfaprod1.fa.ocs.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
+        "candidate_ui_base": "https://fa-ewji-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job",
         "site_number": "CX_1",
         "location": "India",
     },
@@ -317,6 +345,7 @@ class OracleHCMJobSource(BaseJobSource):
                     date_posted=posted_date,
                     description=full_desc,
                     date_found=datetime.now(timezone.utc),
+                    extra_metadata={"company_key": comp_key, "application_url": apply_url},
                 )
                 seen_job_ids.add(job_id)
                 collected_jobs.append(job)

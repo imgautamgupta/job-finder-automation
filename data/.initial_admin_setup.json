@@ -1,0 +1,7 @@
+{
+  "email": "admin@jobfinder.local",
+  "full_name": "Primary Candidate",
+  "role": "ADMIN",
+  "initial_setup_token": "5MKXirm_F8uZDyqrBmtR4r9LUu76IxhE",
+  "notice": "This token can be used for initial setup or password reset when auth endpoints are enabled in Phase 3D."
+}

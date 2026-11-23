@@ -65,12 +65,57 @@ DEFAULT_SUCCESSFACTORS_COMPANIES: Dict[str, Dict[str, Any]] = {
         "default_keywords": "(India)",
         "supports_role_queries": True,
     },
+    "deloitte_india": {
+        "name": "Deloitte India",
+        "base_url": "https://careers.deloitte.com/careersus/en-US/services/rss/job/",
+        "locale": "en_US",
+        "default_keywords": "",
+        "supports_role_queries": True,
+        "location_scope": "all",
+    },
+    "deloitte_srilanka": {
+        "name": "Deloitte Sri Lanka & Maldives",
+        "base_url": "https://careers.deloitte.com/careersus/en-US/services/rss/job/",
+        "locale": "en_US",
+        "default_keywords": "Sri Lanka",
+        "supports_role_queries": False,
+        "location_scope": "all",
+        "sf_site_id": "718344",
+    },
+    "deloitte_mauritius": {
+        "name": "Deloitte Mauritius",
+        "base_url": "https://careers.deloitte.com/careersus/en-US/services/rss/job/",
+        "locale": "en_US",
+        "default_keywords": "Mauritius",
+        "supports_role_queries": False,
+        "location_scope": "all",
+        "sf_site_id": "718444",
+    },
+    "birlasoft": {
+        "name": "Birlasoft",
+        "base_url": "https://jobs.birlasoft.com/services/rss/job/",
+        "locale": "en_US",
+        "default_keywords": "(India)",
+        "supports_role_queries": True,
+    },
+    "mastek": {
+        "name": "Mastek",
+        "base_url": "https://careers.mastek.com/services/rss/job/",
+        "locale": "en_US",
+        "default_keywords": "(India)",
+        "supports_role_queries": True,
+    },
 }
 
 INDIAN_LOCATIONS_REGEX = re.compile(
     r"\b(india|bangalore|bengaluru|hyderabad|pune|mumbai|chennai|gurgaon|gurugram|noida|"
     r"delhi|kolkata|ahmedabad|kochi|indore|bhopal|coimbatore|chandigarh|jaipur|karnataka|"
     r"telangana|maharashtra|tamil nadu|haryana|uttar pradesh)\b",
+    re.IGNORECASE,
+)
+
+SOUTH_ASIA_OVERSEAS_LOCATIONS = re.compile(
+    r"\b(sri lanka|colombo|maldives|male|mauritius|port louis|ebene)\b",
     re.IGNORECASE,
 )
 
@@ -97,7 +142,12 @@ def extract_successfactors_job_id(url: str, guid: Optional[str] = None) -> str:
     return f"SF-{abs(hash(url)) % 1000000}"
 
 
-def parse_successfactors_location(title: str, description: str, link: Optional[str] = None) -> str:
+def parse_successfactors_location(
+    title: str,
+    description: str,
+    link: Optional[str] = None,
+    comp_config: Optional[Dict[str, Any]] = None,
+) -> str:
     """Extract location from URL slug, title parenthetical, or description.
 
     Returns specific location string (e.g. 'Katowice', 'Bangalore, India')
@@ -126,15 +176,31 @@ def parse_successfactors_location(title: str, description: str, link: Optional[s
         loc_cand = m.group(1).strip()
         if INDIAN_LOCATIONS_REGEX.search(loc_cand):
             return loc_cand
-        # Detect explicit overseas markers
-        if any(w in loc_cand.lower() for w in ["m/w/d", "w/m/d", "germany", "poland", "mxico", "mexico", "france", "uk", "usa"]):
+        if SOUTH_ASIA_OVERSEAS_LOCATIONS.search(loc_cand):
+            return loc_cand
+        # Detect explicit overseas markers or general location if not gender marker
+        if any(w in loc_cand.lower() for w in ["m/w/d", "w/m/d"]):
+            pass
+        elif any(w in loc_cand.lower() for w in ["germany", "poland", "mxico", "mexico", "france", "uk", "usa"]):
+            return loc_cand
+        elif comp_config and comp_config.get("location_scope") == "all":
             return loc_cand
 
     # 3. Check description
-    if description and INDIAN_LOCATIONS_REGEX.search(description):
+    if description:
         m_loc = INDIAN_LOCATIONS_REGEX.search(description)
         if m_loc:
             return f"{m_loc.group(1).capitalize()}, India"
+        m_sa = SOUTH_ASIA_OVERSEAS_LOCATIONS.search(description)
+        if m_sa:
+            match_str = m_sa.group(1).lower()
+            if match_str in ("sri lanka", "colombo"):
+                return "Sri Lanka"
+            elif match_str in ("maldives", "male"):
+                return "Maldives"
+            elif match_str in ("mauritius", "port louis", "ebene"):
+                return "Mauritius"
+            return m_sa.group(1).title()
 
     # 4. If URL slug has city, return that city even if foreign
     if link and "/job/" in link:
@@ -146,6 +212,15 @@ def parse_successfactors_location(title: str, description: str, link: Optional[s
                 return parts[0].strip().title()
         except Exception:
             pass
+
+    # 5. Check comp_config defaults for known entities
+    if comp_config:
+        sf_site = comp_config.get("sf_site_id")
+        comp_name_lower = comp_config.get("name", "").lower()
+        if sf_site == "718344" or "sri lanka" in comp_name_lower:
+            return "Sri Lanka"
+        elif sf_site == "718444" or "mauritius" in comp_name_lower:
+            return "Mauritius"
 
     return "Not Specified"
 
@@ -298,10 +373,12 @@ class SuccessFactorsJobSource(BaseJobSource):
     ) -> List[Job]:
         """Fetch and parse RSS items for a single SuccessFactors company."""
         comp_name = comp_config["name"]
+        comp_config["company_key"] = comp_key
         base_url = comp_config["base_url"]
         locale = comp_config.get("locale", "en_US")
         default_kw = comp_config.get("default_keywords", "(India)")
         supports_role_queries = comp_config.get("supports_role_queries", False)
+        location_scope = comp_config.get("location_scope")
 
         collected_jobs: List[Job] = []
         seen_job_ids = set()
@@ -315,7 +392,13 @@ class SuccessFactorsJobSource(BaseJobSource):
                 "web developer", "ai engineer", "ml engineer",
                 "intern", "graduate", "trainee", "associate", "fresher", "entry level",
             ]
-            queries.extend([f"(India)+({term})" for term in targeted_terms])
+            if location_scope == "all":
+                if default_kw:
+                    queries.extend([f"({default_kw})+({term})" for term in targeted_terms])
+                else:
+                    queries.extend([f"({term})" for term in targeted_terms])
+            else:
+                queries.extend([f"(India)+({term})" for term in targeted_terms])
 
         pages_attempted = 0
         pages_succeeded = 0
@@ -326,7 +409,10 @@ class SuccessFactorsJobSource(BaseJobSource):
             if req_error:
                 break
 
-            url = f"{base_url}?locale={locale}&keywords={kw}"
+            if kw:
+                url = f"{base_url}?locale={locale}&keywords={kw}"
+            else:
+                url = f"{base_url}?locale={locale}"
             pages_attempted += 1
 
             resp = None
@@ -394,10 +480,16 @@ class SuccessFactorsJobSource(BaseJobSource):
     def parse_rss_content(self, xml_text: str, comp_config: Dict[str, Any]) -> List[Job]:
         """Parse raw SuccessFactors XML RSS feed text into Job model instances."""
         jobs: List[Job] = []
+        # Sanitize unescaped ampersands in XML (e.g. 'Deloitte & Touche', 'Research & Development')
+        sanitized_xml = re.sub(r"&(?!(amp|lt|gt|apos|quot|#\d+|#x[0-9a-fA-F]+);)", "&amp;", xml_text)
         try:
-            root = ET.fromstring(xml_text)
-        except Exception as e:
-            logger.warning("[SUCCESSFACTORS] Failed to parse RSS XML: %s", e)
+            root = ET.fromstring(sanitized_xml)
+        except Exception:
+            try:
+                root = ET.fromstring(xml_text)
+            except Exception as e:
+                logger.warning("[SUCCESSFACTORS] Failed to parse RSS XML: %s", e)
+                return []
             return []
 
         channel = root.find("channel")
@@ -419,12 +511,18 @@ class SuccessFactorsJobSource(BaseJobSource):
 
             clean_link = re.sub(r"[?&]feedId=null.*", "", link)
             job_id = extract_successfactors_job_id(clean_link, guid)
-            location = parse_successfactors_location(raw_title, desc, clean_link)
+            location = parse_successfactors_location(raw_title, desc, clean_link, comp_config=comp_config)
 
             # Clean parenthetical location from title if desired
             title = re.sub(r"\s*\([^)]+\)$", "", raw_title).strip() or raw_title
             desc_clean = clean_html(desc)
             full_desc = f"{title} at {comp_name}. Location: {location}. {desc_clean}".strip() if desc_clean else f"{title} at {comp_name}. Location: {location}."
+
+            extra_metadata: Dict[str, Any] = {"company_key": comp_config.get("company_key", comp_config.get("name", "").lower())}
+            if comp_config.get("sf_site_id"):
+                extra_metadata["sf_site_id"] = comp_config["sf_site_id"]
+            if comp_config.get("location_scope"):
+                extra_metadata["location_scope"] = comp_config["location_scope"]
 
             job = Job(
                 source=self.source_name,
@@ -437,6 +535,7 @@ class SuccessFactorsJobSource(BaseJobSource):
                 date_posted=pub_date or "Unknown",
                 description=full_desc,
                 date_found=datetime.now(timezone.utc),
+                extra_metadata=extra_metadata,
             )
             jobs.append(job)
 

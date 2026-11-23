@@ -16,10 +16,11 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from app.config.settings import get_settings
+from app.config.company_registry import get_company_registry, IntegrationStatus
 from app.database.database import DatabaseManager
 from app.services.collector import JobCollector
 from app.services.deduplicator import JobDeduplicator
-from app.services.excel_exporter import ExcelExporter
+from app.services.excel_exporter import ExcelExporter, derive_country
 from app.services.filter import JobFilter
 from app.services.matcher import JobMatcher
 from app.services.recommender import JobRecommender
@@ -49,7 +50,132 @@ def setup_logging(log_level: str = "INFO") -> None:
     )
 
 
-async def run_pipeline(full_report: bool = False) -> None:
+def resolve_source_connectors(
+    settings: Any,
+    sources_override: Optional[str] = None,
+) -> tuple[list[Any], list[str]]:
+    """Determine enabled source connectors and company portal configurations based on ENABLED_SOURCES or CLI override."""
+    if sources_override:
+        enabled_tokens = [s.strip().lower() for s in sources_override.split(",") if s.strip()]
+    else:
+        enabled_tokens = settings.enabled_sources_list
+
+    token_set = set(enabled_tokens)
+    logger = logging.getLogger("job_finder_automation")
+    logger.info("[CONFIG] Active source tokens for this run: %s", sorted(token_set))
+
+    # All verified Workday companies
+    all_workday = ["adobe", "intel", "nvidia", "salesforce", "walmart", "mastercard", "visa", "paypal", "hp"]
+    # All verified CompanyJson companies
+    all_company_json = ["amazon", "infosys"]
+    # All verified SuccessFactors companies (including Birlasoft, Mastek)
+    all_successfactors = [
+        "capgemini", "wipro", "hcltech",
+        "birlasoft", "mastek"
+    ]
+    # All verified Oracle HCM companies (including Hexaware, Zensar, eClerx, OFSS)
+    all_oracle_hcm = ["oracle", "dell", "hexaware", "zensar", "eclerx", "ofss"]
+    # All verified SmartRecruiters companies (including Sopra Steria)
+    all_smartrecruiters = ["sopra_steria"]
+    # All verified TurboHire companies
+    all_turbohire = ["flipkart"]
+    # All verified Greenhouse companies (17 top tech employers)
+    all_greenhouse = [
+        "stripe", "cloudflare", "databricks", "elastic", "canonical",
+        "mongodb", "brex", "gitlab", "affirm", "lyft", "scaleai",
+        "pinterest", "reddit", "figma", "twilio", "instacart", "airtable"
+    ]
+
+    # 1. Accenture
+    accenture_enabled = "accenture" in token_set
+
+    # 2. Workday
+    if "workday" in token_set:
+        workday_comps = list(all_workday)
+        workday_enabled = True
+    else:
+        workday_comps = [c for c in all_workday if c in token_set]
+        workday_enabled = len(workday_comps) > 0
+
+    # 3. CompanyJson (Amazon, Infosys)
+    if "company_json" in token_set:
+        cj_comps = list(all_company_json)
+        cj_enabled = True
+    else:
+        cj_comps = [c for c in all_company_json if c in token_set]
+        cj_enabled = len(cj_comps) > 0
+
+    # 4. SuccessFactors (Capgemini, Wipro, HCLTech, Deloitte, Birlasoft, Mastek)
+    if "successfactors" in token_set:
+        sf_comps = list(all_successfactors)
+        sf_enabled = True
+    else:
+        sf_comps = []
+        for c in all_successfactors:
+            if c in token_set:
+                sf_comps.append(c)
+        if any("deloitte" in t for t in token_set):
+            for d in ["deloitte_india", "deloitte_srilanka", "deloitte_mauritius"]:
+                if d in token_set or "deloitte" in token_set:
+                    sf_comps.append(d)
+        sf_enabled = len(sf_comps) > 0
+
+    # 5. Oracle HCM (Oracle, Dell, Hexaware, Zensar, eClerx, OFSS)
+    if "oracle_hcm" in token_set:
+        oh_comps = list(all_oracle_hcm)
+        oh_enabled = True
+    else:
+        oh_comps = [c for c in all_oracle_hcm if c in token_set]
+        oh_enabled = len(oh_comps) > 0
+
+    # 6. TurboHire (Flipkart)
+    turbohire_enabled = "turbohire" in token_set or "flipkart" in token_set
+    th_comps = ["flipkart"] if turbohire_enabled else []
+
+    # 7. SmartRecruiters (Sopra Steria)
+    if "smartrecruiters" in token_set:
+        sr_comps = list(all_smartrecruiters)
+        smartrecruiters_enabled = True
+    else:
+        sr_comps = [c for c in all_smartrecruiters if c in token_set or c.replace("_", "") in token_set]
+        smartrecruiters_enabled = len(sr_comps) > 0 or (
+            "smartrecruiters" in token_set and getattr(settings, "SMARTRECRUITERS_ENABLED", False)
+        )
+
+    # 8. Greenhouse
+    if "greenhouse" in token_set:
+        gh_comps = list(all_greenhouse)
+        greenhouse_enabled = True
+    else:
+        gh_comps = [c for c in all_greenhouse if c in token_set]
+        greenhouse_enabled = len(gh_comps) > 0 or (
+            "greenhouse" in token_set and getattr(settings, "GREENHOUSE_ENABLED", False)
+        )
+
+    # 9. Unverified / platform sources (always disabled unless explicitly enabled in config and tokens)
+    linkedin_enabled = "linkedin" in token_set and getattr(settings, "LINKEDIN_ENABLED", False)
+    naukri_enabled = "naukri" in token_set and getattr(settings, "NAUKRI_ENABLED", False)
+    lever_enabled = "lever" in token_set and getattr(settings, "LEVER_ENABLED", False)
+
+    sources = [
+        AccentureJobSource(is_enabled=accenture_enabled, settings=settings),
+        WorkdayJobSource(is_enabled=workday_enabled, settings=settings, companies=workday_comps),
+        CompanyJsonJobSource(is_enabled=cj_enabled, settings=settings, companies=cj_comps),
+        SuccessFactorsJobSource(is_enabled=sf_enabled, settings=settings, companies=sf_comps),
+        OracleHCMJobSource(is_enabled=oh_enabled, settings=settings, companies=oh_comps),
+        TurboHireJobSource(is_enabled=turbohire_enabled, settings=settings, companies=th_comps),
+        LinkedInJobSource(is_enabled=linkedin_enabled, settings=settings),
+        NaukriJobSource(is_enabled=naukri_enabled, settings=settings),
+        LeverJobSource(is_enabled=lever_enabled, settings=settings),
+        GreenhouseJobSource(is_enabled=greenhouse_enabled, settings=settings, companies=gh_comps if gh_comps else None),
+        SmartRecruitersJobSource(is_enabled=smartrecruiters_enabled, settings=settings, companies=sr_comps if sr_comps else None),
+    ]
+
+    active_tokens = list(token_set)
+    return sources, active_tokens
+
+
+async def run_pipeline(full_report: bool = False, sources_override: Optional[str] = None) -> None:
     """Execute the end-to-end job discovery, filtering, deduplication, and export pipeline."""
     settings = get_settings()
     setup_logging(settings.LOG_LEVEL)
@@ -101,36 +227,11 @@ async def run_pipeline(full_report: bool = False) -> None:
     )
     logger.info("Skills loaded: %d | Excluded keywords: %d", len(profile.skills), len(profile.negative_keywords))
 
-    # 4. Initialize Source Connectors
-    # NOTE: Pipeline is running in Accenture-only mode.
-    # All other sources are disabled. To re-enable a source, update its
-    # _ENABLED flag in .env (e.g. NAUKRI_ENABLED=true). No code changes needed.
-    linkedin_source = LinkedInJobSource(is_enabled=settings.LINKEDIN_ENABLED, settings=settings)
-    naukri_source = NaukriJobSource(is_enabled=settings.NAUKRI_ENABLED, settings=settings)
-    lever_source = LeverJobSource(is_enabled=settings.LEVER_ENABLED, settings=settings)
-    greenhouse_source = GreenhouseJobSource(is_enabled=settings.GREENHOUSE_ENABLED, settings=settings)
-    accenture_source = AccentureJobSource(is_enabled=settings.ACCENTURE_ENABLED, settings=settings)
-    workday_source = WorkdayJobSource(is_enabled=settings.WORKDAY_ENABLED, settings=settings)
-    smartrecruiters_source = SmartRecruitersJobSource(is_enabled=settings.SMARTRECRUITERS_ENABLED, settings=settings)
-    successfactors_source = SuccessFactorsJobSource(is_enabled=settings.SUCCESSFACTORS_ENABLED, settings=settings)
-    oracle_hcm_source = OracleHCMJobSource(is_enabled=settings.ORACLE_HCM_ENABLED, settings=settings)
-    company_json_source = CompanyJsonJobSource(is_enabled=settings.COMPANY_JSON_ENABLED, settings=settings)
-    turbohire_source = TurboHireJobSource(is_enabled=settings.TURBOHIRE_ENABLED, settings=settings)
-
+    # 4. Initialize Source Connectors (Task 16 Single Switch ENABLED_SOURCES / CLI Override)
+    sources, active_tokens = resolve_source_connectors(settings, sources_override=sources_override)
     collector = JobCollector(
-        sources=[
-            linkedin_source,
-            naukri_source,
-            lever_source,
-            greenhouse_source,
-            accenture_source,
-            workday_source,
-            smartrecruiters_source,
-            successfactors_source,
-            oracle_hcm_source,
-            company_json_source,
-            turbohire_source,
-        ]
+        sources=sources,
+        source_timeout_sec=settings.SOURCE_TIMEOUT_SEC,
     )
     logger.info("Active Sources: %s", ", ".join(collector.registered_sources))
 
@@ -189,6 +290,32 @@ async def run_pipeline(full_report: bool = False) -> None:
 
         # Step 2: Filter Jobs by User Preferences and Classify
         logger.info("[FILTER] Filtering jobs against profile preferences...")
+        registry = get_company_registry()
+        for src_name, s_info in source_results.items():
+            by_comp = (s_info.get("diagnostics") or {}).get("by_company", {})
+            if by_comp:
+                for c_key, c_info in by_comp.items():
+                    c_id = c_key.lower().replace(" ", "_")
+                    c_coll = c_info.get("collected", 0)
+                    c_st = c_info.get("status", "COMPLETED")
+                    c_err = c_info.get("error")
+                    registry.update_health(
+                        company_id=c_id,
+                        status=c_st,
+                        jobs_retrieved=c_coll,
+                        error=c_err,
+                    )
+            elif src_name.lower() == "accenture":
+                c_coll = s_info.get("collected", 0)
+                c_st = s_info.get("status", "COMPLETED")
+                c_err = s_info.get("error")
+                registry.update_health(
+                    company_id="accenture",
+                    status=c_st,
+                    jobs_retrieved=c_coll,
+                    error=c_err,
+                )
+
         for job in raw_jobs:
             job_filter.classify_job(job)
 
@@ -263,58 +390,25 @@ async def run_pipeline(full_report: bool = False) -> None:
             db_manager=db_manager,
             accenture_jobs=deduped_accenture_jobs if deduped_accenture_jobs else None,
             all_jobs=deduped_all_jobs,
+            enabled_sources=active_tokens,
         )
         logger.info("[EXCEL] Report generated at: %s", export_file)
 
-        # Step 7: Lever & Greenhouse In-Depth Diagnostics
-        if lever_source.is_enabled and lever_source.diagnostics.get("collected", 0) > 0:
-            diag_report = lever_source.format_diagnostics(
-                filtered_jobs=filtered_jobs,
-                scored_jobs=batch_jobs,
-            )
-            logger.info("==================================================")
-            logger.info("\n%s", diag_report)
-
-        if greenhouse_source.is_enabled and greenhouse_source.diagnostics.get("collected", 0) > 0:
-            gh_diag_report = greenhouse_source.format_diagnostics(
-                filtered_jobs=filtered_jobs,
-                scored_jobs=batch_jobs,
-            )
-            logger.info("==================================================")
-            logger.info("\n%s", gh_diag_report)
-
-        if accenture_source.is_enabled and accenture_source.diagnostics.get("collected", 0) > 0:
-            acc_diag_report = accenture_source.format_diagnostics(
-                filtered_jobs=filtered_jobs,
-                scored_jobs=batch_jobs,
-            )
-            logger.info("==================================================")
-            logger.info("\n%s", acc_diag_report)
-
-        if workday_source.is_enabled and workday_source.diagnostics.get("total_collected", 0) > 0:
-            wd_diag_report = workday_source.format_diagnostics()
-            logger.info("==================================================")
-            logger.info("\n%s", wd_diag_report)
-
-        if company_json_source.is_enabled and company_json_source.diagnostics.get("total_collected", 0) > 0:
-            cj_diag_report = company_json_source.format_diagnostics()
-            logger.info("==================================================")
-            logger.info("\n%s", cj_diag_report)
-
-        if successfactors_source.is_enabled and successfactors_source.diagnostics.get("total_collected", 0) > 0:
-            sf_diag_report = successfactors_source.format_diagnostics()
-            logger.info("==================================================")
-            logger.info("\n%s", sf_diag_report)
-
-        if oracle_hcm_source.is_enabled and oracle_hcm_source.diagnostics.get("total_collected", 0) > 0:
-            oh_diag_report = oracle_hcm_source.format_diagnostics()
-            logger.info("==================================================")
-            logger.info("\n%s", oh_diag_report)
-
-        if turbohire_source.is_enabled and turbohire_source.diagnostics.get("total_collected", 0) > 0:
-            th_diag_report = turbohire_source.format_diagnostics()
-            logger.info("==================================================")
-            logger.info("\n%s", th_diag_report)
+        # Step 7: Connector In-Depth Diagnostics
+        for s in sources:
+            if getattr(s, "is_enabled", False):
+                diag = getattr(s, "diagnostics", {})
+                coll = diag.get("total_collected") or diag.get("collected") or 0
+                if coll > 0 and hasattr(s, "format_diagnostics"):
+                    try:
+                        if s.source_name in ("lever", "greenhouse", "accenture"):
+                            diag_report = s.format_diagnostics(filtered_jobs=filtered_jobs, scored_jobs=batch_jobs)
+                        else:
+                            diag_report = s.format_diagnostics()
+                        logger.info("==================================================")
+                        logger.info("\n%s", diag_report)
+                    except Exception as diag_err:
+                        logger.debug("Could not format diagnostics for %s: %s", s.source_name, diag_err)
 
         # Step 8: Overall Run Status
         if collector.has_source_warnings():
@@ -338,7 +432,7 @@ async def run_pipeline(full_report: bool = False) -> None:
 
             err_cnt = sum(
                 1 for s in collector.get_source_results().values()
-                if s.get("status") in ("BLOCKED", "UNAVAILABLE", "ERROR", "PARTIAL")
+                if s.get("status") in ("BLOCKED", "UNAVAILABLE", "ERROR", "PARTIAL", "FAILED")
             )
 
             db_manager.update_pipeline_run(
@@ -359,6 +453,7 @@ async def run_pipeline(full_report: bool = False) -> None:
             )
 
             # Step 10: Print Daily Summary
+            total_duration_sec = (completed_at - run_started_at).total_seconds()
             print_daily_summary(
                 run_id=run_id,
                 source_results=collector.get_source_results(),
@@ -371,6 +466,9 @@ async def run_pipeline(full_report: bool = False) -> None:
                 run_status=run_status,
                 export_file=str(export_file) if export_file else "None",
                 all_jobs=deduped_all_jobs,
+                raw_jobs=raw_jobs,
+                total_runtime_sec=total_duration_sec,
+                db_manager=db_manager,
             )
 
         # Step 11: Log Retention Cleanup (keep latest 30 days)
@@ -395,6 +493,9 @@ def print_daily_summary(
     run_status: str,
     export_file: str,
     all_jobs: Optional[list] = None,
+    raw_jobs: Optional[list] = None,
+    total_runtime_sec: Optional[float] = None,
+    db_manager: Optional[Any] = None,
 ) -> None:
     """Print the human-readable Daily Summary block."""
     lines = [
@@ -405,25 +506,65 @@ def print_daily_summary(
         f"Run ID: {run_id}",
     ]
 
-    # Company Breakdown: collected / MATCH / REVIEW / REJECT per company (Task 12)
+    # Calculate My Jobs row count from workbook if available
+    my_jobs_row_count = 0
+    if export_file and Path(export_file).exists():
+        try:
+            import openpyxl
+            wb = openpyxl.load_workbook(export_file, read_only=True)
+            target_sheet = "My Jobs" if "My Jobs" in wb.sheetnames else wb.sheetnames[0]
+            ws = wb[target_sheet]
+            rows = list(ws.iter_rows(values_only=True))
+            if len(rows) > 1:
+                # check if row 2 is empty placeholder
+                if rows[1][0] and "No matching jobs" in str(rows[1][0]):
+                    my_jobs_row_count = 0
+                else:
+                    my_jobs_row_count = len(rows) - 1
+            wb.close()
+        except Exception:
+            my_jobs_row_count = relevant_count
+
+    # Breakdown Tables: Company, Source, and Country (Task 12, 14 & 16)
     if all_jobs:
+        # 1. Company Breakdown
         company_stats: Dict[str, Dict[str, int]] = {}
+        # 2. Source Breakdown
+        source_stats: Dict[str, Dict[str, int]] = {}
+        # 3. Country Breakdown
+        country_stats: Dict[str, Dict[str, int]] = {}
+
         for j in all_jobs:
             comp = j.company or "Unknown"
+            src = (j.source or "Unknown").capitalize()
+            ctry = derive_country(j.location)
+
             if comp not in company_stats:
                 company_stats[comp] = {"collected": 0, "MATCH": 0, "REVIEW": 0, "REJECT": 0}
+            if src not in source_stats:
+                source_stats[src] = {"collected": 0, "MATCH": 0, "REVIEW": 0, "REJECT": 0}
+            if ctry not in country_stats:
+                country_stats[ctry] = {"collected": 0, "MATCH": 0, "REVIEW": 0, "REJECT": 0}
+
             company_stats[comp]["collected"] += 1
+            source_stats[src]["collected"] += 1
+            country_stats[ctry]["collected"] += 1
+
             dec = str((j.extra_metadata or {}).get("decision") or getattr(j, "decision", "REJECT")).upper()
             if dec in ("MATCH", "REVIEW"):
                 company_stats[comp][dec] += 1
+                source_stats[src][dec] += 1
+                country_stats[ctry][dec] += 1
             else:
                 company_stats[comp]["REJECT"] += 1
+                source_stats[src]["REJECT"] += 1
+                country_stats[ctry]["REJECT"] += 1
 
         lines.extend([
             "",
             "Company Breakdown:",
-            f"  {'Company':<16} {'Collected':>9} {'MATCH':>7} {'REVIEW':>8} {'REJECT':>8}",
-            "  " + "-" * 52,
+            f"  {'Company':<24} {'Collected':>9} {'MATCH':>7} {'REVIEW':>8} {'REJECT':>8}",
+            "  " + "-" * 60,
         ])
         tot_c = tot_m = tot_rv = tot_rj = 0
         for comp in sorted(company_stats.keys()):
@@ -432,39 +573,107 @@ def print_daily_summary(
             tot_m += cs["MATCH"]
             tot_rv += cs["REVIEW"]
             tot_rj += cs["REJECT"]
-            lines.append(f"  {comp:<16} {cs['collected']:>9} {cs['MATCH']:>7} {cs['REVIEW']:>8} {cs['REJECT']:>8}")
+            lines.append(f"  {comp:<24} {cs['collected']:>9} {cs['MATCH']:>7} {cs['REVIEW']:>8} {cs['REJECT']:>8}")
         lines.extend([
-            "  " + "-" * 52,
-            f"  {'Total':<16} {tot_c:>9} {tot_m:>7} {tot_rv:>8} {tot_rj:>8}",
+            "  " + "-" * 60,
+            f"  {'Total':<24} {tot_c:>9} {tot_m:>7} {tot_rv:>8} {tot_rj:>8}",
         ])
 
-    # Sources & Partial Reasons
+        # Source Breakdown Table (Task 14)
+        lines.extend([
+            "",
+            "Source Breakdown:",
+            f"  {'Source':<20} {'Collected':>9} {'MATCH':>7} {'REVIEW':>8} {'REJECT':>8}",
+            "  " + "-" * 56,
+        ])
+        s_tot_c = s_tot_m = s_tot_rv = s_tot_rj = 0
+        for src in sorted(source_stats.keys()):
+            ss = source_stats[src]
+            s_tot_c += ss["collected"]
+            s_tot_m += ss["MATCH"]
+            s_tot_rv += ss["REVIEW"]
+            s_tot_rj += ss["REJECT"]
+            lines.append(f"  {src:<20} {ss['collected']:>9} {ss['MATCH']:>7} {ss['REVIEW']:>8} {ss['REJECT']:>8}")
+        lines.extend([
+            "  " + "-" * 56,
+            f"  {'Total':<20} {s_tot_c:>9} {s_tot_m:>7} {s_tot_rv:>8} {s_tot_rj:>8}",
+        ])
+
+        # Country Breakdown Table
+        lines.extend([
+            "",
+            "Country Breakdown:",
+            f"  {'Country':<18} {'Collected':>9} {'MATCH':>7} {'REVIEW':>8} {'REJECT':>8}",
+            "  " + "-" * 54,
+        ])
+        c_tot_c = c_tot_m = c_tot_rv = c_tot_rj = 0
+        for ctry in sorted(country_stats.keys()):
+            cs = country_stats[ctry]
+            c_tot_c += cs["collected"]
+            c_tot_m += cs["MATCH"]
+            c_tot_rv += cs["REVIEW"]
+            c_tot_rj += cs["REJECT"]
+            lines.append(f"  {ctry:<18} {cs['collected']:>9} {cs['MATCH']:>7} {cs['REVIEW']:>8} {cs['REJECT']:>8}")
+        lines.extend([
+            "  " + "-" * 54,
+            f"  {'Total':<18} {c_tot_c:>9} {c_tot_m:>7} {c_tot_rv:>8} {c_tot_rj:>8}",
+        ])
+
+    # Per-Source Performance Summary (Task 16 Table)
     lines.extend([
         "",
-        "Sources:",
+        "Per-Source Performance Summary:",
+        f"  {'Source / Portal':<26} {'Status':<11} {'Available':>9} {'Fetched':>8} {'MATCH':>7} {'REVIEW':>8} {'REJECT':>8} {'Runtime':>8}",
+        "  " + "-" * 91,
     ])
-    for name, s_info in source_results.items():
-        status = s_info.get("status", "UNKNOWN")
-        coll = s_info.get("collected", 0)
-        err = s_info.get("error")
-        cap_name = name.capitalize()
 
-        if status == "COMPLETED":
-            lines.append(f"  {cap_name:<15}: {coll} collected")
-        elif status == "PARTIAL":
-            lines.append(f"  {cap_name:<15}: PARTIAL ({err or f'{coll} collected'})")
-        elif status == "BLOCKED":
-            lines.append(f"  {cap_name:<15}: BLOCKED ({err or 'Access Denied'})")
-        elif status == "DISABLED":
-            lines.append(f"  {cap_name:<15}: DISABLED")
-        elif status == "UNAVAILABLE":
-            lines.append(f"  {cap_name:<15}: UNAVAILABLE ({err})")
+    flagged_sources = []
+    # Build unified view of portals
+    for s_name, s_info in source_results.items():
+        s_status = s_info.get("status", "UNKNOWN")
+        s_avail = s_info.get("total_available", 0)
+        s_coll = s_info.get("collected", 0)
+        s_dur = f"{s_info.get('duration_sec', 0.0):.1f}s"
+        s_err = s_info.get("error")
+
+        # Check if source has sub-companies (workday, company_json, successfactors, oracle_hcm, turbohire)
+        by_comp = (s_info.get("diagnostics") or {}).get("by_company", {})
+        if by_comp:
+            for c_key, c_info in sorted(by_comp.items(), key=lambda x: x[1].get("name", x[0])):
+                c_name = c_info.get("name", c_key.capitalize())
+                c_st = c_info.get("status", "COMPLETED")
+                c_av = c_info.get("available", c_info.get("collected", 0))
+                c_ft = c_info.get("collected", 0)
+                c_er = c_info.get("error")
+                c_stats = (company_stats.get(c_name) if all_jobs else None) or {"MATCH": 0, "REVIEW": 0, "REJECT": 0}
+                lines.append(
+                    f"  {c_name:<26} {c_st:<11} {c_av:>9} {c_ft:>8} {c_stats['MATCH']:>7} {c_stats['REVIEW']:>8} {c_stats['REJECT']:>8} {s_dur:>8}"
+                )
+                if c_st in ("FAILED", "BLOCKED") or c_ft == 0:
+                    flagged_sources.append((c_name, c_st, c_er or "Returned 0 jobs"))
         else:
-            lines.append(f"  {cap_name:<15}: {status} ({err or f'{coll} collected'})")
+            c_name = s_name.capitalize()
+            c_stats = (company_stats.get(c_name) if all_jobs else None) or (source_stats.get(c_name) if all_jobs else None) or {"MATCH": 0, "REVIEW": 0, "REJECT": 0}
+            lines.append(
+                f"  {c_name:<26} {s_status:<11} {s_avail:>9} {s_coll:>8} {c_stats['MATCH']:>7} {c_stats['REVIEW']:>8} {c_stats['REJECT']:>8} {s_dur:>8}"
+            )
+            if s_status in ("FAILED", "BLOCKED") or s_coll == 0:
+                flagged_sources.append((c_name, s_status, s_err or "Returned 0 jobs"))
+
+    lines.append("  " + "-" * 91)
+
+    # Flagged sources section
+    if flagged_sources:
+        lines.extend([
+            "",
+            "Flagged Sources (0 Jobs or FAILED):",
+        ])
+        for f_name, f_st, f_reason in flagged_sources:
+            lines.append(f"  - {f_name:<24}: [{f_st}] {f_reason}")
 
     lines.extend([
         "",
-        "Jobs:",
+        "Jobs Summary:",
         f"  Collected   : {raw_count}",
         f"  New         : {new_count}",
         f"  Duplicates  : {duplicate_count}",
@@ -472,16 +681,24 @@ def print_daily_summary(
         f"  Strong      : {strong_count}",
         f"  Excellent   : {excellent_count}",
         "",
-        "Status:",
-        f"  Run         : {run_status}",
+        "Pipeline Status:",
+        f"  Run Status  : {run_status}",
+        f"  Total Time  : {f'{total_runtime_sec:.1f}s' if total_runtime_sec is not None else 'N/A'}",
         "",
-        "Output:",
-        f"  {export_file}",
+        "Workbook Output:",
+        f"  Path        : {export_file}",
+        f"  My Jobs Rows: {my_jobs_row_count}",
     ])
 
     if "My_Jobs" in str(export_file):
         latest_file = str(Path(export_file).parent / "My_Jobs_latest.xlsx")
-        lines.append(f"  {latest_file}")
+        lines.append(f"  Latest Link : {latest_file}")
+
+    registry = get_company_registry()
+    lines.extend([
+        "",
+        registry.format_health_summary(),
+    ])
 
     lines.append("==================================================")
 
@@ -546,8 +763,21 @@ def main() -> None:
 
     full_report_flag = any(arg in ("--full-report", "-full-report", "--full", "-full") for arg in sys.argv[1:])
 
+    # Task 16: CLI option --sources / -s
+    sources_override = None
+    args = sys.argv[1:]
+    for idx, arg in enumerate(args):
+        if arg in ("--sources", "-s", "--source") and idx + 1 < len(args):
+            sources_override = args[idx + 1]
+        elif arg.startswith("--sources="):
+            sources_override = arg.split("=", 1)[1]
+        elif arg.startswith("-s="):
+            sources_override = arg.split("=", 1)[1]
+        elif arg.startswith("--source="):
+            sources_override = arg.split("=", 1)[1]
+
     try:
-        asyncio.run(run_pipeline(full_report=full_report_flag))
+        asyncio.run(run_pipeline(full_report=full_report_flag, sources_override=sources_override))
         sys.exit(0)
     except SystemExit as se:
         sys.exit(se.code if se.code is not None else 0)

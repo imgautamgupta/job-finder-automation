@@ -43,6 +43,18 @@ class JobProfile(BaseModel):
         default_factory=list,
         description="Accepted experience levels (e.g. Fresher, Entry Level, 0-1 years)"
     )
+    match_max_years: int = Field(
+        default=2,
+        description="Max stated years for MATCH decision (inclusive)"
+    )
+    review_max_years: int = Field(
+        default=3,
+        description="Max stated years for REVIEW decision (inclusive); above this -> REJECT"
+    )
+    genai_skills: List[str] = Field(
+        default_factory=list,
+        description="GenAI skills that receive double weight in match scoring"
+    )
     skills: List[str] = Field(
         default_factory=list,
         description="Technical skills and tools"
@@ -88,6 +100,7 @@ class JobProfile(BaseModel):
         "preferred_locations",
         "experience_levels",
         "skills",
+        "genai_skills",
         "positive_keywords",
         "negative_keywords",
         mode="before",

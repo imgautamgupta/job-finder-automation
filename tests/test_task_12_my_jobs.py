@@ -104,14 +104,14 @@ def test_single_sheet_default_and_filtering(tmp_path, temp_db, sample_jobs):
 
     header = rows[0]
     expected_header = (
-        "Decision", "New?", "Company", "Job Title", "Location", "Experience",
+        "Decision", "New?", "Company", "Job Title", "Location", "Country", "Experience",
         "Why", "Apply Link", "Posted", "Job ID", "Date Found",
         "Application Status", "Follow-up Date", "Notes"
     )
     assert header == expected_header
 
     # Verify REJECT is not included
-    job_ids = [r[9] for r in rows[1:]]
+    job_ids = [r[10] for r in rows[1:]]
     assert "BC-303" not in job_ids
     assert "TC-101" in job_ids
     assert "SX-202" in job_ids
@@ -132,13 +132,13 @@ def test_my_jobs_ordering(tmp_path, temp_db, sample_jobs):
     # Row 2: AC-404 (MATCH, score 78)
     # Row 3: SX-202 (REVIEW, score 85)
     assert rows[0][0] == "MATCH"
-    assert rows[0][9] == "TC-101"
+    assert rows[0][10] == "TC-101"
 
     assert rows[1][0] == "MATCH"
-    assert rows[1][9] == "AC-404"
+    assert rows[1][10] == "AC-404"
 
     assert rows[2][0] == "REVIEW"
-    assert rows[2][9] == "SX-202"
+    assert rows[2][10] == "SX-202"
 
 
 def test_hyperlinks_and_formatting(tmp_path, temp_db, sample_jobs):
@@ -159,15 +159,15 @@ def test_hyperlinks_and_formatting(tmp_path, temp_db, sample_jobs):
     assert cell_a2.value == "MATCH"
     assert cell_a2.fill.start_color.rgb in ("00D1FAE5", "D1FAE5", "00C6EFCE", "C6EFCE")
 
-    # Col 8: Apply Link -> text "Apply", hyperlink target
-    cell_h2 = ws["H2"]
-    assert cell_h2.value == "Apply"
-    assert cell_h2.hyperlink is not None
-    assert cell_h2.hyperlink.target == "https://techcorp.com/job1"
+    # Col 9: Apply Link -> text "Apply", hyperlink target
+    cell_i2 = ws["I2"]
+    assert cell_i2.value == "Apply"
+    assert cell_i2.hyperlink is not None
+    assert cell_i2.hyperlink.target == "https://techcorp.com/job1"
 
-    # Col 7 (Why) and Col 14 (Notes) have wrap_text = True
-    assert ws["G2"].alignment.wrap_text is True
-    assert ws["N2"].alignment.wrap_text is True
+    # Col 8 (Why) and Col 15 (Notes) have wrap_text = True
+    assert ws["H2"].alignment.wrap_text is True
+    assert ws["O2"].alignment.wrap_text is True
 
     # Check row 4 (SX-202, REVIEW) -> amber fill (FEF3C7 or FFEB9C)
     cell_a4 = ws["A4"]
@@ -259,14 +259,14 @@ def test_tracking_sync_from_excel_to_db(tmp_path, temp_db, sample_jobs):
     # Find TC-101 row
     tc_row = None
     for row_idx in range(2, ws.max_row + 1):
-        if ws.cell(row=row_idx, column=10).value == "TC-101":
+        if ws.cell(row=row_idx, column=11).value == "TC-101":
             tc_row = row_idx
             break
     assert tc_row is not None
 
-    ws.cell(row=tc_row, column=12, value="Applied")
-    ws.cell(row=tc_row, column=13, value="2026-10-27")
-    ws.cell(row=tc_row, column=14, value="Referral submitted")
+    ws.cell(row=tc_row, column=13, value="Applied")
+    ws.cell(row=tc_row, column=14, value="2026-10-27")
+    ws.cell(row=tc_row, column=15, value="Referral submitted")
     wb.save(excel_path)
 
     # 3. Call sync_excel_tracking_to_db
@@ -302,14 +302,14 @@ def test_applied_job_stays_in_my_jobs_even_if_not_matching(tmp_path, temp_db, sa
     wb = openpyxl.load_workbook(out_file)
     ws = wb["My Jobs"]
     rows = list(ws.iter_rows(values_only=True))[1:]
-    job_ids = [r[9] for r in rows]
+    job_ids = [r[10] for r in rows]
 
     # BC-303 must appear because it is tracked (APPLIED)
     assert "BC-303" in job_ids
     # Find BC-303 row
-    bc_row = next(r for r in rows if r[9] == "BC-303")
-    assert bc_row[11] == "Applied"
-    assert bc_row[13] == "Applied directly via company portal"
+    bc_row = next(r for r in rows if r[10] == "BC-303")
+    assert bc_row[12] == "Applied"
+    assert bc_row[14] == "Applied directly via company portal"
 
 
 def test_full_report_produces_all_old_sheets(tmp_path, temp_db, sample_jobs):

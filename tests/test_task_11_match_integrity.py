@@ -49,6 +49,14 @@ class TestLevelTitleCheck:
             "Software Dev Engineer 1",
             "SDE 1",
             "SDE I",
+            "Software Dev Engineer II",
+            "Software Dev Engineer II, Paragon",
+            "SDE 2",
+            "SDE II",
+            "Software Engineer 2",
+            "Software Engineer L5",
+            "Level 2 Engineer",
+            "Level II Engineer",
             "Associate Software Engineer",
             "Associate Engineer",
             "Junior Software Engineer",
@@ -58,6 +66,9 @@ class TestLevelTitleCheck:
             "Machine Learning Engineer (L4)",
             "Level 1 Engineer",
             "Associate Consultant",
+            "QA Engineer 2",
+            "Developer 2",
+            "2nd Level Support Engineer",
         ]
         for title in allowed:
             marker = match_level_title(title)
@@ -65,30 +76,22 @@ class TestLevelTitleCheck:
 
     def test_rejected_titles(self):
         rejected = [
-            "Software Dev Engineer II",
-            "Software Dev Engineer II, Paragon",
             "Engineer III",
-            "SDE 2",
-            "SDE II",
             "SDE III",
             "SDE IV",
-            "Software Engineer 2",
             "Software Engineer 3",
-            "Software Engineer L5",
             "Software Engineer L6",
-            "Level 2 Engineer",
-            "Level II Engineer",
             "Level III Specialist",
             "Level IV Architect",
-            "QA Engineer 2",
-            "Developer 2",
-            "2nd Level Support Engineer",
+            "QA Engineer 3",
+            "Developer 3",
+            "3rd Level Support Engineer",
         ]
         for title in rejected:
             marker = match_level_title(title)
             assert marker is not None, f"Expected rejected title '{title}' to match marker but got None"
 
-    def test_classify_job_rejects_level_ii(self, test_profile):
+    def test_classify_job_allows_level_ii(self, test_profile):
         flt = JobFilter(profile=test_profile, max_required_min_years=1)
         job = Job(
             source="test",
@@ -100,8 +103,22 @@ class TestLevelTitleCheck:
             url="https://www.amazon.jobs/en/jobs/10495277",
         )
         decision, reason = flt.classify_job(job)
+        assert decision == "MATCH"
+
+    def test_classify_job_rejects_level_iii(self, test_profile):
+        flt = JobFilter(profile=test_profile, max_required_min_years=1)
+        job = Job(
+            source="test",
+            title="Software Dev Engineer III",
+            company="Amazon",
+            location="Bengaluru, India",
+            experience_required="1+ years",
+            description="Basic Qualifications:\n- 1+ years of non-internship professional software development experience",
+            url="https://www.amazon.jobs/en/jobs/10495277",
+        )
+        decision, reason = flt.classify_job(job)
         assert decision == "REJECT"
-        assert "level" in reason.lower() or "ii" in reason.lower()
+        assert "level" in reason.lower() or "iii" in reason.lower()
         assert "level title" in job.extra_metadata.get("all_failing_rules", "")
 
     def test_classify_job_allows_level_i_l4(self, test_profile):
@@ -156,13 +173,12 @@ class TestMatchRuleIntegrity:
 
     def test_fresher_title_matches_without_experience_info(self, test_profile):
         flt = JobFilter(profile=test_profile, max_required_min_years=1)
-        for t in [
-            "Software Engineer Intern",
-            "Graduate Software Engineer Trainee",
+        # Titles stating fresher parse experience to 0 -> MATCH
+        fresher_titles = [
             "Fresher Python Developer",
-            "Entry Level Backend Developer",
-            "New Grad Software Engineer",
-        ]:
+            "Software Engineer (Fresher)",
+        ]
+        for t in fresher_titles:
             job = Job(
                 source="test",
                 title=t,
@@ -174,6 +190,25 @@ class TestMatchRuleIntegrity:
             )
             decision, reason = flt.classify_job(job)
             assert decision == "MATCH", f"Expected MATCH for '{t}', got {decision}"
+
+        # Task 15 update: intern and trainee titles are below candidate profile level -> REJECT
+        intern_trainee_titles = [
+            "Software Engineer Intern",
+            "Graduate Software Engineer Trainee",
+        ]
+        for t in intern_trainee_titles:
+            job = Job(
+                source="test",
+                title=t,
+                company="TestCo",
+                location="Bengaluru, India",
+                experience_required=None,
+                description="Join our team working on backend infrastructure.",
+                url="https://example.com/intern",
+            )
+            decision, reason = flt.classify_job(job)
+            assert decision == "REJECT", f"Expected REJECT for '{t}', got {decision}"
+            assert "below profile level" in reason
 
     def test_no_experience_info_becomes_review(self, test_profile):
         flt = JobFilter(profile=test_profile, max_required_min_years=1)

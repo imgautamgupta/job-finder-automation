@@ -88,8 +88,9 @@ class TestRoleMatchGaps:
         assert flt.is_match(_job("SDE 1 Infra", "Noida, Uttar Pradesh")) is True
 
     def test_sde_ii_excluded_by_level_check(self):
+        # Task 15 update: Level II/2 is no longer rejected by level check; goes through experience gates
         flt = JobFilter(profile=_make_profile())
-        assert flt.is_match(_job("SDE II", "Noida, Uttar Pradesh")) is False
+        assert flt.is_match(_job("SDE II", "Noida, Uttar Pradesh")) is True
 
     def test_sde_iii_excluded_by_level_check(self):
         flt = JobFilter(profile=_make_profile())
@@ -100,12 +101,14 @@ class TestRoleMatchGaps:
         assert flt.is_match(_job("SDE IV", "Bangalore, India")) is False
 
     def test_sde_2_infra_excluded_by_level_check(self):
+        # Task 15 update: Level 2 is no longer rejected by level check; goes through experience gates
         flt = JobFilter(profile=_make_profile())
-        assert flt.is_match(_job("SDE 2 Infra", "Noida, Uttar Pradesh")) is False
+        assert flt.is_match(_job("SDE 2 Infra", "Noida, Uttar Pradesh")) is True
 
     def test_ds_ml_intern_passes(self):
+        # Task 15 update: candidate profile is beyond intern level; intern titles are rejected
         flt = JobFilter(profile=_make_profile())
-        assert flt.is_match(_job("DS/ML Intern", "Hybrid in Bengaluru, India")) is True
+        assert flt.is_match(_job("DS/ML Intern", "Hybrid in Bengaluru, India")) is False
 
     def test_ai_engineer_still_passes(self):
         """Regression guard: AI Engineer was already passing."""
@@ -118,12 +121,12 @@ class TestRoleMatchGaps:
         assert flt.is_match(_job("Agentic AI Engineer", "Bangalore, India; India")) is True
 
     def test_software_development_engineer_intern_passes(self):
-        """Regression guard: Software Development Engineer Intern was already passing."""
+        # Task 15 update: candidate profile is beyond intern level; intern titles are rejected
         flt = JobFilter(profile=_make_profile())
         assert flt.is_match(_job(
             "Software Development Engineer Intern",
             "Onsite in Bangalore; Hybrid in Bengaluru, India",
-        )) is True
+        )) is False
 
     def test_ldap_software_engineer_india_remote_passes(self):
         """Regression guard: LDAP Software Engineer - India was already passing."""
@@ -506,16 +509,19 @@ class TestRealProfileIntegration:
         assert real_filter.is_match(job) is True
 
     def test_ds_ml_intern_matches_real_profile(self, real_filter):
+        # Task 15 update: candidate profile is beyond intern level; intern titles are rejected
         job = _job("DS/ML Intern", "Hybrid in Bengaluru, India")
-        assert real_filter.is_match(job) is True
+        assert real_filter.is_match(job) is False
 
     def test_software_development_engineer_intern_matches_real_profile(self, real_filter):
+        # Task 15 update: candidate profile is beyond intern level; intern titles are rejected
         job = _job("Software Development Engineer Intern", "Bangalore, India")
-        assert real_filter.is_match(job) is True
+        assert real_filter.is_match(job) is False
 
     def test_sde_ii_excluded_by_real_profile_level_check(self, real_filter):
+        # Task 15 update: Level II is no longer rejected by level check; goes through experience gates
         job = _job("SDE II", "Noida, Uttar Pradesh")
-        assert real_filter.is_match(job) is False
+        assert real_filter.is_match(job) is True
 
     def test_senior_backend_engineer_excluded_by_real_profile(self, real_filter):
         job = _job("Senior Backend Engineer", "Bangalore, India")

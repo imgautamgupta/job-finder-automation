@@ -33,6 +33,15 @@ SENIORITY_TITLE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# Work authorization flag
+WORK_AUTH_PATTERN = re.compile(
+    r"\b(?:work\s+authoriz(?:ation|ed)|right\s+to\s+work|citizenship\s+required|"
+    r"visa\s+sponsorship\s+(?:not\s+(?:available|provided|offered)|unavailable|is\s+not)|"
+    r"must\s+be\s+(?:a\s+)?(?:us|uk|australian|canadian)\s+citizen|"
+    r"security\s+clearance\s+required)\b",
+    re.IGNORECASE,
+)
+
 
 def match_seniority_title(title: Optional[str]) -> Optional[str]:
     """Check if title contains senior markers.
@@ -55,11 +64,11 @@ def match_seniority_title(title: Optional[str]) -> Optional[str]:
 
 LEVEL_TITLE_PATTERN = re.compile(
     r"(?:"
-    r"\b(?:II|III|IV|V|VI)\b|"
-    r"\bL[5-9]\b|\bL\d{2,}\b|"
-    r"\b(?:level|lvl)\s*[-_]?\s*(?:[2-9]|\d{2,}|II|III|IV|V|VI)\b|"
-    r"\b(?:sde|swe|mle|qa|qae|sdet|dev(?:eloper)?|engineer|architect|scientist|consultant|analyst)\s*[-_]?\s*(?:[2-9]|\d{2,})\b|"
-    r"\b(?:[2-9])\s*(?:nd|rd|th)?\s*level\b"
+    r"\b(?:III|IV|V|VI)\b|"
+    r"\bL[6-9]\b|\bL\d{2,}\b|"
+    r"\b(?:level|lvl)\s*[-_]?\s*(?:[3-9]|\d{2,}|III|IV|V|VI)\b|"
+    r"\b(?:sde|swe|mle|qa|qae|sdet|dev(?:eloper)?|engineer|architect|scientist|consultant|analyst)\s*[-_]?\s*(?:[3-9]|\d{2,})\b|"
+    r"\b(?:[3-9])\s*(?:nd|rd|th)?\s*level\b"
     r")",
     re.IGNORECASE,
 )
@@ -67,14 +76,15 @@ LEVEL_TITLE_PATTERN = re.compile(
 
 def match_level_title(title: Optional[str]) -> Optional[str]:
     """Check if title contains mid/senior level markers to reject:
-    - Level II, III, IV, V, VI (Roman numerals)
-    - Level 2, 3, 4, 5, etc.
-    - SDE 2, SWE 2, Engineer 2, 3, etc.
-    - L5, L6, L7, L8, L9, L10+
+    - Level III, IV, V, VI (Roman numerals)
+    - Level 3, 4, 5, etc.
+    - SDE 3, SWE 3, Engineer 3, etc.
+    - L6, L7, L8, L9, L10+
 
     Keeping allowed:
-    - Level I, 1, L1, L2, L3, L4 (entry / junior levels)
-    - Associate, Junior, Fresher, Intern, Trainee, New Grad
+    - Level I, II, 1, 2, L1, L2, L3, L4, L5
+    - SDE 1, SDE 2, SWE 1, SWE 2
+    - Associate, Junior, Fresher, New Grad
 
     Returns matched level string or None.
     """
@@ -85,6 +95,45 @@ def match_level_title(title: Optional[str]) -> Optional[str]:
     if match:
         return match.group(0).strip()
     return None
+
+
+BELOW_PROFILE_PATTERN = re.compile(
+    r"\b(?:intern(?:ship)?|trainee|apprentice)\b",
+    re.IGNORECASE,
+)
+
+
+def match_below_profile_title(title: Optional[str]) -> Optional[str]:
+    """Check if title contains intern/trainee/apprentice markers (below profile level).
+
+    Returns matched string or None.
+    """
+    if not title:
+        return None
+    cleaned_title = unicodedata.normalize("NFKC", str(title).strip())
+    match = BELOW_PROFILE_PATTERN.search(cleaned_title)
+    if match:
+        return match.group(0).strip()
+    return None
+
+
+def is_hp_or_deloitte_source(job: Job) -> bool:
+    """Identify if a job originates strictly from HP Careers or Deloitte sources.
+
+    Task 16 requirement: ENTRY_LEVEL_LOCATION_SCOPE=all and ROLE_FILTER=off
+    apply ONLY to HP and the Deloitte sources. Every other source must use the profile's
+    preferred locations and the role filter.
+    """
+    comp = (job.company or "").strip().lower()
+    if comp == "hp" or comp.startswith("hp ") or comp in ("hewlett packard", "hewlett-packard"):
+        return True
+    if "deloitte" in comp:
+        return True
+    meta = job.extra_metadata or {}
+    meta_comp = str(meta.get("company_key") or meta.get("company") or "").strip().lower()
+    if meta_comp == "hp" or "deloitte" in meta_comp:
+        return True
+    return False
 
 
 def parse_num(val: str) -> Optional[Union[int, float]]:
@@ -569,17 +618,21 @@ class JobFilter:
         max_required_min_years: Optional[int] = None,
     ):
         self.profile = profile
+        self._explicit_override = max_required_min_years is not None
+        # Task 15: use profile-level thresholds if available, else fall back to settings
         if max_required_min_years is not None:
-            self.max_required_min_years = max_required_min_years
+            # Explicit override (used in tests): treat as MATCH threshold
+            self.match_max_years = max_required_min_years
+            self.review_max_years = max_required_min_years + 1
         else:
-            try:
-                from app.config.settings import get_settings
-                self.max_required_min_years = get_settings().MAX_REQUIRED_MIN_YEARS
-            except Exception:
-                self.max_required_min_years = 1
+            self.match_max_years = getattr(profile, "match_max_years", None) or 2
+            self.review_max_years = getattr(profile, "review_max_years", None) or 3
+        # Keep backward-compat attribute
+        self.max_required_min_years = self.match_max_years
 
-    def is_match(self, job: Job) -> bool:
+    def is_match(self, job: Job, profile: Optional[JobProfile] = None) -> bool:
         """Evaluate if a single Job listing satisfies user preferences."""
+        active_profile = profile or self.profile
         title_lower = (job.title or "").lower()
         location_raw = job.location or ""
         location_norm = unicodedata.normalize("NFC", location_raw)
@@ -600,7 +653,7 @@ class JobFilter:
             )
             return False
 
-        for neg_kw in self.profile.negative_keywords:
+        for neg_kw in active_profile.negative_keywords:
             neg_lower = neg_kw.lower().strip()
             if not neg_lower:
                 continue
@@ -613,6 +666,10 @@ class JobFilter:
                 return False
 
         # 1B. Gate 1: Parse minimum years from structured portal fields or job title
+        if self._explicit_override and profile is None:
+            review_max = self.review_max_years
+        else:
+            review_max = getattr(active_profile, "review_max_years", None) or self.review_max_years
         gate1_min = parse_structured_experience_min(job.experience_required)
         title_min = parse_title_experience_min(job.title)
         if gate1_min is None:
@@ -620,42 +677,45 @@ class JobFilter:
         elif title_min is not None:
             gate1_min = min(gate1_min, title_min)
 
-        if gate1_min is not None and gate1_min > self.max_required_min_years:
+        if gate1_min is not None and gate1_min > review_max:
             logger.debug(
                 "Job '%s' excluded by Gate 1 experience: %s > %d",
-                job.title, gate1_min, self.max_required_min_years,
+                job.title, gate1_min, review_max,
             )
             return False
 
         # 1C. Gate 2: Scan full description for experience patterns
         gate2_min = scan_description_experience_min(job.description)
-        if gate2_min is not None and gate2_min > self.max_required_min_years:
+        if gate2_min is not None and gate2_min > self.review_max_years:
             logger.debug(
                 "Job '%s' excluded by Gate 2 description experience: %d > %d",
-                job.title, gate2_min, self.max_required_min_years,
+                job.title, gate2_min, self.review_max_years,
             )
             return False
 
         # 2. Remote check (India-eligible remote)
-        is_job_remote = is_india_eligible_remote(location_norm)
-        if self.profile.remote_only and not is_job_remote:
-            logger.debug("Job '%s' excluded because not India-eligible remote", job.title)
-            return False
+        is_hp_deloitte = is_hp_or_deloitte_source(job)
+        if not is_hp_deloitte:
+            is_job_remote = is_india_eligible_remote(location_norm)
+            if self.profile.remote_only and not is_job_remote:
+                logger.debug("Job '%s' excluded because not India-eligible remote", job.title)
+                return False
 
-        if not self.profile.preferences.remote_allowed and is_job_remote:
-            logger.debug("Job '%s' excluded because remote is not allowed", job.title)
-            return False
+            if not self.profile.preferences.remote_allowed and is_job_remote:
+                logger.debug("Job '%s' excluded because remote is not allowed", job.title)
+                return False
 
-        # 3. Internship check
-        is_internship = "intern" in title_lower or "internship" in title_lower
-        if is_internship and not self.profile.preferences.internship_allowed:
-            logger.debug("Job '%s' excluded because internships are not allowed", job.title)
+        # 3. Below-profile title check (intern/trainee/apprentice -> REJECT regardless of preferences)
+        below_marker = match_below_profile_title(job.title)
+        if below_marker:
+            logger.debug("Job '%s' excluded by below-profile title marker: '%s'", job.title, below_marker)
             return False
 
         # 4. Target role match (title contains any role token/term with word boundary awareness)
-        if self.profile.target_roles:
+        # Task 16: ROLE_FILTER=off applies ONLY to HP and Deloitte sources
+        if not is_hp_deloitte and active_profile.target_roles:
             role_matched = False
-            for role in self.profile.target_roles:
+            for role in active_profile.target_roles:
                 role_clean = role.strip()
                 if not role_clean:
                     continue
@@ -679,10 +739,11 @@ class JobFilter:
                 return False
 
         # 5. Location match (if locations specified)
-        if self.profile.preferred_locations and not (self.profile.remote_only and is_job_remote):
+        # Task 16: ENTRY_LEVEL_LOCATION_SCOPE=all applies ONLY to HP and Deloitte sources
+        if not is_hp_deloitte and active_profile.preferred_locations and not (active_profile.remote_only and is_job_remote):
             is_loc_matched = False
             # Check if remote matches allowed remote and is India-eligible
-            if is_job_remote and self.profile.preferences.remote_allowed:
+            if is_job_remote and active_profile.preferences.remote_allowed:
                 is_loc_matched = True
             elif location_lower and location_lower not in ("unknown", "none", "n/a", "not specified"):
                 unrelated_cities = {
@@ -694,7 +755,7 @@ class JobFilter:
                 }
                 has_unrelated_city = any(re.search(r"\b" + re.escape(c) + r"\b", location_lower) for c in unrelated_cities)
 
-                for pref_loc in self.profile.preferred_locations:
+                for pref_loc in active_profile.preferred_locations:
                     p_low = pref_loc.lower().strip()
                     if p_low == "remote":
                         continue
@@ -718,10 +779,10 @@ class JobFilter:
                 return False
 
         # 6. Employment type check if available on the job
-        if job.employment_type and self.profile.employment_types:
+        if job.employment_type and active_profile.employment_types:
             job_emp_type = job.employment_type.lower()
             emp_matched = any(
-                emp.lower() in job_emp_type for emp in self.profile.employment_types
+                emp.lower() in job_emp_type for emp in active_profile.employment_types
             )
             if not emp_matched:
                 logger.debug(
@@ -733,11 +794,11 @@ class JobFilter:
 
         return True
 
-    def filter_jobs(self, jobs: List[Job]) -> List[Job]:
+    def filter_jobs(self, jobs: List[Job], profile: Optional[JobProfile] = None) -> List[Job]:
         """Filter a list of Job instances according to profile rules."""
         matched_jobs: List[Job] = []
         for job in jobs:
-            if self.is_match(job):
+            if self.is_match(job, profile=profile):
                 matched_jobs.append(job)
         logger.info(
             "Filtered %d listings down to %d matching jobs",
@@ -746,7 +807,7 @@ class JobFilter:
         )
         return matched_jobs
 
-    def classify_job(self, job: Job) -> tuple[str, str]:
+    def classify_job(self, job: Job, profile: Optional[JobProfile] = None) -> tuple[str, str]:
         """Classify a single Job into MATCH, REVIEW, or REJECT with a deterministic rationale.
 
         - REJECT: Fails profile filters (senior title/keywords, explicit 5+ yrs experience,
@@ -760,6 +821,14 @@ class JobFilter:
             Tuple of (decision: str, reason: str) where decision in ('MATCH', 'REVIEW', 'REJECT').
             Also populates job.extra_metadata['decision'] and job.extra_metadata['decision_reason'].
         """
+        active_profile = profile or self.profile
+        if self._explicit_override and profile is None:
+            match_max = self.match_max_years
+            review_max = self.review_max_years
+        else:
+            match_max = getattr(active_profile, "match_max_years", None) or self.match_max_years
+            review_max = getattr(active_profile, "review_max_years", None) or self.review_max_years
+
         title_lower = (job.title or "").lower()
         location_raw = job.location or ""
         location_norm = unicodedata.normalize("NFC", location_raw)
@@ -767,11 +836,14 @@ class JobFilter:
 
         failing_reasons: List[Tuple[str, str]] = []
 
+        # Task 16: ENTRY_LEVEL_LOCATION_SCOPE=all and ROLE_FILTER=off apply ONLY to HP and Deloitte
+        is_hp_deloitte = is_hp_or_deloitte_source(job)
+
         # Location check
         is_job_remote = is_india_eligible_remote(location_norm)
-        if self.profile.preferred_locations and not (self.profile.remote_only and is_job_remote):
+        if not is_hp_deloitte and active_profile.preferred_locations and not (active_profile.remote_only and is_job_remote):
             is_loc_matched = False
-            if is_job_remote and self.profile.preferences.remote_allowed:
+            if is_job_remote and active_profile.preferences.remote_allowed:
                 is_loc_matched = True
             elif location_lower and location_lower not in ("unknown", "none", "n/a", "not specified"):
                 unrelated_cities = {
@@ -782,7 +854,7 @@ class JobFilter:
                     "new york", "berlin", "tokyo", "sydney", "dubai", "toronto"
                 }
                 has_unrelated_city = any(re.search(r"\b" + re.escape(c) + r"\b", location_lower) for c in unrelated_cities)
-                for pref_loc in self.profile.preferred_locations:
+                for pref_loc in active_profile.preferred_locations:
                     p_low = pref_loc.lower().strip()
                     if p_low == "remote":
                         continue
@@ -809,7 +881,12 @@ class JobFilter:
         if level_marker:
             failing_reasons.append((f"level title: {level_marker}", f"Title contains non-entry level marker: '{level_marker}'"))
 
-        for neg_kw in self.profile.negative_keywords:
+        # Below-profile title check (intern/trainee/apprentice)
+        below_marker = match_below_profile_title(job.title)
+        if below_marker:
+            failing_reasons.append(("below profile level", f"below profile level: '{below_marker}'"))
+
+        for neg_kw in active_profile.negative_keywords:
             neg_clean = neg_kw.lower().strip()
             if not neg_clean:
                 continue
@@ -825,31 +902,32 @@ class JobFilter:
         elif title_min is not None:
             gate1_min = min(gate1_min, title_min)
 
-        if gate1_min is not None and gate1_min > self.max_required_min_years:
+        if gate1_min is not None and gate1_min > review_max:
             failing_reasons.append((f"Gate 1: requires {gate1_min}+ years", f"requires {gate1_min}+ years"))
 
         # Gate 2 - scan description for experience patterns
         gate2_min, gate2_snippet = scan_description_experience(job.description)
-        if gate2_min is not None and gate2_min > self.max_required_min_years:
+        if gate2_min is not None and gate2_min > review_max:
             snip_str = f" ('{gate2_snippet}')" if gate2_snippet else ""
             failing_reasons.append((f"Gate 2: requires {gate2_min}+ years", f"requires {gate2_min}+ years{snip_str}"))
 
         # Remote check
-        if self.profile.remote_only and not is_job_remote:
-            failing_reasons.append(("remote", "Remote location is not India-eligible"))
-        elif not self.profile.preferences.remote_allowed and is_job_remote:
-            failing_reasons.append(("remote", "Remote roles are not permitted by profile preferences"))
+        if not is_hp_deloitte:
+            if active_profile.remote_only and not is_job_remote:
+                failing_reasons.append(("remote", "Remote location is not India-eligible"))
+            elif not active_profile.preferences.remote_allowed and is_job_remote:
+                failing_reasons.append(("remote", "Remote roles are not permitted by profile preferences"))
 
         # Internship check
         is_internship = "intern" in title_lower or "internship" in title_lower
-        if is_internship and not self.profile.preferences.internship_allowed:
+        if is_internship and not active_profile.preferences.internship_allowed:
             failing_reasons.append(("internship", "Internships are not permitted by profile preferences"))
 
         # Target role match
         matched_target_role = None
-        if self.profile.target_roles:
+        if active_profile.target_roles:
             role_matched = False
-            for role in self.profile.target_roles:
+            for role in active_profile.target_roles:
                 role_clean = role.strip()
                 if not role_clean:
                     continue
@@ -866,14 +944,16 @@ class JobFilter:
                     matched_target_role = role_clean
                     break
 
-            if not role_matched:
+            if not role_matched and not is_hp_deloitte:
                 failing_reasons.append(("target roles", f"Title '{job.title}' does not match target roles"))
+            elif is_hp_deloitte and not matched_target_role:
+                matched_target_role = job.title
 
         # Employment type check
-        if job.employment_type and self.profile.employment_types:
+        if job.employment_type and active_profile.employment_types:
             job_emp_type = job.employment_type.lower()
             emp_matched = any(
-                emp.lower() in job_emp_type for emp in self.profile.employment_types
+                emp.lower() in job_emp_type for emp in active_profile.employment_types
             )
             if not emp_matched:
                 failing_reasons.append(("employment type", f"Employment type '{job.employment_type}' does not match preferences"))
@@ -893,41 +973,71 @@ class JobFilter:
             )
             return decision, primary_reason
 
-        # Step 9: Experience Evaluation (MATCH vs REVIEW)
-        has_fresher_title = bool(
-            re.search(
-                r"\b(?:intern|internship|trainee|graduate|fresher|freshers|entry[- ]level|new\s*grad(?:uate)?)\b",
-                title_lower,
-            )
-        )
+        # Step 9: Experience Evaluation (MATCH vs REVIEW vs REJECT)
+        # Gate 1: structured field or title
+        gate1_min_classify = parse_structured_experience_min(job.experience_required)
+        title_min_classify = parse_title_experience_min(job.title)
+        if gate1_min_classify is None:
+            gate1_min_classify = title_min_classify
+        elif title_min_classify is not None:
+            gate1_min_classify = min(gate1_min_classify, title_min_classify)
 
-        gate1_found = (gate1_min is not None and gate1_min <= self.max_required_min_years)
-        gate2_found = (gate2_min is not None and gate2_min <= self.max_required_min_years)
+        # Gate 2: description
+        gate2_min_classify, gate2_snippet_classify = scan_description_experience(job.description)
 
-        # Condition (a): A gate positively found a stated minimum <= MAX_REQUIRED_MIN_YEARS
-        if gate1_found or gate2_found:
-            decision = "MATCH"
-            role_label = matched_target_role or job.title
-            if gate1_found and gate1_min is not None:
-                reason = f"Eligible: Stated minimum {gate1_min} years matches criteria for '{role_label}'"
+        # Pick the most constraining gate that actually found something
+        stated_min = None
+        stated_snippet = None
+        if gate1_min_classify is not None and gate2_min_classify is not None:
+            if gate2_min_classify > gate1_min_classify:
+                stated_min = gate2_min_classify
+                stated_snippet = gate2_snippet_classify
             else:
-                snip_str = f" ('{gate2_snippet}')" if gate2_snippet else ""
-                reason = f"Eligible: Stated minimum {gate2_min} years{snip_str} matches criteria for '{role_label}'"
-            self._record_classification(job, decision, reason, all_failing_rules="")
-            return decision, reason
+                stated_min = gate1_min_classify
+                stated_snippet = None
+        elif gate1_min_classify is not None:
+            stated_min = gate1_min_classify
+            stated_snippet = None
+        elif gate2_min_classify is not None:
+            stated_min = gate2_min_classify
+            stated_snippet = gate2_snippet_classify
 
-        # Condition (b): Title contains intern/trainee/graduate/fresher/entry level/new grad
-        if has_fresher_title:
-            decision = "MATCH"
-            role_label = matched_target_role or job.title
-            reason = f"Eligible: Title matches entry-level/fresher criteria for '{role_label}'"
-            self._record_classification(job, decision, reason, all_failing_rules="")
-            return decision, reason
+        role_label = matched_target_role or job.title
 
-        # If no experience info is found anywhere -> REVIEW "experience not stated"
-        decision = "REVIEW"
-        reason = "experience not stated"
+        # No failing rules — now classify by experience
+        if stated_min is not None:
+            if stated_min <= match_max:
+                decision = "MATCH"
+                snip_str = f" ('{stated_snippet}')" if stated_snippet else ""
+                reason = f"Eligible: Stated minimum {stated_min} years{snip_str} matches criteria for '{role_label}'"
+            elif stated_min <= review_max:
+                decision = "REVIEW"
+                snip_str = f" ('{stated_snippet}')" if stated_snippet else ""
+                reason = f"stretch: asks {stated_min} years{snip_str}"
+            else:
+                # > review_max — REJECT (this case is also caught in failing_reasons above, but belt+suspenders)
+                decision = "REJECT"
+                reason = f"requires {stated_min}+ years"
+                self._record_classification(job, decision, reason, all_failing_rules=f"Gate: requires {stated_min}+ years", excluded_reasons=[reason])
+                return decision, reason
+        else:
+            # Experience not stated anywhere
+            decision = "REVIEW"
+            reason = "experience not stated"
+
+        # Work authorization flag
+        has_work_auth = False
+        if job.description and WORK_AUTH_PATTERN.search(job.description):
+            has_work_auth = True
+            if not reason.endswith("; check work-authorization requirement"):
+                reason = f"{reason}; check work-authorization requirement"
+
         self._record_classification(job, decision, reason, all_failing_rules="")
+        if has_work_auth:
+            if job.extra_metadata is None:
+                job.extra_metadata = {}
+            job.extra_metadata["work_auth_flag"] = True
+
         return decision, reason
 
     def _record_classification(

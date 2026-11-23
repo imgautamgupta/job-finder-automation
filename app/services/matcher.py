@@ -166,7 +166,10 @@ class JobMatcher:
 
         # 3. Skills & Keywords Matching (0 - 30 points)
         skills_score, matched_skills, matched_kws = self._score_skills(
-            combined_text, active_profile.skills, active_profile.positive_keywords
+            combined_text,
+            active_profile.skills,
+            active_profile.positive_keywords,
+            getattr(active_profile, "genai_skills", None),
         )
 
         # 4. Location Matching (0 - 20 points)
@@ -260,6 +263,7 @@ class JobMatcher:
         text: str,
         skills: List[str],
         positive_keywords: List[str],
+        genai_skills: Optional[List[str]] = None,
     ) -> Tuple[int, List[str], List[str]]:
         """Calculate skills and positive keywords score (0-30)."""
         if not text:
@@ -301,9 +305,16 @@ class JobMatcher:
                 seen_skills.add(kw_lower)
 
         # Proportional scoring capped at 30:
-        # Each matched technical skill awards 6 points.
+        # Technical skills award 6 points each, or 12 points if in genai_skills.
         # Each matched positive keyword awards 3 points.
-        raw_score = len(matched_skills) * 6 + len(matched_kws) * 3
+        genai_set = {s.lower() for s in (genai_skills or [])}
+        raw_score = 0
+        for sk in matched_skills:
+            if sk.lower() in genai_set:
+                raw_score += 12  # double weight for GenAI skills
+            else:
+                raw_score += 6
+        raw_score += len(matched_kws) * 3
         skills_score = min(30, raw_score)
 
         return skills_score, matched_skills, matched_kws

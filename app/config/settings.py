@@ -68,11 +68,11 @@ class Settings(BaseSettings):
 
     # Workday CXS Careers Configuration (Task 6)
     WORKDAY_ENABLED: bool = True
-    WORKDAY_COMPANIES: str = "adobe,intel,nvidia,salesforce,walmart,mastercard,visa,paypal"
+    WORKDAY_COMPANIES: str = "adobe,intel,nvidia,salesforce,walmart,mastercard,visa,paypal,hp"
     WORKDAY_MAX_JOBS_PER_COMPANY: int = Field(default=1000, ge=1, le=5000)
     WORKDAY_REQUEST_DELAY_SEC: float = Field(default=0.8, ge=0.0, le=60.0)
     WORKDAY_CUSTOM_CONFIGS: str = ""  # Optional JSON string for extra companies
-    WORKDAY_FETCH_DETAILS: bool = True
+    WORKDAY_FETCH_DETAILS: bool = False
     WORKDAY_DETAIL_DELAY_SEC: float = Field(default=0.5, ge=0.0, le=10.0)
     WORKDAY_MAX_DETAILS_PER_RUN: int = Field(default=50, ge=1, le=500)
 
@@ -84,7 +84,7 @@ class Settings(BaseSettings):
 
     # SuccessFactors RSS Source Configuration (Task 10: Capgemini, Wipro, HCLTech)
     SUCCESSFACTORS_ENABLED: bool = True
-    SUCCESSFACTORS_COMPANIES: str = "capgemini,wipro,hcltech"
+    SUCCESSFACTORS_COMPANIES: str = "capgemini,wipro,hcltech,deloitte_india,deloitte_srilanka,deloitte_mauritius"
     SUCCESSFACTORS_REQUEST_DELAY_SEC: float = Field(default=1.0, ge=0.0, le=60.0)
     SUCCESSFACTORS_CUSTOM_CONFIGS: str = ""
     SUCCESSFACTORS_MAX_JOBS_PER_COMPANY: int = Field(default=100, ge=1, le=500)
@@ -121,11 +121,47 @@ class Settings(BaseSettings):
     # Resume Configuration (Phase 10)
     RESUME_PATH: Optional[str] = ""
 
+    # Master switch for enabled sources / portals (Task 16)
+    ENABLED_SOURCES: str = Field(
+        default=(
+            "accenture,workday,adobe,intel,nvidia,salesforce,walmart,mastercard,visa,paypal,hp,"
+            "amazon,infosys,capgemini,wipro,hcltech,deloitte_india,deloitte_srilanka,deloitte_mauritius,"
+            "oracle,dell,flipkart,turbohire,smartrecruiters,sopra_steria,oracle_hcm,hexaware,zensar,eclerx,ofss,"
+            "birlasoft,mastek,greenhouse,stripe,cloudflare,databricks,elastic,canonical,mongodb,brex,gitlab,"
+            "affirm,lyft,scaleai,pinterest,reddit,figma,twilio,instacart,airtable"
+        ),
+        description="Single switch for enabled sources and career portals (comma-separated).",
+    )
+    SOURCE_TIMEOUT_SEC: float = Field(
+        default=300.0,
+        ge=5.0,
+        le=600.0,
+        description="Per-source time limit in seconds so slow sources cannot stall the run.",
+    )
+
     # Experience Double Filter Configuration (Task 2)
     MAX_REQUIRED_MIN_YEARS: int = Field(default=1, ge=0, le=50)
 
+    # Experience MATCH/REVIEW thresholds (Task 15)
+    MATCH_MAX_YEARS: int = Field(default=2, ge=0, le=50)
+    REVIEW_MAX_YEARS: int = Field(default=3, ge=0, le=50)
+
     # Full Multi-Sheet Report Flag (Task 12)
     FULL_REPORT: bool = False
+
+    # Multi-User Initial Account Configuration (Phase 3B)
+    INITIAL_USER_EMAIL: str = Field(
+        default="admin@jobfinder.local",
+        description="Email address for the initial designated owner account during migration",
+    )
+    INITIAL_USER_NAME: str = Field(
+        default="Primary Candidate",
+        description="Display name for the initial designated owner account",
+    )
+    INITIAL_USER_PASSWORD_HASH: Optional[str] = Field(
+        default=None,
+        description="Pre-computed password hash for the initial user account; if omitted, a secure token is generated",
+    )
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -165,6 +201,15 @@ class Settings(BaseSettings):
         if not self.GREENHOUSE_COMPANIES:
             return []
         return [c.strip() for c in self.GREENHOUSE_COMPANIES.split(",") if c.strip()]
+
+    @property
+    def enabled_sources_list(self) -> list[str]:
+        """Return parsed, lowercase list of enabled source/portal keys."""
+        if not self.ENABLED_SOURCES:
+            return []
+        if isinstance(self.ENABLED_SOURCES, list):
+            return [str(s).strip().lower() for s in self.ENABLED_SOURCES if str(s).strip()]
+        return [s.strip().lower() for s in str(self.ENABLED_SOURCES).split(",") if s.strip()]
 
     @property
     def accenture_search_roles_list(self) -> list[str]:

@@ -170,31 +170,44 @@ class TestGate2DescriptionScanner:
 
 class TestJobFilterDoubleGate:
     def test_gate1_rejects_2_to_5_years(self, flt):
+        # Task 15 update: max_required_min_years=1 gives match_max=1, review_max=2.
+        # Stated min=2 falls into stretch range (<= 2) -> REVIEW "stretch: asks 2 years".
         job = _make_job(experience_required="2-5 years")
         decision, reason = flt.classify_job(job)
-        assert decision == "REJECT"
-        assert reason == "requires 2+ years"
-        assert flt.is_match(job) is False
+        assert decision == "REVIEW"
+        assert "stretch: asks 2 years" in reason
+        assert flt.is_match(job) is True
 
     def test_gate1_rejects_2_plus_years(self, flt):
+        # Task 15 update: stated min=2 with match_max=1, review_max=2 yields REVIEW.
         job = _make_job(experience_required="2+ years")
         decision, reason = flt.classify_job(job)
-        assert decision == "REJECT"
-        assert reason == "requires 2+ years"
-        assert flt.is_match(job) is False
+        assert decision == "REVIEW"
+        assert "stretch: asks 2 years" in reason
+        assert flt.is_match(job) is True
 
     def test_gate1_rejects_spelled_out_numbers(self, flt):
+        # Task 15 update: stated min=2 with match_max=1, review_max=2 yields REVIEW.
         job = _make_job(experience_required="two to five years")
         decision, reason = flt.classify_job(job)
-        assert decision == "REJECT"
-        assert reason == "requires 2+ years"
-        assert flt.is_match(job) is False
+        assert decision == "REVIEW"
+        assert "stretch: asks 2 years" in reason
+        assert flt.is_match(job) is True
 
     def test_gate1_rejects_unicode_dashes(self, flt):
+        # Task 15 update: stated min=2 with match_max=1, review_max=2 yields REVIEW.
         job = _make_job(experience_required="2\u20135 years")
         decision, reason = flt.classify_job(job)
+        assert decision == "REVIEW"
+        assert "stretch: asks 2 years" in reason
+        assert flt.is_match(job) is True
+
+    def test_gate1_rejects_3_plus_years(self, flt):
+        # Task 15: stated min=3 > review_max_years (2) -> REJECT
+        job = _make_job(experience_required="3-5 years")
+        decision, reason = flt.classify_job(job)
         assert decision == "REJECT"
-        assert reason == "requires 2+ years"
+        assert "requires 3+ years" in reason
         assert flt.is_match(job) is False
 
     def test_gate2_rejects_even_when_gate1_passed(self, flt):
@@ -210,16 +223,15 @@ class TestJobFilterDoubleGate:
         assert flt.is_match(job) is False
 
     def test_gate2_rejects_at_least_2_years_in_description(self, flt):
-        # Gate 1 has no info, Gate 2 finds at least 2 years
+        # Task 15 update: stated min=2 with match_max=1, review_max=2 yields REVIEW "stretch: asks 2 years".
         job = _make_job(
             experience_required=None,
             description="At least 2 years of experience in distributed systems.",
         )
         decision, reason = flt.classify_job(job)
-        assert decision == "REJECT"
-        assert "requires 2+ years" in reason
-        assert "at least 2 years" in reason.lower()
-        assert flt.is_match(job) is False
+        assert decision == "REVIEW"
+        assert "stretch: asks 2 years" in reason
+        assert flt.is_match(job) is True
 
     def test_both_gates_pass_matches(self, flt):
         # Gate 1 has 0-2 years (min=0 <= 1), description has no conflicting requirement
@@ -255,27 +267,31 @@ class TestJobFilterDoubleGate:
         assert flt.is_match(job) is True
 
     def test_no_info_fresher_title_triggers_match(self, flt):
-        # Neither gate finds info, but title contains intern -> MATCH
+        # Task 15 update: candidate profile is beyond intern level.
+        # Title with 'Intern' is rejected as below profile level.
         job = _make_job(
             title="Software Engineer Intern",
             experience_required=None,
             description="Join our team as an engineering intern.",
         )
         decision, reason = flt.classify_job(job)
-        assert decision == "MATCH"
-        assert flt.is_match(job) is True
+        assert decision == "REJECT"
+        assert "below profile level" in reason
+        assert flt.is_match(job) is False
 
     def test_no_info_graduate_trainee_triggers_match(self, flt):
+        # Task 15 update: candidate profile is beyond trainee level.
+        # Title with 'Trainee' is rejected as below profile level.
         job = _make_job(
             title="Graduate Trainee Engineer",
             experience_required="Not Specified",
             description="Rotational graduate training program.",
         )
-        # We need Graduate Trainee to match target roles if profile filters on roles
         flt.profile.target_roles.append("Graduate Trainee Engineer")
         decision, reason = flt.classify_job(job)
-        assert decision == "MATCH"
-        assert flt.is_match(job) is True
+        assert decision == "REJECT"
+        assert "below profile level" in reason
+        assert flt.is_match(job) is False
 
     def test_senior_title_remains_rejected_regardless_of_experience(self, flt):
         job = _make_job(

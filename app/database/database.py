@@ -26,8 +26,10 @@ class DatabaseManager:
     @contextmanager
     def get_connection(self) -> Generator[sqlite3.Connection, None, None]:
         """Context manager creating and automatically closing a sqlite3 connection."""
-        conn = sqlite3.connect(str(self.db_path))
+        conn = sqlite3.connect(str(self.db_path), timeout=30.0)
         conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA foreign_keys = ON;")
+        conn.execute("PRAGMA busy_timeout = 30000;")
         try:
             yield conn
         finally:
@@ -451,6 +453,15 @@ class DatabaseManager:
 
             conn.commit()
             logger.info("Database initialized successfully at %s", self.db_path)
+
+        # Apply versioned multi-user schema migrations (Phase 3B)
+        try:
+            from app.database.migrations import MigrationManager
+            migration_mgr = MigrationManager(self.db_path)
+            migration_mgr.apply_all()
+        except Exception as mig_err:
+            logger.error("Failed to apply multi-user migrations: %s", mig_err)
+            raise
 
     # Alias for backwards compatibility
     init_db = initialize
@@ -3269,5 +3280,384 @@ class DatabaseManager:
             "warnings": warnings,
             "details": details,
         }
+
+    # =========================================================================
+    # Phase 3B Multi-User & Candidate Isolation Methods
+    # =========================================================================
+
+    def create_user(
+        self,
+        email: str,
+        password_hash: str,
+        full_name: str,
+        role: str = "CANDIDATE",
+        is_active: bool = True,
+    ) -> int:
+        """Create a new user account with enforced candidate isolation."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO users (email, password_hash, full_name, role, is_active)
+                VALUES (?, ?, ?, ?, ?);
+                """,
+                (email.strip().lower(), password_hash, full_name.strip(), role, 1 if is_active else 0),
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_user_by_id(self, user_id: int) -> Optional[Dict[str, Any]]:
+        """Retrieve user account by ID."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE id = ?;", (user_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def get_user_by_email(self, email: str) -> Optional[Dict[str, Any]]:
+        """Retrieve user account by email address."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE email = ? COLLATE NOCASE;", (email.strip(),))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def create_or_update_candidate_profile(
+        self,
+        user_id: int,
+        headline: Optional[str] = None,
+        total_experience_years: float = 0.0,
+        current_title: Optional[str] = None,
+        education_level: Optional[str] = None,
+        technical_skills: Optional[List[str]] = None,
+        domain_skills: Optional[List[str]] = None,
+        raw_extracted_text: Optional[str] = None,
+    ) -> int:
+        """Create or update a candidate's extracted profile."""
+        tech_json = json.dumps(technical_skills or [])
+        dom_json = json.dumps(domain_skills or [])
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO candidate_profiles (
+                    user_id, headline, total_experience_years, current_title,
+                    education_level, technical_skills, domain_skills, raw_extracted_text
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(user_id) DO UPDATE SET
+                    headline = excluded.headline,
+                    total_experience_years = excluded.total_experience_years,
+                    current_title = excluded.current_title,
+                    education_level = excluded.education_level,
+                    technical_skills = excluded.technical_skills,
+                    domain_skills = excluded.domain_skills,
+                    raw_extracted_text = excluded.raw_extracted_text,
+                    updated_at = CURRENT_TIMESTAMP;
+                """,
+                (
+                    user_id,
+                    headline,
+                    total_experience_years,
+                    current_title,
+                    education_level,
+                    tech_json,
+                    dom_json,
+                    raw_extracted_text,
+                ),
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_candidate_profile(self, user_id: int) -> Optional[Dict[str, Any]]:
+        """Retrieve a candidate's profile by user ID."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM candidate_profiles WHERE user_id = ?;", (user_id,))
+            row = cursor.fetchone()
+            if not row:
+                return None
+            res = dict(row)
+            res["technical_skills"] = json.loads(res["technical_skills"]) if res["technical_skills"] else []
+            res["domain_skills"] = json.loads(res["domain_skills"]) if res["domain_skills"] else []
+            return res
+
+    def create_or_update_candidate_preferences(
+        self,
+        user_id: int,
+        target_roles: List[str],
+        preferred_locations: List[str],
+        location_scope: str = "PREF_ONLY",
+        work_arrangement: str = "ANY",
+        max_required_years: int = 2,
+        match_min_score: int = 50,
+        notice_period: str = "IMMEDIATE",
+    ) -> int:
+        """Create or update candidate search constraints."""
+        roles_json = json.dumps(target_roles)
+        locs_json = json.dumps(preferred_locations)
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO candidate_preferences (
+                    user_id, target_roles, preferred_locations, location_scope,
+                    work_arrangement, max_required_years, match_min_score, notice_period
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(user_id) DO UPDATE SET
+                    target_roles = excluded.target_roles,
+                    preferred_locations = excluded.preferred_locations,
+                    location_scope = excluded.location_scope,
+                    work_arrangement = excluded.work_arrangement,
+                    max_required_years = excluded.max_required_years,
+                    match_min_score = excluded.match_min_score,
+                    notice_period = excluded.notice_period,
+                    updated_at = CURRENT_TIMESTAMP;
+                """,
+                (
+                    user_id,
+                    roles_json,
+                    locs_json,
+                    location_scope,
+                    work_arrangement,
+                    max_required_years,
+                    match_min_score,
+                    notice_period,
+                ),
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_candidate_preferences(self, user_id: int) -> Optional[Dict[str, Any]]:
+        """Retrieve candidate search preferences by user ID."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM candidate_preferences WHERE user_id = ?;", (user_id,))
+            row = cursor.fetchone()
+            if not row:
+                return None
+            res = dict(row)
+            res["target_roles"] = json.loads(res["target_roles"]) if res["target_roles"] else []
+            res["preferred_locations"] = json.loads(res["preferred_locations"]) if res["preferred_locations"] else []
+            return res
+
+    def record_job_match(
+        self,
+        user_id: int,
+        job_id: int,
+        match_score: int,
+        match_category: str,
+        matched_skills: Optional[List[str]] = None,
+        missing_skills: Optional[List[str]] = None,
+        match_reason: Optional[str] = None,
+        resume_alignment_score: int = 0,
+    ) -> int:
+        """Persist a candidate-specific job match evaluation."""
+        ms_json = json.dumps(matched_skills or [])
+        miss_json = json.dumps(missing_skills or [])
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO job_matches (
+                    user_id, job_id, match_score, match_category, matched_skills,
+                    missing_skills, match_reason, resume_alignment_score, evaluated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(user_id, job_id) DO UPDATE SET
+                    match_score = excluded.match_score,
+                    match_category = excluded.match_category,
+                    matched_skills = excluded.matched_skills,
+                    missing_skills = excluded.missing_skills,
+                    match_reason = excluded.match_reason,
+                    resume_alignment_score = excluded.resume_alignment_score,
+                    evaluated_at = CURRENT_TIMESTAMP;
+                """,
+                (
+                    user_id,
+                    job_id,
+                    match_score,
+                    match_category,
+                    ms_json,
+                    miss_json,
+                    match_reason,
+                    resume_alignment_score,
+                ),
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_user_job_matches(
+        self,
+        user_id: int,
+        min_score: int = 0,
+        category: Optional[str] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> List[Dict[str, Any]]:
+        """Retrieve candidate-isolated job matches joined with shared job catalog."""
+        query = """
+            SELECT
+                jm.id AS match_id,
+                jm.user_id,
+                jm.match_score,
+                jm.match_category,
+                jm.matched_skills,
+                jm.missing_skills,
+                jm.match_reason,
+                jm.resume_alignment_score,
+                jm.evaluated_at,
+                j.id AS job_id,
+                j.title,
+                j.company,
+                j.location,
+                j.url,
+                j.apply_url,
+                j.date_posted,
+                j.source
+            FROM job_matches jm
+            JOIN jobs j ON jm.job_id = j.id
+            WHERE jm.user_id = ?
+              AND jm.match_score >= ?
+        """
+        params: List[Any] = [user_id, min_score]
+        if category:
+            query += " AND jm.match_category = ?"
+            params.append(category)
+
+        query += " ORDER BY jm.match_score DESC LIMIT ? OFFSET ?;"
+        params.extend([limit, offset])
+
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, tuple(params))
+            results = []
+            for row in cursor.fetchall():
+                d = dict(row)
+                d["matched_skills"] = json.loads(d["matched_skills"]) if d["matched_skills"] else []
+                d["missing_skills"] = json.loads(d["missing_skills"]) if d["missing_skills"] else []
+                results.append(d)
+            return results
+
+    def save_job_for_user(self, user_id: int, job_id: int, candidate_notes: Optional[str] = None) -> int:
+        """Bookmark a job with private candidate notes."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO saved_jobs (user_id, job_id, candidate_notes, created_at)
+                VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(user_id, job_id) DO UPDATE SET
+                    candidate_notes = COALESCE(excluded.candidate_notes, saved_jobs.candidate_notes);
+                """,
+                (user_id, job_id, candidate_notes),
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_user_saved_jobs(self, user_id: int) -> List[Dict[str, Any]]:
+        """Retrieve all saved jobs for a specific candidate."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT
+                    sj.id AS saved_id,
+                    sj.user_id,
+                    sj.candidate_notes,
+                    sj.created_at AS saved_at,
+                    j.id AS job_id,
+                    j.title,
+                    j.company,
+                    j.location,
+                    j.url,
+                    j.source
+                FROM saved_jobs sj
+                JOIN jobs j ON sj.job_id = j.id
+                WHERE sj.user_id = ?
+                ORDER BY sj.created_at DESC;
+                """,
+                (user_id,),
+            )
+            return [dict(r) for r in cursor.fetchall()]
+
+    def record_user_application(
+        self,
+        user_id: int,
+        job_id: int,
+        status: str = "APPLIED",
+        applied_at: Optional[str] = None,
+        notes: Optional[str] = None,
+        resume_id: Optional[int] = None,
+        interview_date: Optional[str] = None,
+        interview_round: Optional[str] = None,
+        salary_offered: Optional[str] = None,
+    ) -> int:
+        """Create or update a candidate application record."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO applications (
+                    user_id, job_id, resume_id, status, applied_at,
+                    interview_date, interview_round, notes, salary_offered
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(user_id, job_id) DO UPDATE SET
+                    status = excluded.status,
+                    applied_at = COALESCE(excluded.applied_at, applications.applied_at),
+                    resume_id = COALESCE(excluded.resume_id, applications.resume_id),
+                    interview_date = excluded.interview_date,
+                    interview_round = excluded.interview_round,
+                    notes = COALESCE(excluded.notes, applications.notes),
+                    salary_offered = excluded.salary_offered,
+                    updated_at = CURRENT_TIMESTAMP;
+                """,
+                (
+                    user_id,
+                    job_id,
+                    resume_id,
+                    status,
+                    applied_at,
+                    interview_date,
+                    interview_round,
+                    notes,
+                    salary_offered,
+                ),
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_user_applications(self, user_id: int, status: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Retrieve applications for a specific candidate with shared job catalog details."""
+        query = """
+            SELECT
+                a.id AS application_id,
+                a.user_id,
+                a.status,
+                a.applied_at,
+                a.interview_date,
+                a.interview_round,
+                a.notes,
+                a.salary_offered,
+                a.updated_at,
+                j.id AS job_id,
+                j.title,
+                j.company,
+                j.location,
+                j.url,
+                j.source
+            FROM applications a
+            JOIN jobs j ON a.job_id = j.id
+            WHERE a.user_id = ?
+        """
+        params: List[Any] = [user_id]
+        if status:
+            query += " AND a.status = ?"
+            params.append(status)
+
+        query += " ORDER BY a.updated_at DESC;"
+
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, tuple(params))
+            return [dict(r) for r in cursor.fetchall()]
 
 

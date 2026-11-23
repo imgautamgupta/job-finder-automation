@@ -259,21 +259,23 @@ def parse_greenhouse_posting(posting: Dict[str, Any], company_id: str) -> Option
 def fetch_greenhouse_postings_http(
     board_token: str,
     timeout_sec: float = 15.0,
+    content: bool = False,
 ) -> List[Dict[str, Any]]:
     """Fetch raw public job postings from Greenhouse Job Board API using standard urllib.
 
     Args:
         board_token: Greenhouse company/board identifier.
         timeout_sec: Network request timeout in seconds.
+        content: Whether to fetch full HTML content for every job.
 
     Returns:
         List of posting dictionaries, or empty list on error/restriction.
     """
-    url = build_greenhouse_jobs_url(board_token, content=True)
+    url = build_greenhouse_jobs_url(board_token, content=content)
     req = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "JobFinderAutomation/1.0",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Accept": "application/json",
         },
     )
@@ -335,11 +337,18 @@ def fetch_greenhouse_postings_http(
         return []
 
 
+DEFAULT_GREENHOUSE_COMPANIES: List[str] = [
+    "stripe", "cloudflare", "databricks", "elastic", "canonical",
+    "mongodb", "brex", "gitlab", "affirm", "lyft", "scaleai",
+    "pinterest", "reddit", "figma", "twilio", "instacart", "airtable"
+]
+
+
 class GreenhouseJobSource(BaseJobSource):
     """Source connector for collecting public job postings from Greenhouse.
 
     Collects listings from configured company board identifiers via Greenhouse's public
-    Job Board API (https://boards-api.greenhouse.io/v1/boards/<board_token>/jobs?content=true).
+    Job Board API (https://boards-api.greenhouse.io/v1/boards/<board_token>/jobs).
     Adheres strictly to safety constraints: no authentication required, no
     CAPTCHA solving, conservative rate limits, and graceful error handling.
     """
@@ -348,14 +357,17 @@ class GreenhouseJobSource(BaseJobSource):
         self,
         is_enabled: Optional[bool] = None,
         settings: Optional[Settings] = None,
+        companies: Optional[List[str]] = None,
     ):
         self._settings = settings or get_settings()
         enabled_flag = is_enabled if is_enabled is not None else self._settings.GREENHOUSE_ENABLED
         super().__init__(is_enabled=enabled_flag)
+        self._custom_companies = companies
 
         self.max_jobs_per_company = self._settings.GREENHOUSE_MAX_JOBS_PER_COMPANY
         self.request_delay_sec = self._settings.GREENHOUSE_REQUEST_DELAY_SEC
         self.diagnostics: Dict[str, Any] = {
+            "by_company": {},
             "available_postings": 0,
             "collection_limit": self.max_jobs_per_company,
             "collected": 0,
@@ -372,7 +384,12 @@ class GreenhouseJobSource(BaseJobSource):
     @property
     def companies(self) -> List[str]:
         """Parsed, non-empty list of configured Greenhouse board identifiers."""
-        return self._settings.greenhouse_company_list
+        if self._custom_companies is not None:
+            return [c.strip().lower() for c in self._custom_companies if c.strip()]
+        raw_val = getattr(self._settings, "GREENHOUSE_COMPANIES", None)
+        if raw_val is not None:
+            return [c.strip().lower() for c in raw_val.split(",") if c.strip()]
+        return list(DEFAULT_GREENHOUSE_COMPANIES)
 
     async def setup(self) -> None:
         """Initialize Greenhouse connector lifecycle."""
@@ -421,6 +438,7 @@ class GreenhouseJobSource(BaseJobSource):
 
         # Reset diagnostic metrics for this collection run
         self.diagnostics = {
+            "by_company": {},
             "available_postings": 0,
             "collection_limit": self.max_jobs_per_company,
             "collected": 0,
@@ -499,10 +517,24 @@ class GreenhouseJobSource(BaseJobSource):
                     company,
                 )
                 all_collected_jobs.extend(company_jobs)
+                self.diagnostics["by_company"][company] = {
+                    "name": company.capitalize(),
+                    "status": "COMPLETED",
+                    "collected": len(company_jobs),
+                    "available": available_count,
+                    "error": None,
+                }
 
             except Exception as exc:
                 self.last_status = "WARNING"
                 self.last_error = str(exc)
+                self.diagnostics["by_company"][company] = {
+                    "name": company.capitalize(),
+                    "status": "FAILED",
+                    "collected": 0,
+                    "available": 0,
+                    "error": str(exc),
+                }
                 logger.warning(
                     "Unexpected error during Greenhouse collection for company='%s': %s",
                     company,

@@ -25,6 +25,12 @@ from app.sources.base import BaseJobSource
 logger = logging.getLogger(__name__)
 
 
+SMARTRECRUITERS_COMPANY_SLUGS = {
+    "sopra_steria": {"name": "Sopra Steria", "slug": "SopraSteria1", "country": "in"},
+    "soprasteria": {"name": "Sopra Steria", "slug": "SopraSteria1", "country": "in"},
+}
+
+
 class SmartRecruitersJobSource(BaseJobSource):
     """Reusable, config-driven source connector for SmartRecruiters public job boards."""
 
@@ -50,6 +56,8 @@ class SmartRecruitersJobSource(BaseJobSource):
         else:
             raw = getattr(self._settings, "SMARTRECRUITERS_COMPANIES", "")
             self.configured_companies = [c.strip().lower() for c in raw.split(",") if c.strip()]
+            if not self.configured_companies and enabled_flag:
+                self.configured_companies = ["sopra_steria"]
 
         self.diagnostics: Dict[str, Any] = {
             "by_company": {},
@@ -86,14 +94,16 @@ class SmartRecruitersJobSource(BaseJobSource):
 
         async with httpx.AsyncClient(timeout=12.0, follow_redirects=True) as client:
             for comp in self.configured_companies:
-                logger.info("[SMARTRECRUITERS] Collecting jobs for company: %s...", comp)
+                comp_info = SMARTRECRUITERS_COMPANY_SLUGS.get(comp.lower(), {})
+                display_name = comp_info.get("name", comp.capitalize())
+                logger.info("[SMARTRECRUITERS] Collecting jobs for company: %s...", display_name)
                 try:
                     comp_jobs = await self._collect_company_jobs(client, comp, min(max_results, self.max_jobs_per_company))
                     all_jobs.extend(comp_jobs)
                 except Exception as comp_err:
                     logger.warning("[SMARTRECRUITERS] Independent failure for %s: %s", comp, comp_err)
                     self.diagnostics["by_company"][comp] = {
-                        "name": comp.capitalize(),
+                        "name": display_name,
                         "status": "FAILED",
                         "error": str(comp_err),
                         "collected": 0,
@@ -129,7 +139,12 @@ class SmartRecruitersJobSource(BaseJobSource):
         max_limit: int,
     ) -> List[Job]:
         """Collect listings for a single SmartRecruiters company."""
-        url = f"https://api.smartrecruiters.com/v1/companies/{comp}/postings?country=in"
+        comp_info = SMARTRECRUITERS_COMPANY_SLUGS.get(comp.lower(), {})
+        slug = comp_info.get("slug", comp)
+        display_name = comp_info.get("name", comp.capitalize())
+        country_code = comp_info.get("country", "in")
+
+        url = f"https://api.smartrecruiters.com/v1/companies/{slug}/postings?country={country_code}"
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
             "Accept": "application/json",
@@ -139,7 +154,7 @@ class SmartRecruitersJobSource(BaseJobSource):
         if resp.status_code != 200:
             logger.warning("[SMARTRECRUITERS] %s returned HTTP status %d", comp, resp.status_code)
             self.diagnostics["by_company"][comp] = {
-                "name": comp.capitalize(),
+                "name": display_name,
                 "status": f"HTTP_{resp.status_code}",
                 "error": f"Status code {resp.status_code}",
                 "collected": 0,
@@ -162,28 +177,33 @@ class SmartRecruitersJobSource(BaseJobSource):
             region = loc_data.get("region") or ""
             loc_str = f"{city}, {region}".strip(", ") or "India"
 
-            apply_url = f"https://jobs.smartrecruiters.com/{comp}/{job_id}"
+            apply_url = f"https://jobs.smartrecruiters.com/{slug}/{job_id}"
             released = it.get("releasedDate") or ""
 
             job = Job(
                 source=self.source_name,
                 title=title,
-                company=comp.capitalize(),
+                company=display_name,
                 location=loc_str,
                 url=apply_url,
-                job_id=job_id,
                 source_job_id=job_id,
-                date_posted=released,
-                description=f"{title} at {comp.capitalize()}. Location: {loc_str}. Released: {released}.",
-                date_found=datetime.now(timezone.utc),
+                date_posted=released if released else None,
+                easy_apply=False,
+                extra_metadata={
+                    "company_key": comp.lower(),
+                    "source": "smartrecruiters",
+                    "source_platform": "smartrecruiters",
+                    "smartrecruiters_id": job_id,
+                },
             )
             collected_jobs.append(job)
 
         self.diagnostics["by_company"][comp] = {
-            "name": comp.capitalize(),
+            "name": display_name,
             "status": "COMPLETED",
-            "available": total_found,
             "collected": len(collected_jobs),
+            "available": total_found,
+            "gap": max(0, total_found - len(collected_jobs)),
             "error": None,
         }
         self.diagnostics["total_collected"] += len(collected_jobs)

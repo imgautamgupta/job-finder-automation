@@ -169,7 +169,7 @@ def test_all_jobs_hyperlinks(tmp_path):
     wb = openpyxl.load_workbook(file_path)
     ws = wb["All Jobs"]
 
-    url_cell = ws.cell(row=2, column=13)
+    url_cell = ws.cell(row=2, column=14)
     assert url_cell.value == "https://accenture.com/jobs/arc1"
     assert url_cell.hyperlink is not None
     assert url_cell.hyperlink.target == "https://accenture.com/jobs/arc1"
@@ -196,8 +196,8 @@ def test_all_jobs_sorting(tmp_path):
 
     results = []
     for r in range(2, ws.max_row + 1):
-        dec = ws.cell(row=r, column=8).value
-        score = ws.cell(row=r, column=6).value
+        dec = ws.cell(row=r, column=9).value
+        score = ws.cell(row=r, column=7).value
         job_id = ws.cell(row=r, column=3).value
         results.append((dec, score, job_id))
 
@@ -228,21 +228,21 @@ def test_all_jobs_color_coding_and_formatting(tmp_path):
 
     # AutoFilter
     assert ws.auto_filter.ref is not None
-    assert ws.auto_filter.ref.startswith("A1:O")
+    assert ws.auto_filter.ref.startswith("A1:Q")
 
-    # Decision color coding: col 8
+    # Decision color coding: col 9
     # Row 2 is MATCH (green fill)
-    cell_match = ws.cell(row=2, column=8)
+    cell_match = ws.cell(row=2, column=9)
     assert cell_match.fill.start_color.rgb in ("00DCFCE7", "DCFCE7")
     assert cell_match.font.bold is True
 
     # Row 3 is REVIEW (amber fill)
-    cell_review = ws.cell(row=3, column=8)
+    cell_review = ws.cell(row=3, column=9)
     assert cell_review.fill.start_color.rgb in ("00FEF3C7", "FEF3C7")
     assert cell_review.font.bold is True
 
     # Row 4 is REJECT (red fill)
-    cell_reject = ws.cell(row=4, column=8)
+    cell_reject = ws.cell(row=4, column=9)
     assert cell_reject.fill.start_color.rgb in ("00FEE2E2", "FEE2E2")
     assert cell_reject.font.bold is True
 
@@ -319,5 +319,5 @@ def test_history_preserved_across_two_runs(tmp_path):
     ws = wb["All Jobs"]
 
     # Row 2 contains job
-    assert ws.cell(row=2, column=15).value == "INTERVIEW"  # Application Status col 15
+    assert ws.cell(row=2, column=16).value == "INTERVIEW"  # Application Status col 16
     assert ws.cell(row=2, column=3).value == "ACC-HIST-1"   # Job ID col 3

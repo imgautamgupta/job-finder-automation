@@ -1,26 +1,36 @@
 {
   "target_roles": [
-    "Python Developer",
+    "GenAI Engineer",
+    "Generative AI Engineer",
+    "AI Engineer",
+    "LLM Engineer",
+    "Agentic AI Engineer",
+    "Applied AI Engineer",
+    "AI Application Developer",
+    "Conversational AI Engineer",
+    "AI/ML Engineer",
+    "Machine Learning Engineer",
+    "Software Engineer",
+    "Software Developer",
+    "SDE",
     "Backend Developer",
     "Backend Engineer",
-    "Software Engineer",
-    "Software Development Engineer",
+    "Python Developer",
     "Full Stack Developer",
+    "MERN Stack Developer",
     "Web Developer",
-    "ML Engineer",
-    "Machine Learning Engineer",
-    "AI Engineer",
-    "SDE",
-    "SDE Intern",
-    "Software Development Engineer Intern",
-    "DS/ML Intern",
-    "Python Developer Intern",
-    "Machine Learning Intern",
-    "Web Developer Intern"
+    "Platform Engineer",
+    "Developer Tools Engineer"
   ],
   "preferred_locations": [
     "Delhi",
+    "New Delhi",
     "Noida",
+    "Greater Noida",
+    "Gurgaon",
+    "Gurugram",
+    "Ghaziabad",
+    "Faridabad",
     "Bangalore",
     "Bengaluru",
     "Ahmedabad",
@@ -28,38 +38,81 @@
     "Remote"
   ],
   "experience_levels": [
-    "Fresher",
-    "Entry Level",
-    "Internship",
-    "0-1 years"
+    "0-2 years",
+    "1-3 years"
   ],
+  "match_max_years": 2,
+  "review_max_years": 3,
   "skills": [
     "Python",
     "JavaScript",
     "TypeScript",
+    "SQL",
+    "RAG",
+    "retrieval",
+    "agentic AI",
+    "agents",
+    "LangChain",
+    "LangGraph",
+    "LlamaIndex",
+    "LLM",
+    "GPT",
+    "prompt engineering",
+    "vector search",
+    "vector database",
+    "OpenSearch",
+    "embeddings",
+    "NLP",
+    "FastAPI",
+    "Flask",
+    "Node.js",
+    "Express",
     "React",
     "Next.js",
-    "FastAPI",
+    "Tailwind",
     "REST API",
-    "MongoDB",
-    "SQL",
+    "microservices",
     "PostgreSQL",
-    "Machine Learning",
-    "Scikit-learn",
-    "OpenCV",
-    "NLP",
-    "Pandas",
-    "NumPy",
+    "MongoDB",
+    "MySQL",
+    "AWS",
+    "EC2",
+    "S3",
+    "Docker",
+    "Kubernetes",
     "Git",
-    "GitHub"
+    "CI/CD",
+    "system design",
+    "data structures and algorithms"
+  ],
+  "genai_skills": [
+    "RAG",
+    "retrieval",
+    "agentic AI",
+    "agents",
+    "LangChain",
+    "LangGraph",
+    "LlamaIndex",
+    "LLM",
+    "GPT",
+    "prompt engineering",
+    "vector search",
+    "vector database",
+    "OpenSearch",
+    "embeddings"
   ],
   "positive_keywords": [
+    "GenAI",
+    "Generative AI",
     "AI",
-    "Artificial Intelligence",
+    "Machine Learning",
     "Backend",
     "Full Stack",
     "Software Development",
-    "Web Development"
+    "Web Development",
+    "Cloud",
+    "API",
+    "Agentic"
   ],
   "negative_keywords": [
     "Senior",
@@ -74,37 +127,52 @@
     "Architect",
     "Head of",
     "Distinguished",
-    "Fellow",
-    "Sr. Consultant",
-    "5+ years",
-    "7+ years",
-    "10+ years"
+    "Fellow"
   ],
   "preferences": {
     "remote_allowed": true,
-    "internship_allowed": true,
-    "fresher_allowed": true,
+    "internship_allowed": false,
+    "fresher_allowed": false,
     "entry_level_allowed": true
   },
   "projects": [
     {
-      "name": "Loan Application Fraud Detection via Document Verification",
-      "skills": ["Python", "OpenCV", "Scikit-learn", "FastAPI", "OCR", "Machine Learning"],
-      "description": "AI/ML pipeline for loan application fraud detection using document OCR and computer vision verification."
+      "name": "Production GenAI RAG Application",
+      "skills": ["Python", "RAG", "LangChain", "LLM", "vector search", "FastAPI", "AWS"],
+      "description": "Built and deployed a production RAG-based AI application using LangChain, vector databases, and LLMs."
     },
     {
-      "name": "NeuroNest Notes & Bookmarks Manager",
-      "skills": ["JavaScript", "React", "Next.js", "REST API", "MongoDB", "SQL", "PostgreSQL"],
-      "description": "Full-stack personal knowledge and bookmarks manager with RESTful backend and database integration."
+      "name": "Agentic AI Workflow System",
+      "skills": ["Python", "LangGraph", "agents", "agentic AI", "LLM", "prompt engineering"],
+      "description": "Developed multi-agent AI workflows using LangGraph for automated task execution."
+    },
+    {
+      "name": "Full-Stack Web Application",
+      "skills": ["React", "Next.js", "Node.js", "FastAPI", "PostgreSQL", "MongoDB", "REST API"],
+      "description": "Full-stack application with React/Next.js frontend and Python backend."
     }
   ],
   "experience": [
     {
-      "title": "AI/ML Intern",
-      "company": "AI/ML Internship",
+      "title": "Software Engineer",
+      "experience_type": "full_time",
+      "duration_months": 13,
+      "skills": ["Python", "RAG", "LangChain", "LangGraph", "LLM", "FastAPI", "AWS", "Docker", "PostgreSQL"],
+      "description": "Full-time software engineer role building production GenAI and backend systems."
+    },
+    {
+      "title": "GenAI Engineer Intern",
       "experience_type": "internship",
-      "skills": ["Python", "OpenCV", "Scikit-learn", "FastAPI", "Machine Learning"],
-      "description": "Built computer vision and machine learning models for document analysis and automated validation."
+      "duration_months": 9,
+      "skills": ["Python", "LLM", "RAG", "LangChain", "prompt engineering", "FastAPI"],
+      "description": "Built GenAI applications including RAG systems and LLM-powered features."
+    },
+    {
+      "title": "Python SDE Intern",
+      "experience_type": "internship",
+      "duration_months": 6,
+      "skills": ["Python", "FastAPI", "REST API", "PostgreSQL", "Docker"],
+      "description": "Python backend development with FastAPI and database integration."
     }
   ]
 }

@@ -2,6 +2,16 @@ from app.models.job import ApplicationPriority, Job, JobStatus
 from app.models.profile import JobProfile, SearchPreferences
 from app.models.match import MatchResult
 from app.models.recommendation import ApplicationRecommendation
+from app.models.multiuser import (
+    ApplicationRecord,
+    CandidatePreferences,
+    CandidateProfile,
+    JobMatchRecord,
+    ResumeRecord,
+    SavedJobRecord,
+    User,
+    UserRole,
+)
 from app.models.search_intelligence import (
     DataConfidence,
     LocationSearchPerformance,
@@ -51,6 +61,14 @@ __all__ = [
     "JobAgentSummary",
     "JobAgentRecommendation",
     "JobAgentReport",
+    "User",
+    "UserRole",
+    "CandidateProfile",
+    "CandidatePreferences",
+    "ResumeRecord",
+    "JobMatchRecord",
+    "SavedJobRecord",
+    "ApplicationRecord",
 ]
 
 from app.models.job_agent import (

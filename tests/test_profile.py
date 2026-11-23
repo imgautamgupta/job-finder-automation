@@ -33,9 +33,9 @@ def test_target_roles_loaded_correctly():
         "Backend Developer",
         "Software Engineer",
         "Full Stack Developer",
-        "ML Engineer",
+        "Machine Learning Engineer",
         "AI Engineer",
-        "SDE Intern",
+        "GenAI Engineer",
     ]
     for role in expected_sample_roles:
         assert role in profile.target_roles
@@ -69,7 +69,7 @@ def test_skills_loaded_correctly():
         "FastAPI",
         "React",
         "PostgreSQL",
-        "Machine Learning",
+        "RAG",
         "Docker" if "Docker" in profile.skills else "Git",
     ]
     for skill in sample_skills:
@@ -92,7 +92,7 @@ def test_negative_keywords_loaded_correctly():
         "Principal",
         "Director",
         "Architect",
-        "10+ years",
+        "Manager",
     ]
     for neg_kw in sample_negative_kws:
         assert neg_kw in profile.negative_keywords

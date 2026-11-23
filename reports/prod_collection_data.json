@@ -1,0 +1,915 @@
+{
+  "timestamp": "2026-11-06T18:31:36.160035+00:00",
+  "total_duration_sec": 319.4,
+  "totals": {
+    "raw_retrieved": 2254,
+    "parsed_jobs": 2254,
+    "unique_deduped": 2254,
+    "saved_to_sqlite": 2254,
+    "new_saved": 73,
+    "top_matches": 93,
+    "all_jobs_rows": 2254,
+    "clickable_links": 2254
+  },
+  "excel_export": "data\\exports\\jobs_full_20261107_000124.xlsx",
+  "backup_excel": "data\\exports\\My_Jobs_latest_backup_pre_phase2_2.xlsx",
+  "collector_results": {
+    "accenture": {
+      "status": "PARTIAL",
+      "collected": 200,
+      "duration_sec": 19.44
+    },
+    "workday": {
+      "status": "PARTIAL",
+      "collected": 1113,
+      "duration_sec": 129.85
+    },
+    "company_json": {
+      "status": "DISABLED",
+      "collected": 0,
+      "duration_sec": 0.0
+    },
+    "successfactors": {
+      "status": "PARTIAL",
+      "collected": 186,
+      "duration_sec": 125.63
+    },
+    "oracle_hcm": {
+      "status": "PARTIAL",
+      "collected": 150,
+      "duration_sec": 13.55
+    },
+    "turbohire": {
+      "status": "COMPLETED",
+      "collected": 15,
+      "duration_sec": 3.69
+    },
+    "linkedin": {
+      "status": "DISABLED",
+      "collected": 0,
+      "duration_sec": 0.0
+    },
+    "naukri": {
+      "status": "DISABLED",
+      "collected": 0,
+      "duration_sec": 0.0
+    },
+    "lever": {
+      "status": "DISABLED",
+      "collected": 0,
+      "duration_sec": 0.0
+    },
+    "greenhouse": {
+      "status": "COMPLETED",
+      "collected": 565,
+      "duration_sec": 24.65
+    },
+    "smartrecruiters": {
+      "status": "COMPLETED",
+      "collected": 25,
+      "duration_sec": 2.58
+    }
+  },
+  "company_stats": {
+    "accenture": {
+      "name": "Accenture",
+      "company_id": "accenture",
+      "ats_platform": "custom",
+      "connector": "accenture",
+      "careers_url": "https://www.accenture.com/in-en/careers",
+      "raw_records": 200,
+      "parsed_jobs": 200,
+      "unique_jobs": 200,
+      "saved_to_sqlite": 200,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 200,
+      "valid_app_urls": 200,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Custom Software Engineer",
+        "Custom Software Engineer"
+      ]
+    },
+    "flipkart": {
+      "name": "Flipkart",
+      "company_id": "flipkart",
+      "ats_platform": "turbohire",
+      "connector": "turbohire",
+      "careers_url": "https://www.flipkartcareers.com/",
+      "raw_records": 15,
+      "parsed_jobs": 15,
+      "unique_jobs": 15,
+      "saved_to_sqlite": 15,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 15,
+      "valid_app_urls": 15,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Area Manager-Mumbai(G10)",
+        "Assistant Manager Projects"
+      ]
+    },
+    "sopra_steria": {
+      "name": "Sopra Steria",
+      "company_id": "sopra_steria",
+      "ats_platform": "smartrecruiters",
+      "connector": "smartrecruiters",
+      "careers_url": "https://www.soprasteria.in/careers",
+      "raw_records": 25,
+      "parsed_jobs": 25,
+      "unique_jobs": 25,
+      "saved_to_sqlite": 25,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 25,
+      "valid_app_urls": 25,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "SAP WM - Senior Product Analyst",
+        "Senior Software Engineer - AS400, Cobol"
+      ]
+    },
+    "adobe": {
+      "name": "Adobe",
+      "company_id": "adobe",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://careers.adobe.com/",
+      "raw_records": 37,
+      "parsed_jobs": 37,
+      "unique_jobs": 37,
+      "saved_to_sqlite": 37,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 37,
+      "valid_app_urls": 37,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Group Manager, Global Customer Operations & Growth",
+        "Manager, Firefly FDE"
+      ]
+    },
+    "intel": {
+      "name": "Intel",
+      "company_id": "intel",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://jobs.intel.com/",
+      "raw_records": 94,
+      "parsed_jobs": 94,
+      "unique_jobs": 94,
+      "saved_to_sqlite": 94,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 94,
+      "valid_app_urls": 94,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "AI Software Engineer - AI Frameworks",
+        "SOC Functional Validation Engineer"
+      ]
+    },
+    "nvidia": {
+      "name": "NVIDIA",
+      "company_id": "nvidia",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://www.nvidia.com/en-us/about-nvidia/careers/",
+      "raw_records": 247,
+      "parsed_jobs": 247,
+      "unique_jobs": 247,
+      "saved_to_sqlite": 247,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 247,
+      "valid_app_urls": 247,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Staff Business Systems Analyst, Beeline Vendor Management System",
+        "Manager, System Software Engineering - Infrastructure Engineering and Automation"
+      ]
+    },
+    "salesforce": {
+      "name": "Salesforce",
+      "company_id": "salesforce",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://careers.salesforce.com/",
+      "raw_records": 94,
+      "parsed_jobs": 94,
+      "unique_jobs": 94,
+      "saved_to_sqlite": 94,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 94,
+      "valid_app_urls": 94,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Software Engineering AMTS",
+        "Product Accessibility Engineer"
+      ]
+    },
+    "walmart": {
+      "name": "Walmart Global Tech",
+      "company_id": "walmart",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://careers.walmart.com/",
+      "raw_records": 199,
+      "parsed_jobs": 199,
+      "unique_jobs": 199,
+      "saved_to_sqlite": 199,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 199,
+      "valid_app_urls": 199,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "PRINCIPAL, SOFTWARE ENGINEER",
+        "SENIOR, SOFTWARE ENGINEER"
+      ]
+    },
+    "mastercard": {
+      "name": "Mastercard",
+      "company_id": "mastercard",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://careers.mastercard.com/",
+      "raw_records": 227,
+      "parsed_jobs": 227,
+      "unique_jobs": 227,
+      "saved_to_sqlite": 227,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 227,
+      "valid_app_urls": 227,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Senior software engineer",
+        "Vice President, Software Engineering"
+      ]
+    },
+    "visa": {
+      "name": "Visa",
+      "company_id": "visa",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://corporate.visa.com/en/careers.html",
+      "raw_records": 99,
+      "parsed_jobs": 99,
+      "unique_jobs": 99,
+      "saved_to_sqlite": 99,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 99,
+      "valid_app_urls": 99,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Director (Technology Leader with hands-on exp in Platform / Application Development, GenAI, Python, Java, 14 - 18 years exp.)",
+        "Director, Finance (FP&A with experience in BI & Analytics)"
+      ]
+    },
+    "paypal": {
+      "name": "PayPal",
+      "company_id": "paypal",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://careers.pypl.com/",
+      "raw_records": 16,
+      "parsed_jobs": 16,
+      "unique_jobs": 16,
+      "saved_to_sqlite": 16,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 16,
+      "valid_app_urls": 16,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Sr Software Engineer, Back End",
+        "Staff Data Scientist"
+      ]
+    },
+    "hp": {
+      "name": "HP",
+      "company_id": "hp",
+      "ats_platform": "workday",
+      "connector": "workday",
+      "careers_url": "https://jobs.hp.com/",
+      "raw_records": 100,
+      "parsed_jobs": 100,
+      "unique_jobs": 100,
+      "saved_to_sqlite": 100,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 100,
+      "valid_app_urls": 100,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Field Technical Support",
+        "Software Applications Engineer 4"
+      ]
+    },
+    "oracle": {
+      "name": "Oracle",
+      "company_id": "oracle",
+      "ats_platform": "oracle_hcm",
+      "connector": "oracle_hcm",
+      "careers_url": "https://www.oracle.com/corporate/careers/",
+      "raw_records": 25,
+      "parsed_jobs": 25,
+      "unique_jobs": 25,
+      "saved_to_sqlite": 25,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 25,
+      "valid_app_urls": 25,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Manager, Software Engineering",
+        "Senior Application Software Engineer"
+      ]
+    },
+    "dell": {
+      "name": "Dell Technologies",
+      "company_id": "dell",
+      "ats_platform": "oracle_hcm",
+      "connector": "oracle_hcm",
+      "careers_url": "https://jobs.dell.com/",
+      "raw_records": 25,
+      "parsed_jobs": 25,
+      "unique_jobs": 25,
+      "saved_to_sqlite": 25,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 25,
+      "valid_app_urls": 25,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Principal Systems Development Engineer",
+        "Analyst, Financial Analysis"
+      ]
+    },
+    "hexaware": {
+      "name": "Hexaware Technologies",
+      "company_id": "hexaware",
+      "ats_platform": "oracle_hcm",
+      "connector": "oracle_hcm",
+      "careers_url": "https://jobs.hexaware.com/",
+      "raw_records": 25,
+      "parsed_jobs": 25,
+      "unique_jobs": 25,
+      "saved_to_sqlite": 25,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 25,
+      "valid_app_urls": 25,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Capital Market Trade Manager-BPS",
+        "Head - Order to Cash (O2C)"
+      ]
+    },
+    "zensar": {
+      "name": "Zensar Technologies",
+      "company_id": "zensar",
+      "ats_platform": "oracle_hcm",
+      "connector": "oracle_hcm",
+      "careers_url": "https://www.zensar.com/careers",
+      "raw_records": 25,
+      "parsed_jobs": 25,
+      "unique_jobs": 25,
+      "saved_to_sqlite": 25,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 25,
+      "valid_app_urls": 25,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Guidewire Technical Architect",
+        "TAXATION"
+      ]
+    },
+    "eclerx": {
+      "name": "eClerx",
+      "company_id": "eclerx",
+      "ats_platform": "oracle_hcm",
+      "connector": "oracle_hcm",
+      "careers_url": "https://eclerx.com/careers/",
+      "raw_records": 25,
+      "parsed_jobs": 25,
+      "unique_jobs": 25,
+      "saved_to_sqlite": 25,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 25,
+      "valid_app_urls": 25,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Analyst",
+        "Process Manager"
+      ]
+    },
+    "ofss": {
+      "name": "Oracle Financial Services Software",
+      "company_id": "ofss",
+      "ats_platform": "oracle_hcm",
+      "connector": "oracle_hcm",
+      "careers_url": "https://www.oracle.com/corporate/careers/",
+      "raw_records": 25,
+      "parsed_jobs": 25,
+      "unique_jobs": 25,
+      "saved_to_sqlite": 25,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 25,
+      "valid_app_urls": 25,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Manager, Software Engineering",
+        "Senior Application Software Engineer"
+      ]
+    },
+    "capgemini": {
+      "name": "Capgemini",
+      "company_id": "capgemini",
+      "ats_platform": "successfactors",
+      "connector": "successfactors",
+      "careers_url": "https://www.capgemini.com/in-en/careers/",
+      "raw_records": 92,
+      "parsed_jobs": 92,
+      "unique_jobs": 92,
+      "saved_to_sqlite": 92,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 92,
+      "valid_app_urls": 92,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Group Internal Auditor",
+        "Service Delivery Manager"
+      ]
+    },
+    "wipro": {
+      "name": "Wipro",
+      "company_id": "wipro",
+      "ats_platform": "successfactors",
+      "connector": "successfactors",
+      "careers_url": "https://careers.wipro.com",
+      "raw_records": 22,
+      "parsed_jobs": 22,
+      "unique_jobs": 22,
+      "saved_to_sqlite": 22,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 22,
+      "valid_app_urls": 22,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Network Security - BUSINESS ANALYST L3",
+        "Technical Lead - L1"
+      ]
+    },
+    "hcltech": {
+      "name": "HCLTech",
+      "company_id": "hcltech",
+      "ats_platform": "successfactors",
+      "connector": "successfactors",
+      "careers_url": "https://careers.hcltech.com",
+      "raw_records": 22,
+      "parsed_jobs": 22,
+      "unique_jobs": 22,
+      "saved_to_sqlite": 22,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 22,
+      "valid_app_urls": 22,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Subject Matter Expert (Support&amp;Ops)",
+        "Sr Administrator (Support &amp; Operations)"
+      ]
+    },
+    "birlasoft": {
+      "name": "Birlasoft",
+      "company_id": "birlasoft",
+      "ats_platform": "successfactors",
+      "connector": "successfactors",
+      "careers_url": "https://jobs.birlasoft.com/",
+      "raw_records": 21,
+      "parsed_jobs": 21,
+      "unique_jobs": 21,
+      "saved_to_sqlite": 21,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 21,
+      "valid_app_urls": 21,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Sr Technical Lead-App Development",
+        "IBM Mainframe Technical Lead-App Development"
+      ]
+    },
+    "mastek": {
+      "name": "Mastek",
+      "company_id": "mastek",
+      "ats_platform": "successfactors",
+      "connector": "successfactors",
+      "careers_url": "https://careers.mastek.com/",
+      "raw_records": 29,
+      "parsed_jobs": 29,
+      "unique_jobs": 29,
+      "saved_to_sqlite": 29,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 29,
+      "valid_app_urls": 29,
+      "health_status": "PARTIAL",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "CICD Engineer",
+        "Data Engineer/BI Developer-DA&amp;A"
+      ]
+    },
+    "stripe": {
+      "name": "Stripe",
+      "company_id": "stripe",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://stripe.com/jobs",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Abuse Investigator",
+        "Abuse Investigator"
+      ]
+    },
+    "cloudflare": {
+      "name": "Cloudflare",
+      "company_id": "cloudflare",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.cloudflare.com/careers/",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Account Executive, FedCiv",
+        "Account Executive, Indonesia"
+      ]
+    },
+    "databricks": {
+      "name": "Databricks",
+      "company_id": "databricks",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.databricks.com/company/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "\u30c7\u30ea\u30d0\u30ea\u30fc\u30bd\u30ea\u30e5\u30fc\u30b7\u30e7\u30f3\u30a2\u30fc\u30ad\u30c6\u30af\u30c8",
+        "Account Executive"
+      ]
+    },
+    "elastic": {
+      "name": "Elastic",
+      "company_id": "elastic",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.elastic.co/about/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "ABM Manager, Global Public Sector",
+        "ABM Regional Manager, AMER"
+      ]
+    },
+    "canonical": {
+      "name": "Canonical",
+      "company_id": "canonical",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://canonical.com/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Accountant",
+        "Accounts Payable Clerk"
+      ]
+    },
+    "mongodb": {
+      "name": "MongoDB",
+      "company_id": "mongodb",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.mongodb.com/company/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "2027 - Software Engineering Intern, AMER",
+        "2027 - Software Engineer Intern, Dublin - 6 Month Internship"
+      ]
+    },
+    "brex": {
+      "name": "Brex",
+      "company_id": "brex",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.brex.com/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Accountant Partnerships Manager",
+        "Accountant Partnerships Manager"
+      ]
+    },
+    "gitlab": {
+      "name": "GitLab",
+      "company_id": "gitlab",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://about.gitlab.com/jobs/",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "AI Transformation Owner, CRO",
+        "Associate Renewals Manager - France"
+      ]
+    },
+    "affirm": {
+      "name": "Affirm",
+      "company_id": "affirm",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.affirm.com/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Analyst, Early Career (Full Stack)",
+        "Analyst II, Credit"
+      ]
+    },
+    "lyft": {
+      "name": "Lyft",
+      "company_id": "lyft",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.lyft.com/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Accountant",
+        "Accountant, Lease & Fleet"
+      ]
+    },
+    "scaleai": {
+      "name": "Scale AI",
+      "company_id": "scaleai",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://scale.com/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Account Based Marketing Lead",
+        "AI Advisory Principal"
+      ]
+    },
+    "pinterest": {
+      "name": "Pinterest",
+      "company_id": "pinterest",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.pinterestcareers.com/",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "B2B Growth Marketing Manager",
+        "Brand Partnerships Manager, Europe"
+      ]
+    },
+    "reddit": {
+      "name": "Reddit",
+      "company_id": "reddit",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.redditinc.com/careers",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Account Executive, Mid-Market (DACH)",
+        "Agency Partner Manager"
+      ]
+    },
+    "figma": {
+      "name": "Figma",
+      "company_id": "figma",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.figma.com/careers/",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Account Executive, Enterprise",
+        "Account Executive, Enterprise (Bengaluru, India)"
+      ]
+    },
+    "twilio": {
+      "name": "Twilio",
+      "company_id": "twilio",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.twilio.com/en-us/company/jobs",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Account Executive 4",
+        "Americas Sales Business Partner Manager"
+      ]
+    },
+    "instacart": {
+      "name": "Instacart",
+      "company_id": "instacart",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://instacart.careers/",
+      "raw_records": 35,
+      "parsed_jobs": 35,
+      "unique_jobs": 35,
+      "saved_to_sqlite": 35,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 35,
+      "valid_app_urls": 35,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Account Manager",
+        "Activation Sales Development Representative II"
+      ]
+    },
+    "airtable": {
+      "name": "Airtable",
+      "company_id": "airtable",
+      "ats_platform": "greenhouse",
+      "connector": "greenhouse",
+      "careers_url": "https://www.airtable.com/careers",
+      "raw_records": 5,
+      "parsed_jobs": 5,
+      "unique_jobs": 5,
+      "saved_to_sqlite": 5,
+      "missing_locations": 0,
+      "missing_job_ids": 0,
+      "valid_detail_urls": 5,
+      "valid_app_urls": 5,
+      "health_status": "COMPLETED",
+      "vacancies_status": "ACTIVE_VACANCIES",
+      "sample_titles": [
+        "Account Executive, Corporate",
+        "Account Executive, Strategic"
+      ]
+    }
+  }
+}

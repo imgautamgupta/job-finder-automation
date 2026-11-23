@@ -3,6 +3,7 @@
 from datetime import date, datetime, timezone
 import logging
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional, Union
 
 import openpyxl
@@ -78,12 +79,13 @@ ACCENTURE_COLUMNS = [
     "Application Status",
 ]
 
-# Master "All Jobs" worksheet columns (Task 5)
+# Master "All Jobs" worksheet columns (Task 5, Task 14, Phase 1)
 ALL_JOBS_COLUMNS = [
     "Company",
     "Job Title",
     "Official Job ID",
     "Location",
+    "Country",
     "Experience Requirement",
     "Match Score",
     "Skills Match",
@@ -95,6 +97,7 @@ ALL_JOBS_COLUMNS = [
     "Application URL",
     "Date Collected",
     "Application Status",
+    "Employment Type",
 ]
 
 # Sheet "My Jobs" columns (Task 12)
@@ -104,6 +107,7 @@ MY_JOBS_COLUMNS = [
     "Company",
     "Job Title",
     "Location",
+    "Country",
     "Experience",
     "Why",
     "Apply Link",
@@ -114,6 +118,99 @@ MY_JOBS_COLUMNS = [
     "Follow-up Date",
     "Notes",
 ]
+
+COUNTRY_KEYWORDS = [
+    ("United States", [
+        "united states", "usa", "u.s.a.", r"\bu\.s\.\b", r"\bus\b",
+        "new york", "california", "texas", "washington", "massachusetts",
+        "illinois", "colorado", "virginia", "florida", "georgia",
+        "san francisco", "seattle", "austin", "boston", "chicago", "los angeles",
+    ]),
+    ("United Kingdom", ["united kingdom", "great britain", "england", "scotland", "wales", r"\buk\b", "london", "manchester"]),
+    ("United Arab Emirates", ["united arab emirates", r"\buae\b", "abu dhabi", "dubai"]),
+    ("Saudi Arabia", ["saudi arabia", "riyadh", "jeddah"]),
+    ("Sri Lanka", ["sri lanka", "colombo"]),
+    ("Mauritius", ["mauritius", "port louis", "ebene"]),
+    ("Maldives", ["maldives", "male"]),
+    ("India", ["india", "bangalore", "bengaluru", "hyderabad", "pune", "mumbai", "chennai", "gurgaon", "gurugram", "noida", "delhi", "kolkata", "ahmedabad", "kochi", "cochin", "indore", "bhopal", "coimbatore", "chandigarh", "jaipur", "karnataka", "telangana", "maharashtra", "tamil nadu"]),
+    ("Canada", ["canada", "toronto", "vancouver", "montreal", "ottawa", "calgary", "waterloo", "ontario", "quebec", "british columbia"]),
+    ("Australia", ["australia", "sydney", "melbourne", "brisbane", "perth", "adelaide", "canberra", "new south wales", "victoria", "queensland"]),
+    ("Germany", ["germany", "deutschland", "berlin", "munich", "frankfurt", "hamburg", "stuttgart", "cologne", "dusseldorf"]),
+    ("Singapore", ["singapore"]),
+    ("Ireland", ["ireland", "dublin", "cork", "galway"]),
+    ("Netherlands", ["netherlands", "amsterdam", "rotterdam", "the hague", "utrecht"]),
+    ("France", ["france", "paris", "lyon", "toulouse"]),
+    ("Poland", ["poland", "warsaw", "krakow", "katowice", "wroclaw", "poznan"]),
+    ("Switzerland", ["switzerland", "zurich", "geneva", "basel", "bern", "lausanne"]),
+    ("Japan", ["japan", "tokyo", "osaka", "kyoto"]),
+    ("Spain", ["spain", "madrid", "barcelona", "valencia"]),
+    ("Italy", ["italy", "rome", "milan"]),
+    ("Sweden", ["sweden", "stockholm", "gothenburg"]),
+    ("Brazil", ["brazil", "brasil", "sao paulo", "rio de janeiro"]),
+    ("Mexico", ["mexico", "mexico city", "guadalajara", "monterrey"]),
+    ("New Zealand", ["new zealand", "auckland", "wellington"]),
+    ("South Africa", ["south africa", "johannesburg", "cape town"]),
+    ("Philippines", ["philippines", "manila", "cebu"]),
+    ("Malaysia", ["malaysia", "kuala lumpur", "penang"]),
+    ("Indonesia", ["indonesia", "jakarta", "bali"]),
+    ("Vietnam", ["vietnam", "ho chi minh", "hanoi"]),
+    ("Romania", ["romania", "bucharest", "cluj"]),
+    ("Czech Republic", ["czech republic", "czechia", "prague", "brno"]),
+    ("Portugal", ["portugal", "lisbon", "porto"]),
+    ("Austria", ["austria", "vienna"]),
+    ("Belgium", ["belgium", "brussels"]),
+    ("Denmark", ["denmark", "copenhagen"]),
+    ("Norway", ["norway", "oslo"]),
+    ("Finland", ["finland", "helsinki"]),
+    ("Israel", ["israel", "tel aviv", "jerusalem", "haifa"]),
+]
+
+
+def derive_country(location: Optional[str]) -> str:
+    """Derive country name from location string.
+
+    - Returns 'Unknown' if empty or not specified
+    - Returns 'Remote' if location contains 'remote' (case-insensitive)
+    - Otherwise extracts country using mapping of city->country and country keyword detection
+    - Returns the last comma-separated token if no other match (often the country)
+    - Returns 'Unknown' if empty
+    """
+    if not location:
+        return "Unknown"
+
+    loc_str = str(location).strip()
+    if not loc_str or loc_str.lower() in ("not specified", "n/a", "none", "unknown", "null"):
+        return "Unknown"
+
+    if re.search(r"\bremote\b", loc_str, re.IGNORECASE):
+        return "Remote"
+
+    loc_lower = loc_str.lower()
+
+    # Check keyword patterns
+    for country_name, patterns in COUNTRY_KEYWORDS:
+        for pat in patterns:
+            if pat.startswith(r"\b"):
+                if re.search(pat, loc_lower, re.IGNORECASE):
+                    return country_name
+            else:
+                if re.search(r"\b" + re.escape(pat) + r"\b", loc_lower, re.IGNORECASE):
+                    return country_name
+
+    # Check US state 2-letter postal abbreviation in location (e.g., "Austin, TX", "New York, NY", "Atlanta, GA 30303")
+    if re.search(r",\s*(?:al|ak|az|ar|ca|co|ct|de|fl|ga|hi|id|il|in|ia|ks|ky|la|me|md|ma|mi|mn|ms|mo|mt|ne|nv|nh|nj|nm|ny|nc|nd|oh|ok|or|pa|ri|sc|sd|tn|tx|ut|vt|va|wa|wv|wi|wy)(?:\s+\d{5})?(?:\s*,\s*|\s*$)", loc_lower):
+        return "United States"
+
+    # Fallback to last comma-separated token if present
+    if "," in loc_str:
+        tokens = [t.strip() for t in loc_str.split(",") if t.strip()]
+        if tokens:
+            cand = tokens[-1]
+            cand_clean = re.sub(r"[\d\-]+$", "", cand).strip()
+            if cand_clean:
+                return cand_clean.title()
+
+    return loc_str.title() if len(loc_str) < 40 else "Unknown"
 
 STATUS_DISPLAY_MAP = {
     "NEW": "Not applied",
@@ -419,6 +516,43 @@ def sort_jobs(jobs: List[Job]) -> List[Job]:
     )
 
 
+def is_job_actively_tracked(job: Job) -> bool:
+    """Check if a job has a user-assigned tracking status other than 'Not applied'."""
+    st = getattr(job, "status", None)
+    if hasattr(st, "value"):
+        st_val = str(st.value).strip().upper()
+    else:
+        st_val = str(st or "").strip().upper()
+
+    if not st_val or st_val in ("NEW", "NOT_APPLIED", "NOT APPLIED"):
+        meta_st = str((job.extra_metadata or {}).get("status") or "").strip().upper()
+        if meta_st:
+            st_val = meta_st
+
+    return bool(st_val and st_val not in ("NEW", "NOT_APPLIED", "NOT APPLIED", "NONE", ""))
+
+
+def is_job_source_enabled(job: Job, enabled_sources: Optional[List[str]]) -> bool:
+    """Check if job belongs to an enabled source connector or company portal."""
+    if not enabled_sources:
+        return True
+    enabled_set = {s.strip().lower() for s in enabled_sources if s and s.strip()}
+    src = (job.source or "").strip().lower()
+    if src in enabled_set:
+        return True
+    comp = (job.company or "").strip().lower()
+    if comp in enabled_set:
+        return True
+    for token in enabled_set:
+        if token and len(token) >= 3 and token in comp:
+            return True
+    meta = job.extra_metadata or {}
+    meta_comp = str(meta.get("company_key") or meta.get("company") or "").strip().lower()
+    if meta_comp in enabled_set:
+        return True
+    return False
+
+
 class ExcelExporter:
     """Exports collected job postings to professional, styled Excel (.xlsx) workbooks."""
 
@@ -437,6 +571,7 @@ class ExcelExporter:
         accenture_jobs: Optional[List[Job]] = None,
         all_jobs: Optional[List[Job]] = None,
         enabled_companies: Optional[List[str]] = None,
+        enabled_sources: Optional[List[str]] = None,
     ) -> Path:
         """Export job postings to Excel.
 
@@ -457,6 +592,7 @@ class ExcelExporter:
                 accenture_jobs=accenture_jobs,
                 all_jobs=all_jobs,
                 enabled_companies=enabled_companies,
+                enabled_sources=enabled_sources,
             )
         return self.export_my_jobs(
             jobs=jobs,
@@ -464,6 +600,7 @@ class ExcelExporter:
             current_run_id=current_run_id,
             db_manager=db_manager,
             all_jobs=all_jobs,
+            enabled_sources=enabled_sources,
         )
 
     def export_my_jobs(
@@ -473,6 +610,7 @@ class ExcelExporter:
         current_run_id: Optional[str] = None,
         db_manager: Optional[Any] = None,
         all_jobs: Optional[List[Job]] = None,
+        enabled_sources: Optional[List[str]] = None,
     ) -> Path:
         """Export a clean, single-sheet Excel workbook 'My Jobs' with only MATCH, REVIEW, and tracked jobs."""
         wb = openpyxl.Workbook()
@@ -484,6 +622,12 @@ class ExcelExporter:
         seen_keys = set()
 
         for j in candidate_pool:
+            # Task 16: Exclude jobs from disabled sources unless actively tracked (status != 'Not applied')
+            actively_tracked = is_job_actively_tracked(j)
+            if enabled_sources and not actively_tracked:
+                if not is_job_source_enabled(j, enabled_sources):
+                    continue
+
             dec = str((j.extra_metadata or {}).get("decision") or getattr(j, "decision", "")).upper()
             if not dec:
                 if (j.match_score or 0) >= 80:
@@ -648,6 +792,11 @@ class ExcelExporter:
                 if not why_reason and job.recommendation_reasons:
                     why_reason = "; ".join(job.recommendation_reasons)
 
+                if (job.extra_metadata or {}).get("work_auth_flag"):
+                    if "; check work-authorization requirement" not in why_reason:
+                        why_reason = f"{why_reason}; check work-authorization requirement" if why_reason else "check work-authorization requirement"
+
+                country_str = derive_country(job.location)
                 posted_str = str(job.date_posted) if job.date_posted else "Unknown"
                 found_str = job.date_found.strftime("%Y-%m-%d") if job.date_found else ""
 
@@ -663,15 +812,16 @@ class ExcelExporter:
                     job.company,                              # 3. Company
                     job.title,                                # 4. Job Title
                     job.location or "Not Specified",          # 5. Location
-                    job.experience_required or "Not Specified",# 6. Experience
-                    why_reason,                               # 7. Why
-                    "Apply",                                  # 8. Apply Link
-                    posted_str,                               # 9. Posted
-                    official_id,                              # 10. Job ID
-                    found_str,                                # 11. Date Found
-                    app_status_display,                       # 12. Application Status
-                    follow_up_str,                            # 13. Follow-up Date
-                    notes_str,                                # 14. Notes
+                    country_str,                              # 6. Country
+                    job.experience_required or "Not Specified",# 7. Experience
+                    why_reason,                               # 8. Why
+                    "Apply",                                  # 9. Apply Link
+                    posted_str,                               # 10. Posted
+                    official_id,                              # 11. Job ID
+                    found_str,                                # 12. Date Found
+                    app_status_display,                       # 13. Application Status
+                    follow_up_str,                            # 14. Follow-up Date
+                    notes_str,                                # 15. Notes
                 ]
 
                 for col_idx, val in enumerate(row_data, start=1):
@@ -693,21 +843,24 @@ class ExcelExporter:
                         cell.alignment = center_align
                     elif col_idx == 7:
                         cell.font = regular_font
-                        cell.alignment = wrap_align
+                        cell.alignment = center_align
                     elif col_idx == 8:
+                        cell.font = regular_font
+                        cell.alignment = wrap_align
+                    elif col_idx == 9:
                         cell.font = link_font
                         cell.alignment = center_align
                         cell.hyperlink = job.url
-                    elif col_idx in (9, 10, 11):
-                        cell.font = regular_font
-                        cell.alignment = center_align
-                    elif col_idx == 12:
+                    elif col_idx in (10, 11, 12):
                         cell.font = regular_font
                         cell.alignment = center_align
                     elif col_idx == 13:
                         cell.font = regular_font
                         cell.alignment = center_align
                     elif col_idx == 14:
+                        cell.font = regular_font
+                        cell.alignment = center_align
+                    elif col_idx == 15:
                         cell.font = regular_font
                         cell.alignment = wrap_align
 
@@ -720,15 +873,16 @@ class ExcelExporter:
             "C": 18,  # Company
             "D": 36,  # Job Title
             "E": 22,  # Location
-            "F": 16,  # Experience
-            "G": 48,  # Why
-            "H": 12,  # Apply Link
-            "I": 14,  # Posted
-            "J": 18,  # Job ID
-            "K": 14,  # Date Found
-            "L": 20,  # Application Status
-            "M": 16,  # Follow-up Date
-            "N": 35,  # Notes
+            "F": 16,  # Country
+            "G": 16,  # Experience
+            "H": 48,  # Why
+            "I": 12,  # Apply Link
+            "J": 14,  # Posted
+            "K": 18,  # Job ID
+            "L": 14,  # Date Found
+            "M": 20,  # Application Status
+            "N": 16,  # Follow-up Date
+            "O": 35,  # Notes
         }
         for col_letter, width in col_widths.items():
             ws.column_dimensions[col_letter].width = width
@@ -737,9 +891,9 @@ class ExcelExporter:
         ws.freeze_panes = "D2"
 
         # Auto-filter
-        ws.auto_filter.ref = f"A1:N{max(2, max_data_row)}"
+        ws.auto_filter.ref = f"A1:O{max(2, max_data_row)}"
 
-        # Dropdown validation for Column 12 (Application Status)
+        # Dropdown validation for Column 13 (Application Status)
         dv = DataValidation(
             type="list",
             formula1='"Not applied,Applied,Interview,Offer,Rejected,Skipped"',
@@ -750,7 +904,7 @@ class ExcelExporter:
         dv.prompt = "Choose application status"
         dv.promptTitle = "Status"
         ws.add_data_validation(dv)
-        dv.add(f"L2:L{max(2, max_data_row)}")
+        dv.add(f"M2:M{max(2, max_data_row)}")
 
     def export_full_report(
         self,
@@ -761,6 +915,7 @@ class ExcelExporter:
         accenture_jobs: Optional[List[Job]] = None,
         all_jobs: Optional[List[Job]] = None,
         enabled_companies: Optional[List[str]] = None,
+        enabled_sources: Optional[List[str]] = None,
     ) -> Path:
         """Export the comprehensive multi-sheet Excel workbook (All Jobs, Top Matches, Analytics, etc.).
 
@@ -911,7 +1066,7 @@ class ExcelExporter:
         deduped_all = deduplicate_for_all_jobs(raw_all_jobs)
 
         # Filter by enabled companies if provided or data-driven from settings
-        resolved_enabled = enabled_companies
+        resolved_enabled = enabled_companies or enabled_sources
         if resolved_enabled is None:
             resolved_enabled = get_enabled_companies_from_settings()
 
@@ -921,7 +1076,7 @@ class ExcelExporter:
             for j in deduped_all:
                 comp_norm = (j.company or "").strip().lower()
                 src_norm = (j.source or "").strip().lower()
-                if comp_norm in enabled_norm or src_norm in enabled_norm:
+                if comp_norm in enabled_norm or src_norm in enabled_norm or is_job_actively_tracked(j):
                     final_all_jobs.append(j)
                 else:
                     logger.info(
@@ -1218,22 +1373,26 @@ class ExcelExporter:
             status_str = (job.status.value if hasattr(job.status, "value") else str(job.status)) if job.status else "NEW"
             collected_str = job.date_found.strftime("%Y-%m-%d %H:%M:%S") if job.date_found else ""
 
+            country_str = derive_country(job.location)
+            emp_type_str = job.employment_type or "Full-time"
             row_data = [
                 job.company,                                            # 1. Company
                 job.title,                                              # 2. Job Title
                 official_id,                                            # 3. Official Job ID
                 job.location or "Not Specified",                        # 4. Location
-                job.experience_required or "Not Specified",             # 5. Experience Requirement
-                score_val,                                              # 6. Match Score
-                skills_match_str,                                       # 7. Skills Match
-                decision_val,                                           # 8. Decision
-                decision_reason,                                        # 9. Decision Reason
-                all_failing_rules,                                      # 10. All Failing Rules
-                job.date_posted or "Unknown",                           # 11. Posting Date
-                (job.source or "Unknown").capitalize(),                 # 12. Source/Portal
-                job.url,                                                # 13. Application URL
-                collected_str,                                          # 14. Date Collected
-                status_str,                                             # 15. Application Status
+                country_str,                                            # 5. Country
+                job.experience_required or "Not Specified",             # 6. Experience Requirement
+                score_val,                                              # 7. Match Score
+                skills_match_str,                                       # 8. Skills Match
+                decision_val,                                           # 9. Decision
+                decision_reason,                                        # 10. Decision Reason
+                all_failing_rules,                                      # 11. All Failing Rules
+                job.date_posted or "Unknown",                           # 12. Posting Date
+                (job.source or "Unknown").capitalize(),                 # 13. Source/Portal
+                job.url,                                                # 14. Application URL
+                collected_str,                                          # 15. Date Collected
+                status_str,                                             # 16. Application Status
+                emp_type_str,                                           # 17. Employment Type
             ]
 
             for col_idx, val in enumerate(row_data, start=1):
@@ -1241,7 +1400,7 @@ class ExcelExporter:
                 cell.border = border
                 cell.font = regular_font
 
-                if col_idx in (3, 6, 8, 11, 12, 14, 15):
+                if col_idx in (3, 5, 7, 9, 12, 13, 15, 16, 17):
                     cell.alignment = center_align
                 else:
                     cell.alignment = regular_align
@@ -1249,15 +1408,15 @@ class ExcelExporter:
                 if is_even:
                     cell.fill = zebra_fill
 
-                # Hyperlink for Application URL (Col 13)
-                if col_idx == 13:
+                # Hyperlink for Application URL (Col 14)
+                if col_idx == 14:
                     url_str = str(val or "").strip()
                     if url_str.startswith("http"):
                         cell.hyperlink = url_str
                         cell.font = url_font
 
-                # Score highlighting (Col 6)
-                if col_idx == 6 and isinstance(score_val, int):
+                # Score highlighting (Col 7)
+                if col_idx == 7 and isinstance(score_val, int):
                     if score_val >= 90:
                         cell.fill = high_score_fill
                         cell.font = high_score_font
@@ -1268,8 +1427,8 @@ class ExcelExporter:
                         cell.fill = norm_score_fill
                         cell.font = norm_score_font
 
-                # Decision highlighting (Col 8)
-                if col_idx == 8:
+                # Decision highlighting (Col 9)
+                if col_idx == 9:
                     dec_str = str(decision_val).upper().strip()
                     if dec_str == "MATCH":
                         cell.fill = match_fill
@@ -1291,7 +1450,7 @@ class ExcelExporter:
                 if v is not None:
                     max_len = max(max_len, min(len(str(v)), 50))
             min_width = 14
-            if col_name in ("Job Title", "Location", "Application URL", "Experience Requirement", "Decision Reason", "All Failing Rules", "Skills Match"):
+            if col_name in ("Job Title", "Location", "Country", "Application URL", "Experience Requirement", "Decision Reason", "All Failing Rules", "Skills Match"):
                 min_width = 24
             ws.column_dimensions[col_letter].width = max(max_len + 3, min_width)
 

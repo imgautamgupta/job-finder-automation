@@ -18,7 +18,7 @@ import html
 import json
 import logging
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 import urllib.parse
 
 import httpx
@@ -119,6 +119,14 @@ DEFAULT_WORKDAY_COMPANIES: Dict[str, Dict[str, Any]] = {
             ],
         },
     },
+    "hp": {
+        "name": "HP",
+        "host": "hp.wd5.myworkdayjobs.com",
+        "tenant": "hp",
+        "site": "ExternalCareerSite",
+        "applied_facets": {},
+        "location_scope": "all",
+    },
 }
 
 INDIAN_LOCATIONS_REGEX = re.compile(
@@ -183,19 +191,35 @@ def clean_html_description(raw_content: Optional[str]) -> Optional[str]:
 
 
 def passes_title_location_prefilters(
-    job: Job,
+    job: Union[Job, str],
     target_roles: Optional[List[str]] = None,
-    target_locations: Optional[List[str]] = None,
+    target_locations: Optional[Union[List[str], str]] = None,
+    location_scope: Optional[str] = None,
 ) -> bool:
     """Pre-filter verifying whether a Workday vacancy satisfies basic title and location criteria before detail fetch."""
-    if not is_india_location(job.location):
-        return False
+    if isinstance(job, Job):
+        title = job.title or ""
+        loc = job.location or ""
+    else:
+        title = str(job or "")
+        if isinstance(target_roles, str) and target_locations is None:
+            loc = target_roles
+            target_roles = None
+        else:
+            loc = str(target_locations or "") if isinstance(target_locations, str) else ""
 
-    title = job.title or ""
+    if location_scope != "all" and not is_india_location(loc):
+        return False
     from app.services.filter import match_seniority_title
 
     # 1. Seniority exclusion
     if match_seniority_title(title):
+        return False
+
+    # 2b. Below-profile exclusion (intern/trainee/apprentice -> not relevant)
+    # Note: This runs BEFORE detail fetch to save bandwidth
+    from app.services.filter import match_below_profile_title
+    if match_below_profile_title(title):
         return False
 
     # 2. Exclude levels >= 2 (e.g. "Software Engineer II", "Scientist IV")
@@ -316,6 +340,7 @@ class WorkdayJobSource(BaseJobSource):
         self.last_status = "COMPLETED"
         self.last_error = None
         all_jobs: List[Job] = []
+        self._current_collected = all_jobs
 
         # Reset diagnostics
         self.details_fetched_count = 0
@@ -352,11 +377,12 @@ class WorkdayJobSource(BaseJobSource):
                 logger.info("[WORKDAY] Collecting jobs for company: %s (%s)...", comp_name, comp_key)
 
                 try:
+                    limit_to_use = min(comp_max, 100) if comp_config.get("location_scope") == "all" else comp_max
                     comp_jobs = await self._collect_company_jobs(
                         client=client,
                         comp_config=comp_config,
                         comp_key=comp_key,
-                        max_limit=comp_max,
+                        max_limit=limit_to_use,
                         target_roles=roles,
                         target_locations=locations,
                     )
@@ -440,10 +466,12 @@ class WorkdayJobSource(BaseJobSource):
     ) -> List[Job]:
         """Collect and normalize jobs for a single Workday company using portal facets, backoff, and targeted queries."""
         comp_name = comp_config["name"]
+        comp_config["company_key"] = comp_key
         host = comp_config["host"]
         tenant = comp_config["tenant"]
         site = comp_config["site"]
         applied_facets = comp_config.get("applied_facets", {})
+        location_scope = comp_config.get("location_scope")
 
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
@@ -500,7 +528,7 @@ class WorkdayJobSource(BaseJobSource):
                     "appliedFacets": applied_facets,
                     "limit": page_size,
                     "offset": offset,
-                    "searchText": term if (applied_facets or term) else "India",
+                    "searchText": term if (applied_facets or term or location_scope == "all") else "India",
                 }
 
                 # Retry loop with exponential backoff on HTTP 429
@@ -538,7 +566,11 @@ class WorkdayJobSource(BaseJobSource):
                 if not resp or resp.status_code != 200:
                     break
 
-                data = resp.json()
+                try:
+                    data = resp.json()
+                except Exception as json_err:
+                    req_error = f"Non-JSON response (temporary portal maintenance): {json_err}"
+                    break
                 if offset == 0:
                     page_total = data.get("total", 0)
                     if query_idx == 0 or total_available == 0:
@@ -561,17 +593,18 @@ class WorkdayJobSource(BaseJobSource):
                     if job_item.job_id in seen_job_ids:
                         continue
 
-                    # Verify India location pre-filter
-                    if not is_india_location(job_item.location):
-                        ext_p = (p.get("externalPath") or "")
-                        if is_india_location(ext_p):
-                            pass
-                        elif applied_facets and re.search(r"^\d+\s+locations?", (p.get("locationsText") or ""), re.I):
-                            pass
-                        elif not applied_facets:
-                            self.diagnostics["overseas_skipped"] += 1
-                            logger.debug("[WORKDAY] Skipping non-India listing for %s: '%s' (%s)", comp_name, job_item.title, job_item.location)
-                            continue
+                    # Verify India location pre-filter (skip if location_scope == "all")
+                    if location_scope != "all":
+                        if not is_india_location(job_item.location):
+                            ext_p = (p.get("externalPath") or "")
+                            if is_india_location(ext_p):
+                                pass
+                            elif applied_facets and re.search(r"^\d+\s+locations?", (p.get("locationsText") or ""), re.I):
+                                pass
+                            elif not applied_facets:
+                                self.diagnostics["overseas_skipped"] += 1
+                                logger.debug("[WORKDAY] Skipping non-India listing for %s: '%s' (%s)", comp_name, job_item.title, job_item.location)
+                                continue
 
                     seen_job_ids.add(job_item.job_id)
 
@@ -583,6 +616,7 @@ class WorkdayJobSource(BaseJobSource):
                             job_item,
                             target_roles=target_roles,
                             target_locations=target_locations,
+                            location_scope=location_scope,
                         )
                     ):
                         ext_p = (p.get("externalPath") or "").strip()
@@ -666,7 +700,7 @@ class WorkdayJobSource(BaseJobSource):
                     location = f"{city}, India"
                     break
             if not location:
-                location = "India"
+                location = "Worldwide" if comp_config.get("location_scope") == "all" else "India"
 
         posted_on = (posting.get("postedOn") or "Unknown").strip()
 
@@ -681,6 +715,10 @@ class WorkdayJobSource(BaseJobSource):
             date_posted=posted_on,
             description=f"{title} at {comp_name}. Location: {location}. Posted: {posted_on}.",
             date_found=datetime.now(timezone.utc),
+            extra_metadata={
+                "company_key": comp_config.get("company_key", comp_name.lower().replace(" ", "_")),
+                "application_url": direct_url,
+            },
         )
         return job
 

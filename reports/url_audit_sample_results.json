@@ -1,0 +1,411 @@
+{
+  "summary": {
+    "total_sampled": 40,
+    "domain_valid": 40,
+    "opened": 38,
+    "confirmed_active": 37,
+    "unverified": 2
+  },
+  "results": [
+    {
+      "company": "Accenture",
+      "title": "Custom Software Engineer",
+      "url": "https://www.accenture.com/in-en/careers/jobdetails?id=ATCI-5198301-S1910889_en&title=Custom+Software+Engineer",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Adobe",
+      "title": "Machine Learning Engineer 3",
+      "url": "https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced/job/Noida/Machine-Learning-Engineer-3_R171487-1",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Affirm",
+      "title": "Analytics Engineer II, Full Stack (Revenue Analytics)",
+      "url": "https://job-boards.greenhouse.io/affirm/jobs/7813362003",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Airtable",
+      "title": "Renewals Associate",
+      "url": "https://job-boards.greenhouse.io/airtable/jobs/8905022002",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Birlasoft",
+      "title": "AI Engineer",
+      "url": "https://jobs.birlasoft.com/job/Pune-AI-Engineer-INDI/60505744",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Brex",
+      "title": "AI Engineer, Workbench",
+      "url": "https://www.brex.com/careers/8606845002?gh_jid=8606845002",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Canonical",
+      "title": "C++/Rust Graphics and Windowing System Software Engineer - Mir",
+      "url": "https://job-boards.greenhouse.io/canonical/jobs/4439935",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Capgemini",
+      "title": "IoT Software Engineer",
+      "url": "https://careers.capgemini.com/job/Buenos-Aires-IoT-Software-Engineer/1445801833",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Cloudflare",
+      "title": "AI Security Research & Red Team Engineer",
+      "url": "https://boards.greenhouse.io/cloudflare/jobs/8097321?gh_jid=8097321",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Databricks",
+      "title": "Applied AI Engineer",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8091041002",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Dell",
+      "title": "Specialist 2, Inside Product",
+      "url": "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/CX_1/job/D11795",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Elastic",
+      "title": "Agentic AI Engineer",
+      "url": "https://jobs.elastic.co/jobs?gh_jid=8079636&gh_jid=8079636",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Figma",
+      "title": "AI Engineer, Internal Tools",
+      "url": "https://boards.greenhouse.io/figma/jobs/6233043004?gh_jid=6233043004",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Flipkart",
+      "title": "SDE-3, FPG Engineering",
+      "url": "https://flipkart.turbohire.co/job/FIPL-94757",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "GitLab",
+      "title": "Backend Engineer (Python),AI Engineering: Agent Foundations",
+      "url": "https://job-boards.greenhouse.io/gitlab/jobs/8704363002",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "HCLTech",
+      "title": "Senior Test Lead",
+      "url": "https://careers.hcltech.com/job/Senior-Test-Lead/1370987955",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "HP",
+      "title": "Presales Solution Engineer - Edge AI",
+      "url": "https://hp.wd5.myworkdayjobs.com/en-US/ExternalCareerSite/job/All-Cities-Colorado-United-States-of-America/Presales-Solution-Engineer---Edge-AI_3170277-1",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Hexaware Technologies",
+      "title": "Finance and Accounting Order To Cash Team Member-BPS",
+      "url": "https://jobs.hexaware.com/698138",
+      "domain_valid": true,
+      "opened": false,
+      "http_status": 404,
+      "confirmed_active": false,
+      "note": "HTTP 404"
+    },
+    {
+      "company": "Instacart",
+      "title": "Lifecycle Marketing Coordinator, CRM",
+      "url": "https://instacart.careers/job?gh_jid=8355992",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": false,
+      "note": "HTTP 200 (inactive/closed notice detected)"
+    },
+    {
+      "company": "Intel",
+      "title": "LLM & Agentic AI Performance Engineer",
+      "url": "https://intel.wd1.myworkdayjobs.com/en-US/External/job/India-Bangalore/LLM---Agentic-AI-Performance-Engineer_JR0287957",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Lyft",
+      "title": "Backend Software Engineer, Airports",
+      "url": "https://app.careerpuck.com/job-board/lyft/job/8806570002?gh_jid=8806570002",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Mastek",
+      "title": "Cloud Engineer_1",
+      "url": "https://careers.mastek.com/job/Bangalore-Cloud-Engineer_1/61328744",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Mastercard",
+      "title": "Software Engineer II - Java Full stack and AI (with Python)",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/en-US/CorporateCareers/job/Pune-India/Software-Engineer-II---Java-Full-stack-and-AI--with-Python-_R-294262",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "MongoDB",
+      "title": "2027 - Summer Software Engineer Intern, Dublin",
+      "url": "https://www.mongodb.com/careers/job?gh_jid=8267099",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "NVIDIA",
+      "title": "AI Developer Technology Engineer",
+      "url": "https://nvidia.wd5.myworkdayjobs.com/en-US/NVIDIAExternalCareerSite/job/India-Bengaluru/AI-Developer-Technology-Engineer_JR2008156",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Oracle",
+      "title": "Business Analyst 3-Ops",
+      "url": "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_45001/job/347675",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Oracle Financial Services Software",
+      "title": "Business Analyst 3-Ops",
+      "url": "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_45001/job/347675",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "PayPal",
+      "title": "Analyst, Tax - GIR Compliance",
+      "url": "https://paypal.wd1.myworkdayjobs.com/en-US/jobs/job/Bangalore-Karnataka-India/Analyst--Tax---GIR-Compliance_R0138591",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Pinterest",
+      "title": "Machine Learning Engineer, EPD Ads",
+      "url": "https://www.pinterestcareers.com/jobs?gh_jid=6121543",
+      "domain_valid": true,
+      "opened": false,
+      "http_status": 403,
+      "confirmed_active": false,
+      "note": "HTTP 403 (WAF/Cloudflare bot challenge on direct browser URL)"
+    },
+    {
+      "company": "Reddit",
+      "title": "Machine Learning Engineer",
+      "url": "https://job-boards.greenhouse.io/reddit/jobs/7131932",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Salesforce",
+      "title": "Full-Stack Developer \u2014 AI-Native Engineering",
+      "url": "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site/job/India---Bangalore/Full-Stack-Developer---AI-Native-Engineering_JR359537",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Scale AI",
+      "title": "Applied AI Engineer",
+      "url": "https://job-boards.greenhouse.io/scaleai/jobs/4751059005",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Sopra Steria",
+      "title": "Lead Engineer - Fullstack (Java & React)",
+      "url": "https://jobs.smartrecruiters.com/SopraSteria1/744000154875759",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Stripe",
+      "title": "Account Executive, AI Startups - Grower",
+      "url": "https://stripe.com/jobs/search?gh_jid=8238731",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Twilio",
+      "title": "Machine Learning Engineer 2",
+      "url": "https://job-boards.greenhouse.io/twilio/jobs/8240487",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Visa",
+      "title": "Staff SW Engineer (7 - 9 years of exp in Python, React / Angular, strong GenAI solution development, Claude, LLM)",
+      "url": "https://visa.wd5.myworkdayjobs.com/en-US/visa/job/IN---Bengaluru-India/Staff-SW-Engineer--7---9-years-of-exp-in-Python--React---Angular--strong-GenAI-solution-development--Claude--LLM-_REF088256W",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Walmart",
+      "title": "(IND) Software Engineer II",
+      "url": "https://walmart.wd504.myworkdayjobs.com/en-US/WalmartExternal/job/IN-KA-BANGALORE-Home-Office-Building-10/XMLNAME--IND--Software-Engineer-II_R-2533616",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Wipro",
+      "title": "Sailpoint ISC Lead",
+      "url": "https://careers.wipro.com/job/Bengaluru-Sailpoint-ISC-Lead-IND-560035/1360209255",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "Zensar Technologies",
+      "title": "Full Stack Automation",
+      "url": "https://fa-etvl-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/149128",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    },
+    {
+      "company": "eClerx",
+      "title": "Analyst",
+      "url": "https://fa-ewji-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/85797",
+      "domain_valid": true,
+      "opened": true,
+      "http_status": 200,
+      "confirmed_active": true,
+      "note": "HTTP 200 OK (active posting page)"
+    }
+  ]
+}
